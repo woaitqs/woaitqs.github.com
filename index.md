@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Entrance for this blog.
+title: Coding and Living.
 ---
 {% include JB/setup %}
 
