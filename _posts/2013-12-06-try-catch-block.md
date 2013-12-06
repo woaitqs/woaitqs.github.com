@@ -27,7 +27,7 @@ tags: [code]
 
 - 例子如下
 
-``` java
+{% highlight java %}
 class BlewIt extends Exception {
         BlewIt() { }
         BlewIt(String s) { super(s); }
@@ -46,8 +46,10 @@ class Test {
                 }
         }
 }
-```
+{% endhighlight java %}
+
 输出的结果
+
 ```
 Uncaught Exception
 java.lang.NullPointerException
