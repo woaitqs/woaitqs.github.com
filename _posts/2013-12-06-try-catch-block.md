@@ -15,15 +15,15 @@ tags: [code]
 
 - 如果try部分的代码因为V异常而突然停止，那么情况如下
 > - 如果try抛出的V异常是catch模块所申明的情形，那么catch部分代码会被执行
->> - 如果catch部分代码顺利执行完，那么finally部分代码会被执行。
->>> - 如果finaly部分执行完成，那么`try-catch`语句块执行完成。
->>> - 如果finaly部分因为S原因而抛出异常，那么`try-catch`以S异常而突然结束。
->> - 如果catch部分以R异常突然结束，那么finally部分代码会被执行。
->>> - 如果finaly部分执行完成，那么`try-catch`以R异常结束
->>> - 如果finaly部分因为S原因而抛出异常，那么`try-catch`以S异常而突然结束。
+> - 如果catch部分代码顺利执行完，那么finally部分代码会被执行。
+> - 如果finaly部分执行完成，那么`try-catch`语句块执行完成。
+> - 如果finaly部分因为S原因而抛出异常，那么`try-catch`以S异常而突然结束。
+> - 如果catch部分以R异常突然结束，那么finally部分代码会被执行。
+> - 如果finaly部分执行完成，那么`try-catch`以R异常结束
+> - 如果finaly部分因为S原因而抛出异常，那么`try-catch`以S异常而突然结束。
 > - 如果try抛出的V异常未被catch模块所申明，那么情况如下
->> - 如果finaly部分执行完成，那么`try-catch`以V异常结束。
->> - 如果finaly部分因为S原因而抛出异常，那么`try-catch`以S异常而突然结束。
+> - 如果finaly部分执行完成，那么`try-catch`以V异常结束。
+> - 如果finaly部分因为S原因而抛出异常，那么`try-catch`以S异常而突然结束。
 
 - 例子如下
 
