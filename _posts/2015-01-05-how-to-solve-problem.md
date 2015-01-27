@@ -7,13 +7,7 @@ tags: [Logic, Problem]
 ---
 {% include JB/setup %}
 
-# How to Solve a Problem
-
-标签（空格分隔）： 问题 方法论
-
----
-
-本文链接：
+本文链接：http://woaitqs.github.io/logic/2015/01/05/how-to-solve-problem/
 
 如何解决问题
 
