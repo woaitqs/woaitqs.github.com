@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "read source code about [ConCurrentHashMap]"
-description: "ConCurrentHashMap"
+title: "read source code about [HashMap]"
+description: "Source code about HashMap"
 category: "program"
 tags: [java,program]
 ---
