@@ -284,6 +284,7 @@ private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(e.getValue());
     }
 }
+
 ```java
 private void readObject(ObjectInputStream stream) throws IOException,
             ClassNotFoundException {
