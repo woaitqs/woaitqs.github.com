@@ -13,7 +13,7 @@ ConCurrentHashMap 是一个被忽视的Java Concurrent包下面的类，在满�
 ## JDK 是如何定义Map接口的
 在设计一个通用的模块和功能的时候，我们需要静下心来分析下根本需求是什么？根据这个需求来建立我们的根本需求。
 
-Map，就是Key-Value队，通过Key可以快速找到对应的Value，核心的需求是Put和Get方法。
+Map，就是Key-Value对，通过Key可以快速找到对应的Value，核心的需求是Put和Get方法。
 
 ```java
 public void put(K,V);
@@ -284,6 +284,7 @@ private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(e.getValue());
     }
 }
+```
 
 ```java
 private void readObject(ObjectInputStream stream) throws IOException,
