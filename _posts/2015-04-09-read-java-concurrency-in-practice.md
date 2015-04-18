@@ -205,3 +205,5 @@ Omitting many details:
 
 1. ExecutorService = incoming queue + worker threads
 2. CompletionService = incoming queue + worker threads + output queue
+
+### 后续的内容将陆续以专门文章的形式推出，请期待
