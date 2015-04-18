@@ -148,3 +148,60 @@ public class Holder {
 ### JAVA监视器模式
 java 为每一个Object都关联着一种锁(Mutex)，通过这个锁来保证在Sync模块内，同时只有一个线程在执行代码
 
+## 基础构建模块
+
+并发容器与同步工具类
+
+## 结构化并发应用程序
+
+### Executor框架
+
+### 为何用使用Executor框架
+
+1. 线程生命周期的开销非常高
+2. 资源消耗
+3. 稳定性
+
+### 框架介绍
+
+java类库中，任务执行的框架主要是Thread，而是Executor。
+
+```java
+public interface Executor {
+	void execute(Runnable command);
+}
+```
+
+Executor 是基于生产者-消费者模式，提交任务的操作相当于生产者（生产待完成的工作单元），执行任务的线程相当于消费者（执行完这些工作单元）。需要实现生产者-消费者模式，最简单地就是使用Executor
+
+#### 常见的线程池
+
+```java
+newFixedThreadPool
+newCachedThreadPool
+newSingleThreadPool
+newScheduledThreadPool
+```
+
+Executor 只有在所有非守护线程全部终止后才会退出，为了解决这种生命周期问题，Executor扩展了ExecutorService接口，添加了一些用于管理生命周期的方法。
+
+一般用ScheduledThreadPool来代替Timer来执行一些与时间相关的任务。
+
+#### 携带结果的任务Callable与Future
+
+Runnable 是一种很有局限性的抽象，Callable是一种更好的抽象，任务主入口有一个返回值，并可能抛出一个异常。相对于ExecutorService，Future是一个针对于任务生命周期的抽象。
+
+```java
+public interface Callable<V> {
+	V call() throws Exception;
+}
+```
+
+[Feature Interface](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html)
+
+#### 使用CompletionService来进行任务处理
+
+Omitting many details:
+
+1. ExecutorService = incoming queue + worker threads
+2. CompletionService = incoming queue + worker threads + output queue
