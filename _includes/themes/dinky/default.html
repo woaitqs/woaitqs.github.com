@@ -43,7 +43,7 @@
           <h4>about</h4>
           <ul>
             {% if site.author.email %}
-            <li class="contact"><address><span class="author fn n">{{ site.author.name }}</span> - <span class="fn email">{{ site.author.email }}</span></address></li>
+            <li class="contact"><address><span class="fn email">{{ site.author.email }}</span></address></li>
             {% endif %}
             {% if site.author.github %}
             <li class="github"><a href="http://github.com/{{ site.author.github }}/" rel="me">github.com/{{ site.author.github }}</a></li>
@@ -72,9 +72,6 @@
       {{ content }}
       </section>
 
-      <footer>
-      <p><small>Hosted on <a href="http://pages.github.com/">GitHub Pages</a> using the <a href="https://github.com/sodabrew/theme-dinky">Dinky theme</a> for <a href="http://jekyllbootstrap.com/">Jekyll Bootstrap</a></small></p>
-      </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
   </body>
