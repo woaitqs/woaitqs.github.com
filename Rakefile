@@ -47,6 +47,7 @@ task :post do
   title = ENV["title"] || "new-post"
   tags = ENV["tags"] || "[]"
   category = ENV["category"] || ""
+  category = "\"#{category.gsub(/-/,' ')}\"" if !category.empty?
   slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
   begin
     date = (ENV['date'] ? Time.parse(ENV['date']) : Time.now).strftime('%Y-%m-%d')
@@ -65,7 +66,7 @@ task :post do
     post.puts "layout: post"
     post.puts "title: \"#{title.gsub(/-/,' ')}\""
     post.puts 'description: ""'
-    post.puts "category: \"#{category.gsub(/-/,' ')}\""
+    post.puts "category: #{category}"
     post.puts "tags: #{tags}"
     post.puts "---"
     post.puts "{% include JB/setup %}"
@@ -133,15 +134,10 @@ namespace :theme do
       puts "Generating '#{theme_name}' layout: #{File.basename(filename)}"
 
       open(File.join(CONFIG['layouts'], File.basename(filename)), 'w') do |page|
-        if File.basename(filename, ".html").downcase == "default"
-          page.puts "---"
-          page.puts File.read(settings_file) if File.exist?(settings_file)
-          page.puts "---"
-        else
-          page.puts "---"
-          page.puts "layout: default"
-          page.puts "---"
-        end 
+        page.puts "---"
+        page.puts File.read(settings_file) if File.exist?(settings_file)
+        page.puts "layout: default" unless File.basename(filename, ".html").downcase == "default"
+        page.puts "---"
         page.puts "{% include JB/setup %}"
         page.puts "{% include themes/#{theme_name}/#{File.basename(filename)} %}" 
       end

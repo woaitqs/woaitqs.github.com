@@ -3,7 +3,7 @@
 permalink: /:categories/:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-pygments: true
+highlighter: pygments
 
 markdown: redcarpet
 redcarpet:
@@ -99,12 +99,17 @@ JB :
   
   url : 'http://woaitqs.github.com'
 
+    duoshuo :
+      short_name : jekyllbootstrap
+   
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
   # Set 'provider' to false to turn analytics off globally.
   #        
   analytics :
-    provider : google 
+    provider : google
+    gauges :
+        site_id : 'SITE ID'
     google : 
         tracking_id : 'UA-29871455-1'
     getclicky :
