@@ -244,3 +244,20 @@ public void destroyItem(ViewGroup container, int position, Object object) {
     mCurTransaction.remove(fragment);
 }
 ```
+
+### 使用 PagerAdapter 的正确姿势
+
+#### FragmentPagerAdapter 的使用细节
+
+* 根据前面所说的情况，`getItem()` 并不能被确保调用，因此 `getItem()` 在传递参数的时候，只适合传递一些静态的内容。如果我们在 `getItem()` 方法调用了一些需要动态改变的东西，然后使用 `notifyDataSetChanged()` ，会发现不起作用，就是因为这个缘故。如果需要在生成 Fragment 对象后，将数据集中的一些数据传递给该 Fragment，这部分代码应该放到这个函数的重载里。在我们继承的子类中，重载该函数，并调用 FragmentPagerAdapter.instantiateItem() 取得该函数返回 Fragment 对象，然后，我们该 Fragment 对象中对应的方法，将数据传递过去，然后返回该对象（可参考这里的实现[Fragment 如何与Activity 进行交互](http://developer.android.com/guide/components/fragments.html#CommunicatingWithActivity)）。
+* 注意在 getItem() 的时候不能重复调用 SetArguments() 方法，这种数据传递方式只可能用一次，在 Fragment 被添加到 FragmentManager 后，一旦被使用，我们再次调用 setArguments() 将会导致 java.lang.IllegalStateException: Fragment already active 异常。因而可以采用前面提及的方法。
+* 当显示的页面发生变化的时候，需要 `getItemPosition()` 进行特殊处理。`getItemPosition()` 方法有两个魔法值。这个方法会在 `ViewPager` 需要调用查看当前页面是否发生改变的时候调用, 默认返回 `POSITION_UNCHANGED` 表示页面没有发生改变，这也是我们常出现bug的地方。返回 `POSITION_NONE` 来表示页面已经不存在，或者我们可以返回新的位置。通常我们可以返回 `POSITION_NONE` 来强制进行页面的刷新。
+
+```java
+public static final int POSITION_UNCHANGED = -1;
+public static final int POSITION_NONE = -2;
+```
+
+#### FragmentStatePagerAdapter 的使用细节
+
+`Fragment.setArguments()`这种只会在新建 Fragment 时执行一次的参数传递代码，可以放在 `getItem()`里面，其余的代码应该放在 `instantiateItem()` 里面去
