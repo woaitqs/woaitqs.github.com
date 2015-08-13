@@ -69,7 +69,15 @@
       </header>
 
       <section>
-      {{ content }}
+      <!--{{ content }}-->
+      {% capture content %}
+    {% for post in site.posts %}
+        <h2>{{ post.tile }}</h2>
+        {{ post.content }}
+    {% endfor %}
+{% endcapture %}
+{{ content | toc_generator }}
+{{ content }}
       </section>
 
     </div>
