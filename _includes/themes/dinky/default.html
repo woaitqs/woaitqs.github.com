@@ -40,7 +40,7 @@
         {% endif %}
         {% if site.author %}
         <div class="misc vcard">
-          <h4>about</h4>
+          <p class="header">Contact Me.</p>
           <ul>
             {% if site.author.email %}
             <li class="contact"><address><span class="fn email">{{ site.author.email }}</span></address></li>
@@ -69,15 +69,7 @@
       </header>
 
       <section>
-      <!--{{ content }}-->
-      {% capture content %}
-    {% for post in site.posts %}
-        <h2>{{ post.tile }}</h2>
-        {{ post.content }}
-    {% endfor %}
-{% endcapture %}
-{{ content | toc_generator }}
-{{ content }}
+      {{ content }}
       </section>
 
     </div>
