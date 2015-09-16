@@ -2,8 +2,8 @@
 layout: post
 title: "How to Solve Problem"
 description: "Explain how to slove the problem we faced."
-category: "Logic"
-tags: [Logic, Problem]
+category: "logic"
+tags: [logic, problem]
 ---
 {% include JB/setup %}
 

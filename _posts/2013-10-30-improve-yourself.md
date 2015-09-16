@@ -2,8 +2,8 @@
 layout: post
 title: "十一坐下来喝杯茶"
 description: "难得闲时"
-category: "杂思"
-tags: [改变, 思考]
+category: "think"
+tags: [改变, think]
 ---
 {% include JB/setup %}
 

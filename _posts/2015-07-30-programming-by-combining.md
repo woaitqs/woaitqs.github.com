@@ -2,8 +2,8 @@
 layout: post
 title: "programming by combining"
 description: ""
-category: "Program"
-tags: [Combine, Program]
+category: "program"
+tags: [combine, program]
 ---
 {% include JB/setup %}
 

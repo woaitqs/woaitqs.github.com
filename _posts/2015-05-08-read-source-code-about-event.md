@@ -2,8 +2,8 @@
 layout: post
 title: "Read Source Code about Event Bus"
 description: ""
-category: ""
-tags: []
+category: "program"
+tags: [android,eventbus]
 ---
 {% include JB/setup %}
 
