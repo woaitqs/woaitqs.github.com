@@ -50,3 +50,32 @@ Android系统并未给内存提供交互区，但还是使用了分页和mmappin
 如果你的应用进程已经被缓存起来了，并且持有了暂时不被使用的内存(这部分内存不被用户所使用，而且会对系统的运行性能造成影响)。所以，当系统运行内存较少的时候，系统会回收掉最近没有使用的进程，即便这样对于某些内存敏感的进程还是会有些特殊照顾的。如何使得进程更长久的存在，将在后续的章节中说明。
 
 关于进程和线程的说明，点击[这里](http://developer.android.com/intl/zh-cn/guide/components/processes-and-threads.html)
+
+## 应用该如何正确管理内存
+
+在开放的每个阶段，都需要对RAM的使用进行充分的考虑。下面有些技巧可以帮助完成节省内存的目标。
+
+### 节约使用 Service
+
+如果你需要 Service 来完成后台工作，那么当它的工作完成后，记得将 Service 关闭掉。在释放 Service 的时候，也需要注意不会因为泄漏的缘故导致无法释放。
+
+当你启动一个服务的时候，系统总是会缓存有后台服务正在运行的进程。这样会减少系统能够在LRU Cache中缓存的进程数目，使得应用切换没有那么高效，甚至会在内存不够的时候引发崩溃。最好的方式来限制后台服务的生命周期是 IntentService， IntentService 能够在执行完 Intent 指定的任务后，尽快将自己释放掉。
+
+### 当用户界面不可见的时候释放掉内存
+
+当用户跳转到其他界面上去后，界面UI不再被需要，你应该尽快释放被 UI 占据的资源。释放UI占据的资源将显著提升系统性能，增加能够被缓存的进程数量，这样就在一定程度上提升用户体验。
+
+通过在 Activity 里面实现 onTrimMemory() 方法，可以在用户离开界面的时候，接受到相应的通知。在这个方法里面，需要处理 TRIM_MEMORY_UI_HIDDEN 这个级别的消息，来释放掉相应的内存。
+
+需要注意的是 TRIM_MEMORY_UI_HIDDEN 消息不同于 onStop 回调。OnStop 方法会在用户界面不可见的时候，甚至在用户导航到其他 Activity 中的时候触发。尽管应该在 OnStop 方法里面处理 unRegister 等方法，但应该在 onTrimMemory(TRIM_MEMORY_UI_HIDDEN) 释放内存。这能保证及时用户从其他界面回来的时候，依然能够保证高效。
+
+### 当内存不足的时候释放内存
+
+onTrimMemory() 方法在这几个基本上都需要做特殊处理
+TRIM_MEMORY_RUNNING_MODERATE、TRIM_MEMORY_RUNNING_LOW、TRIM_MEMORY_RUNNING_CRITICAL
+
+Android Process 的进程回收策略可以保证当你占有的内存越少，越可能不被回收。
+
+### 避免Bitmap内存问题
+
+当需要加载图片的时候，需要记住只缓存当前屏幕展示区域大小的分辨率，当分辨率太高的时候可以对其进行缩放。记住Bitmap占据的内存大小呈现指数级增长。具体信息参看[这里](http://developer.android.com/intl/zh-tw/training/displaying-bitmaps/manage-memory.html)
