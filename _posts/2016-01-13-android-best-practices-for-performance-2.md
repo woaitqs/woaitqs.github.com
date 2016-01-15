@@ -53,3 +53,5 @@ static final String strVal = "Hello, world!";
 这个类就不再需要 <clinit> 方法，因为这些变量将直接在 dex 文件中的初始化。42 这个字会被直接存下来，strVal 将使用相对不那么笨重的常量指令而不是 field lookup表。
 
 ## 避免内部使用的Getter和Setter方法
+
+使用 ProGuard 可以帮我们优化。
