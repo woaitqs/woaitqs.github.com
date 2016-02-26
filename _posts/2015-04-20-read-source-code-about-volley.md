@@ -28,6 +28,7 @@ Volley是Google在2013年推出的一个网络库，用于解决复杂网络环�
 
 ## Compoment [NetWork]
 
+
 ```java
 public interface Network {
     /**
@@ -39,6 +40,7 @@ public interface Network {
     public NetworkResponse performRequest(Request<?> request) throws VolleyError;
 }
 ```
+
 这里的结构十分明晰，从接收Request输入到提供NetworkResponse输出，在发生异常的时候，抛出VolleyError。这里是对网络请求进行的封装，这与普通的网络请求不一样，因而Volley提供了另一个组件**HttpStack**
 
 ```java
@@ -82,6 +84,7 @@ if (entry.lastModified > 0) {
 2. 处理 NOT_MODIFIED 的情况。当服务端返回304的时候，即表示命中了缓存，在这里就不需要再走返回Response的步骤了，直接使用Cache中的数据就可以了。在实现上面，是通过Mock的一个NetworkResponse来实现的。
 
 ```java
+
 // Handle cache validation.
 if (statusCode == HttpStatus.SC_NOT_MODIFIED) {
 
@@ -101,6 +104,7 @@ if (statusCode == HttpStatus.SC_NOT_MODIFIED) {
             entry.responseHeaders, true,
             SystemClock.elapsedRealtime() - requestStart);
 }
+
 ```
 
 3. 获取 Response Contents 的数据。如果responseContents使用了3态，亦即通过null，空和有数据来表示三种状态，这是一种很有意思的编程技巧。重点在于**entityToBytes**方法。 这个方法里面使用了一个字节池，来避免我们每次allocate 一个字节数组的开销。
