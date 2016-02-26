@@ -15,6 +15,8 @@ Java 注解又成为 Java 标注， 是 Java 语言在5.0版本以上开始支�
 
 JDK 定义了四中基础的注解元数据，分别是 @Documented, @Retention, @Target, @Inherited。
 
+<!--break-->
+
 1. @Documented 用于描述其它类型的annotation应该被作为被标注的程序成员的公共API
 2. @Retention 定义了该Annotation被保留的时间长短：某些Annotation仅出现在源代码中，而被编译器丢弃；而另一些却被编译在class文件中；编译在class文件中的 Annotation 可能会被虚拟机忽略，而另一些在class被装载时将被读取（请注意并不影响class的执行，因为Annotation与class在使用上是被分离的）。
 3. @Inherited 是否可以继承

@@ -13,6 +13,8 @@ RAM 在任何软件开发中都是非常珍贵的资源，在内存受限的手�
 
 接下来的内容将说明Android系统如何管理 app 进程，内存分配，和如何在开发 Android 应用的时候降低内存使用。当需要得知一些如何在 Java 编程中合理利用内存资源，可以参考一些网上的其他书籍。Android 系统提供了比较方面的方式便于你去分析你应用的内存占用情况，链接在[Investigating Your RAM Usage](http://developer.android.com/intl/zh-tw/tools/debugging/debugging-memory.html)
 
+<!--break-->
+
 ## Android 如何管理内存
 
 Android系统并未给内存提供交互区，但还是使用了分页和mmapping的技术去管理内存。这也就意味着任何你修改的内存（无论是给新对象分配内存，还是引用了mmapped的内容）都会在RAM中被保存下来。因而完全释放内存的唯一方法就是释放你所持有的对象，使得内存能够被垃圾回收器回收。

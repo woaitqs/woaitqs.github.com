@@ -6,6 +6,10 @@ exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 highlighter : pygments
 excerpt_separator: "" 
 
+gems: [jekyll-paginate]
+paginate: 5
+paginate_path: "page:num"
+
 kmarkdown: redcarpet
 redcarpet:
     extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]

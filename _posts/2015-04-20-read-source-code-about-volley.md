@@ -13,6 +13,8 @@ Volley是Google在2013年推出的一个网络库，用于解决复杂网络环�
 
 ![在多如箭雨的情形下，Volley是如何帮你搞定一切的](http://img.blog.csdn.net/20130702124537953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdDEyeDM0NTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
+<!--break-->
+
 ## Volley组件化的设计
 
 设计良好的组件，在实现层面上也一定是组件完备的。通过一些基础组件的拼接，来架构起一些伟大的功能。
