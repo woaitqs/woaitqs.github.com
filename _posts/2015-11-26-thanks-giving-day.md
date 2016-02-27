@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "thanks giving day"
+title: "感恩节札记"
 description: "感恩节"
 category: "thinking"
 tags: []

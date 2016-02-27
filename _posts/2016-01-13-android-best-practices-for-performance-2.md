@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Android Best Practices for Performance (2)"
+title: "Android 最佳实践 (2)"
 description: "Managing Your App's Memory"
 category: "program, java, android"
 tags: [android, program]
