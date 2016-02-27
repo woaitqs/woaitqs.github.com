@@ -11,7 +11,6 @@
 	<link href='{{ ASSET_PATH }}/css/style.css' rel="stylesheet" media="all">
 	<link href="http://feeds.feedburner.com/{{ site.author.feedbaname }}" rel="alternate" title="{{ page.title }}" type="application/atom+xml">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
-	<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257674161'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1257674161%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
 </head>
 <body>
 
@@ -44,13 +43,31 @@
 		<div class="unit-foot">
 			<div class="unit-inner unit-foot-inner">
 				<div class="misc vcard">
-					<h4>about</h4>
+					<h4>关于</h4>
 					<ul>
 						<li class="contact"><address><span class="author fn n">{{ site.author.name }}</span> - <span class="fn email">{{ site.author.email }}</span></address></li>
 						<li class="github"><a href="http://github.com/{{ site.author.github }}/" rel="me">github.com/{{ site.author.github }}</a></li>
 						<li class="twitter"><a href="http://twitter.com/{{ site.author.twitter }}/" rel="me">twitter.com/{{ site.author.twitter }}</a></li>
 						<li class="rss"><a href="http://feeds.feedburner.com/{{ site.author.feedname }}">Subscribe to RSS Feed</a></li>
 					</ul>
+
+					<h4>统计</h4>
+					<ul>
+						<li>
+						<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257674161'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1257674161%26online%3D1' type='text/javascript'%3E%3C/script%3E"));</script>
+						</li>
+					</ul>
+					
+					<h4>捐助</h4>
+					<ul>
+						<form style="text-align:left;" method="post" action="https://shenghuo.alipay.com/send/payment/fill.htm" target="_blank">
+<input type="hidden" value="woaitqs" name="optEmail">
+<input type="hidden" value="11" name="payAmount">
+<input type="hidden" name="title" placeholder="付款说明">
+<input type="image" value="给我付款" src="http://www.3464.com/Tools/ZhiFuBaoFuKuan/images/alipay.png" name="pay">
+</form>
+					</ul>
+					
 				</div><!-- misc -->
 			</div><!-- unit-foot-inner -->
 		</div><!-- unit-foot -->
