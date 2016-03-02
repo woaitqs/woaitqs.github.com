@@ -231,13 +231,13 @@ newTable[j | highBit] = e;
 ```
 我们现在来说明，oldCapacity假设为16(00010000), **int highBit = e.hash & oldCapacity**能够得到高位的值，因为低位全为0，经过与操作过后，低位一定是0。J 在这里是index，J 与 高位的值进行与操作过后，就能得到在扩容后面的新的index值。
 
-设想一下，理论上我们得到的新的值应该是 **newValue = hash & (newCapacity - 1)**，与**oldValue = hash & (oldCapacity - 1)**的区别仅在于高位上。 因此我们用J | highBit 就可以得到新的index值。
+设想一下，理论上我们得到的新的值应该是 `newValue = hash & (newCapacity - 1)` ，与 `oldValue = hash & (oldCapacity - 1)` 的区别仅在于高位上。 因此我们用 `J | highBit` 就可以得到新的index值。
 
 ### HashMap 是如何解决迭代问题
 
 首先HashMap提供了3种形式的迭代方法，分别是针对Entry，Key和Value的迭代器，这里实现的代码就比较简单，看下具体的例子就可以知道。实现方式主要是依赖于对HashEntity数组进行遍历即可实现。
 
-问题在于如何保证迭代的时候，基于正确的输出，聪明的你一定看出来了，难度在于「多线程情况的处理」。在迭代的时候，外部可以通过调用put和remove的方法，来改变正在迭代的对象。但从设计之处，HashMap自身就不是线程安全的，因此HashMap在迭代的时候使用了一种Fast—Fail的实现方式，在HashIterator里面维持了一个 expectedModCount 的变量，在每次调用的时候如果发现**ModCount != expectedModCount**，则抛出ConcurrentModificationException 异常。但本身这种检验不能保证在发生错误的情况下，一定能抛出异常，所以我们需要在使用HashMap的时候，心里知道这是「非线程安全」的。
+问题在于如何保证迭代的时候，基于正确的输出，聪明的你一定看出来了，难度在于「多线程情况的处理」。在迭代的时候，外部可以通过调用put和remove的方法，来改变正在迭代的对象。但从设计之处，HashMap自身就不是线程安全的，因此HashMap在迭代的时候使用了一种Fast—Fail的实现方式，在HashIterator里面维持了一个 expectedModCount 的变量，在每次调用的时候如果发现 `ModCount != expectedModCount`，则抛出ConcurrentModificationException 异常。但本身这种检验不能保证在发生错误的情况下，一定能抛出异常，所以我们需要在使用HashMap的时候，心里知道这是「非线程安全」的。
 
 ```java
 HashMapEntry<K, V> nextEntry() {
