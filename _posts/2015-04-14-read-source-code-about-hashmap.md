@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "read source code about [HashMap]"
+title: "Java HashMap 源码解析"
 description: "Source code about HashMap"
 category: "program"
 tags: [java,program]
