@@ -14,6 +14,8 @@ tags: [android, 事件处理]
 
 由于篇幅的限定，我们只关注最基本的几种事件：Down、Move、Up和Cancel。一个Android定义的操作手势[Gestures](http://developer.android.com/training/gestures/index.html) 往往是由用户点击屏幕触发Down事件，用户移动手指会触发Move操作，操作结束的时候，会触发Up或者Cancel。可见对于这几个基本的事件的了解非常有助于我们学习Android的事件处理机制。同时为了叙述的方便，这里排除多点触摸的情况。
 
+<!-- break -->
+
 ### 二、处理事件概述
 
 Android 中可见元素的基础单元就是View(ViewGroup)，事件处理也主要围绕着这两个类展开。用简明扼要的方法来说就是`从上往下传递，从下往上处理`，理解这一句话，就对Android的事件处理机制有了大体的认识。在ViewGroup中定义了几种基本方法，用来构建整个事件处理机制。
