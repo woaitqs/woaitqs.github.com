@@ -76,3 +76,5 @@ A.dispatchTouchEvent()的目的就是通过[hit testing algorithm](https://en.wi
 2. http://balpha.de/2013/07/android-development-what-i-wish-i-had-known-earlier/
 3. http://pierrchen.blogspot.hk/2014/03/pipeline-of-android-touch-event-handling.html
 4. https://thenewcircle.com/s/post/1567/mastering_the_android_touch_system 
+
+-- EOF --
