@@ -13,7 +13,7 @@ tags: [Android, Memory]
 
 ----------
 
-### 一、待嫁闺中
+## 一、待嫁闺中
 
 内存是一个有着沉鱼落雁面容，和体贴善良的女子，她对你含情脉脉的眼神，让你心动流连(妈蛋又跑题了)。Android会给每个应用程序分配适当大小的线程，这样想象如果不加以限制，势必会影响到其他程序和系统本身的稳定性。内存主要是分为两部分，堆和栈(实际上还有方法区，常量池等)。具体可参看[《深入理解java虚拟机》](https://book.douban.com/subject/24722612/)
 
@@ -24,24 +24,24 @@ tags: [Android, Memory]
 ----------
 
 
-### 二、举案齐眉
+## 二、举案齐眉
 
 爱情是一门付出与回报的行为艺术，两者总是相辅相成的。而Android内存模型，通过自动垃圾回收的方式，帮我们完成了这一过程。我们使用Android内存模块来获取内存，然后内存回收模块回收掉不再使用的内存。
 
-#### 堆的分区
+### 堆的分区
 
 年轻代：新创建的对象都存放在这里。因为大多数对象很快变得不可达，所以大多数对象在年轻代中创建，然后消失。当对象从这块内存区域消失时，我们说发生了一次“minor GC”。
 年老代：经过几次收集，寿命不断延长，一段时间后依然存活的对象。
 永久代：主要存放加载的Class类级对象如class本身，method，field。
 
-#### 如何知道对象不再使用？
+### 如何知道对象不再使用？
 
 早期的垃圾回收采用引用计数(reference counting)的机制。每个对象包含一个计数器。当有新的指向该对象的引用时，计数器加1。当引用移除时，计数器减1。当计数器为0时，认为该对象可以进行垃圾回收。但这样存在的问题，在于循环引用上面，如果A引用B，B引用A，即便两者都不再使用，也无法释放内存。
 
 为了解决对象循环引用这个问题，后续采用了更为准确的对象遍历方式。如下图所示，垃圾回收器会建立有向图的方式进行内存管理，通过GC Roots来往下遍历，当发现有对象出于不可达状态的时候，就会对其标记为不可达，以便于后续的GC回收。
 ![GC遍历](http://img.blog.csdn.net/20150627115915868)
 
-#### GC的时机
+### GC的时机
 
 1. 调用函数dvmHeapSourceAlloc在Java堆上分配指定大小的内存。如果分配成功，那么就将分配得到的地址直接返回给调用者了。函数dvmHeapSourceAlloc在不改变Java堆当前大小的前提下进行内存分配，这是属于轻量级的内存分配动作。
 2. 如果上一步内存分配失败，这时候就需要执行一次GC了。不过如果GC线程已经在运行中，即gDvm.gcHeap->gcRunning的值等于True，那么就直接调用函数dvmWaitForConcurrentGcToComplete等到GC执行完成就是了。否则的话，就需要调用函数gcForMalloc来执行一次GC了，参数False表示不要回收软引用对象引用的对象。
@@ -57,7 +57,7 @@ tags: [Android, Memory]
 ----------
 
 
-### 三、面有难色
+## 三、面有难色
 
 感情总不会是一帆风顺，友谊的小船也常常说翻就翻。这不内存妹子就发起了小脾气，心情有些抖动，这是一种我们称之为「内存抖动」的现象。
 
@@ -71,18 +71,18 @@ tags: [Android, Memory]
 ----------
 
 
-### 四、心存芥蒂
+## 四、心存芥蒂
 爱情并不是在任何时候都那么美丽，也时常闹矛盾。内存是个敏感的姑娘，你对她不精心的小伤害，也往往让她对你心存芥蒂，久而久之可能最后分崩离析。在进行的开发的过程中，要注意哪些忽略她感受的小细节，这些细节让她对你的安全感下降很多。我们称这种现象为「内存泄露」。
 
 Android内存泄漏指的是进程中某些对象（垃圾对象）已经没有使用价值了，但是它们却可以直接或间接地引用到 gc roots 导致无法被GC回收。无用的对象占据着内存空间，使得实际可使用内存变小，形象地说法就是内存泄漏了。
 
-#### 泄漏有哪些危害
+### 泄漏有哪些危害
 
 运行性能的问题: Android在运行的时候，如果内存泄露导致其他组件可用的内存变少，一方面会使得GC的频率加剧，在发生GC的时候，所有进程都必须进行等待，GC的频率越多，从而用户越容易感知到卡顿。另一方面，内存变少，将可能使得系统会额外分配给你一些内存，而影响整个系统的运行状况。
 
 运行崩溃问题: 一旦内存不足以分配某些内存，那么将会导致崩溃，这对于体验而言是致命的。我们在进行内存分析的时候，可以发现总有一些机型会出现OutOfMemory的崩溃栈，大抵都和内存泄露有关。
 
-#### 泄漏示例
+### 泄漏示例
 
 来看看下面这个例子，DataContainer 负责抓取和更新数据，我们可以通过 `register(DataListener listener)`方法来对数据更新进行关注。`MainActivity`就关注了DataListener，因而当数据发生回调的时候，`MainActivity`就能立刻做出相应。
 
@@ -136,11 +136,11 @@ public class MainActivity extends AppCompatActivity implements DataContainer.Dat
 }
 ```
 
-#### 定位泄漏的方法
+### 定位泄漏的方法
 
 女生的小情绪，往往难以琢磨，如果我们忽略这些小脾气，往往又会得到惩罚。因而我们需要寻找一种方法来定位可能的对于内存妹纸的伤害。我们将分别从两个方面，来帮助我们分析和定位。一是宏观方法，通过一些很简单的方法来判断是否存在泄露，另一方面是通过精确定位的方式来提出具体的解决方案。
 
-##### Android Studio Memory Monitor
+#### Android Studio Memory Monitor
 
 Android Studio 提供了非常方便的工具，便于我们定位问题。Android Monitors模块中含有 Memory Tab，这个Tab以流线的方式，展示了每一时刻内，已分配的内存和还空闲的内存。
 
@@ -153,7 +153,7 @@ Android Studio 提供了非常方便的工具，便于我们定位问题。Andro
 我们回到刚才的那个例子 #泄漏示例# ，下图是点击`MainActivity`然后按返回键退出，再进入再退出，重复几次后，内存Monitor显示的结果。从这个例子中，我们可以看到，尽管进过了几次 `GC`,但是内存用量却一直在增大，说明有些对象被某些静态或者其他GC Roots的对象引用着，导致其不能被释放。因而可以说明，其存在比较严重的内存泄漏问题。
 ![内存泄露](https://ooo.0o0.ooo/2016/03/31/56fdeba581676.png)
 
-##### Android Devices Monitor
+#### Android Devices Monitor
 
 Android Devices Monitor提供了比较方便辅助的定位方法，在 `Heap` Tab下面，显示着`% Used`的使用量，如果这个值在`GC`后没有明显下降，那么就意味着发生了内存泄漏，具体的操作步骤如下。
 
@@ -167,7 +167,7 @@ Android Devices Monitor提供了比较方便辅助的定位方法，在 `Heap` T
 在多次退出和进入后的内存占比
 ![QQ20160401-2.png](https://ooo.0o0.ooo/2016/04/01/56fe7a65f0c28.png)
 
-##### 精确定位方法
+#### 精确定位方法
 
 我们在查看是否存在内存泄漏情况的时候，基于的基础单位往往是Activity，因而就可以想到一种思路，即通过在界面回退后，强制进行GC，然后判断是否还存在对该Activity的引用，这样就能得知是否存在泄漏。
 
@@ -184,7 +184,7 @@ Android Devices Monitor提供了比较方便辅助的定位方法，在 `Heap` T
 5. 在 MAT 中打开文件，并选择Leak Suspects Report,等待最后的结果。
 6. `Select * From instanceof android.app.Activity` 通过Activity的类名来过滤信息，在右键菜单里面，分别点击Merge Paths to Shortest GC Root 和 exclude all phantom/weak/soft etc. references, 排除被弱引用持有的情况。
 
-##### LeakCanary 自动定位
+#### LeakCanary 自动定位
 
 Square 开源了LeakCanary来用作对于内存泄露情况的自动检测。
 
@@ -194,9 +194,9 @@ LeakCanary实现了引用观察者RefWatcher。RefWatcher.watch() 创建一个 K
 ![内存泄漏比例](https://corner.squareup.com/images/leakcanary/oom_rate.png)
 由于官方开源的LeakCanary只能在Debug版上使用，在Release上通过NullObject方式实现了一个空实现，来避免性能问题。如果想通过小流量的方式来批量地发现用户内存泄露的情况，那么就需要对源码进行整改，刚好我做了这么一件事情，有兴趣的人可以拿去使用。[移除UI展示等逻辑后可在Release上使用的LeakCanary](https://github.com/woaitqs/leakcanary_without_notification)。有了用户相关的数据的泄露栈就能很好地处理各种泄露问题，使得应用良好稳定地运行。
 
-####  常见内存泄漏CASE与修复方法
+###  常见内存泄漏CASE与修复方法
 
-##### 泄漏CASE
+#### 泄漏CASE
 
 1. 注册对象未反注册
 在组件启动后，注册了某个对象的观察者，在组件回收的时候，忘记取消注册了。可以参考这样的例子，Activity声明的时候实现了对于下载进度接口的监听，而这个监听接口在实现的时候使用的是强引用，如果不进行主动反注册，Activity会因为被下载库持有引用，从而导致无法回收。
@@ -211,7 +211,7 @@ LeakCanary实现了引用观察者RefWatcher。RefWatcher.watch() 创建一个 K
 6. Handler 泄漏
 Handler通过发送Message与主线程交互，Message发出之后是存储在MessageQueue中的，有些Message也不是马上就被处理的。在Message中存在一个target，是Handler的一个引用，如果Message在Queue中存在的时间越长，就会导致Handler无法被回收。如果Handler是非静态的，则会导致Activity或者Service不会被回收。handler在使用过后，在组件退出的时候没有处理这些handler。通过Handler post出去一个任务后，没有在最后调用removeCallbacks的接口，清除掉所有跟这个Runnable相关的message。
 
-##### 修复方法
+#### 修复方法
 
 1. 尽量避免在组件内部使用内部类，内部的一些逻辑类可以使用Static的声明，避免持有对组件的引用。
 2. 如果一定要持有内部类的引用，可以通过WeakReference来进行封装，这样可以缓解掉一些泄漏情况。
@@ -220,7 +220,7 @@ Handler通过发送Message与主线程交互，Message发出之后是存储在Me
 5. 在 Java 的实现过程中，也要考虑其对象释放，最好的方法是在不使用某对象时，显式地将此对象赋值为 null，比如使用完Bitmap 后先调用 recycle()，再赋为null,清空对图片等资源有直接引用或者间接引用的数组（使用 array.clear() ; array = null）等，最好遵循谁创建谁释放的原则。
 6. 对 Activity 等组件的引用应该控制在 Activity 的生命周期之内； 如果不能就考虑使用 getApplicationContext 或者 getApplication，以避免 Activity 被外部长生命周期的对象引用而泄露。
 
-### 参考文献
+## 参考文献
 
 1. [http://www.cnblogs.com/vamei/archive/2013/04/28/3048353.html](http://www.cnblogs.com/vamei/archive/2013/04/28/3048353.html)
 2. [http://daily.zhihu.com/story/7364069](http://daily.zhihu.com/story/7364069)
