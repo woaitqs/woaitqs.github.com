@@ -63,6 +63,8 @@ tags: [Android, Memory]
 
 在极短的时间内，分配大量的内存，然后又释放它，这种现象就会造成内存抖动。典型的情况是，在View控件的onDraw方法里分配大量内存，又释放大量内存，这种做法极易引起内存抖动，从而导致性能下降。因为onDraw里的大量内存分配和释放会给系统堆空间造成压力，触发GC工作去释放更多可用内存，而GC工作起来时，又会吃掉宝贵的帧时间 (帧时间是 16ms)，最终导致性能问题。
 
+![绘制超时](http://hukai.me/images/gc_overtime.png)
+
 ![内存抖动示例](https://raw.githubusercontent.com/kamidox/blogs/master/images/memory_churn.gif)
 
 <p style="color:red">这个地方还需要完善</p>
@@ -219,6 +221,66 @@ Handler通过发送Message与主线程交互，Message发出之后是存储在Me
 4. 正确关闭资源，对于使用了BraodcastReceiver，ContentObserver，File，游标 Cursor，Stream，Bitmap等资源的使用，应该在Activity销毁时及时关闭或者注销。
 5. 在 Java 的实现过程中，也要考虑其对象释放，最好的方法是在不使用某对象时，显式地将此对象赋值为 null，比如使用完Bitmap 后先调用 recycle()，再赋为null,清空对图片等资源有直接引用或者间接引用的数组（使用 array.clear() ; array = null）等，最好遵循谁创建谁释放的原则。
 6. 对 Activity 等组件的引用应该控制在 Activity 的生命周期之内； 如果不能就考虑使用 getApplicationContext 或者 getApplication，以避免 Activity 被外部长生命周期的对象引用而泄露。
+
+------------------
+
+## 五、如胶似漆
+
+处理好爱情里面的小摩擦以后，现在我们来把和内存妹纸的恋爱进行到底，如何呵护好来之不易的感情。接下来的章节将围绕内存优化进行展开，这部分内容也对我们的开发很有帮助。
+
+### 善用ArrayMap和SparseArray
+
+HashMap 在我们的程序中经常出现，作为高效率存储和检索的容器被频繁使用。如果了解[HashMap 实现原理](http://woaitqs.github.io/program/2015/04/14/read-source-code-about-hashmap)的话，就知道这是一种空间换时间的实现方式，在客户端开发中由于内存受限，原来以空间换时间的方式也变得不太适合。为了解决HashMap更占内存的弊端，Android提供了内存效率更高的ArrayMap。它内部使用两个数组进行工作，其中一个数组记录key hash过后的顺序列表，另外一个数组按key的顺序记录Key-Value值，如下图所示：
+![ArrayMap 原理图](http://img.ptcms.csdn.net/article/201508/12/55cafcd911daf.jpg)
+
+当你想获取某个value的时候，ArrayMap会计算输入key转换过后的hash值，然后对hash数组使用二分查找法寻找到对应的index，然后我们可以通过这个index在另外一个数组中直接访问到需要的键值对。如果在第二个数组键值对中的key和前面输入的查询key不一致，那么就认为是发生了碰撞冲突。为了解决这个问题，我们会以该key为中心点，分别上下展开，逐个去对比查找，直到找到匹配的值。并且 ArrayMap 会采用动态数组的方式，始终使得内存占用控制在合理的范围内。
+
+SparseArray 相对于ArrayMap做了进一步的细化，避免了对基础数据的装箱操作。系统提供了SparseBoolMap，SparseIntMap，SparseLongMap，LongSparseMap等容器。这些容器的使用场景也和ArrayMap一致，需要满足数量级在千以内，数据组织形式需要包含Map结构。
+
+### 不要滥用Enum
+
+在Android最开始的文档中，写着尽量避免使用Enum，认为使用 Enum 带来了不少的性能问题。不过Enum 相对于 int 而言，确实提供了不少的代码可读性，而且在后续的优化中Enum带来的影响也降低了不少。比如当我们发现有人在使用Enum.oridinal()这样的方法时，大概就可以说明Enum被滥用了。
+
+Android Support提供了更好的方式，在语义限制和性能之间达到一个平衡，这就是[Android Animation](http://developer.android.com/reference/android/support/annotation/StringDef.html)
+
+```java
+@Retention(SOURCE)
+  @StringDef({
+     POWER_SERVICE,
+     WINDOW_SERVICE,
+     LAYOUT_INFLATER_SERVICE
+  })
+  public @interface ServiceName {}
+  public static final String POWER_SERVICE = "power";
+  public static final String WINDOW_SERVICE = "window";
+  public static final String LAYOUT_INFLATER_SERVICE = "layout_inflater";
+  ...
+  public abstract Object getSystemService(@ServiceName String name);
+```
+
+### Bitmap 并不可怕
+
+这一章节会介绍一些处理与加载Bitmap对象的常用方法，这些技术能够使得程序的UI不会被阻塞，并且可以避免程序超出内存限制。如果我们不注意这些，Bitmaps会迅速的消耗掉可用内存从而导致程序崩溃，出现下面的异常:java.lang.OutofMemoryError: bitmap size exceeds VM budget.
+
+在Android应用中加载Bitmaps的操作是需要特别小心处理的，有下面几个方面的原因:
+
+1. 移动设备的系统资源有限。Android设备对于单个程序至少需要16MB的内存。Android Compatibility Definition Document (CDD), Section 3.7. Virtual Machine Compatibility 中给出了对于不同大小与密度的屏幕的最低内存需求。 应用应该在这个最低内存限制下去优化程序的效率。当然，大多数设备的都有更高的限制需求。
+2. Bitmap会消耗很多内存，特别是对于类似照片等内容更加丰富的图片。 例如，Galaxy Nexus的照相机能够拍摄2592x1936 pixels (5 MB)的图片。 如果bitmap的图像配置是使用ARGB_8888 (从Android 2.3开始的默认配置) ，那么加载这张照片到内存大约需要19MB(2592*1936*4 bytes) 的空间，从而迅速消耗掉该应用的剩余内存空间。
+3. Android应用的UI通常会在一次操作中立即加载许多张bitmaps。 例如在ListView, GridView 与 ViewPager 等控件中通常会需要一次加载许多张bitmaps，而且需要预先加载一些没有在屏幕上显示的内容，为用户滑动的显示做准备。
+
+[高效加载大图](http://hukai.me/android-training-course-in-chinese/graphics/displaying-bitmaps/load-bitmap.html)
+
+### 善用Service资源
+
+如果你的应用需要在后台使用service，除非它被触发并执行一个任务，否则其他时候service都应该是停止状态。另外需要注意当这个service完成任务之后因为停止service失败而引起的内存泄漏。
+
+当你启动一个service，系统会倾向为了保留这个service而一直保留service所在的进程。这使得进程的运行代价很高，因为系统没有办法把service所占用的RAM空间腾出来让给其他组件，另外service还不能被paged out。这减少了系统能够存放到LRU缓存当中的进程数量，它会影响app之间的切换效率。它甚至会导致系统内存使用不稳定，从而无法继续保持住所有目前正在运行的service。
+
+限制你的service的最好办法是使用IntentService， 它会在处理完交代给它的intent任务之后尽快结束自己。更多信息，请阅读Running in a Background Service.
+
+当一个Service已经不再需要的时候还继续保留它，这对Android应用的内存管理来说是最糟糕的错误之一。因此千万不要贪婪的使得一个Service持续保留。不仅仅是因为它会使得你的应用因为RAM空间的不足而性能糟糕，还会使得用户发现那些有着常驻后台行为的应用并且可能卸载它。
+
+------------------
 
 ## 参考文献
 
