@@ -2,8 +2,8 @@
 layout: post
 title: "dynamic programming"
 description: ""
-category: ""
-tags: []
+category: "program"
+tags: [program]
 ---
 {% include JB/setup %}
 
@@ -73,7 +73,7 @@ long long fibonacci(unsigned int n){
 
 这题就留给大家思考了，不做具体分析，只列出状态迁移方程，和对应代码
 
-`f(n+1) = max{f(n), prices(n+1) - minPrices(n)}`, 其中 prices[i]表明第i天的股票价格，minPrices(i)是区间[0,1,2...,i]内的最低价格。
+`f(n+1) = max{f(n), prices(n+1) - minPrices(n)}`, 其中 prices[i]表明第i天的股票价格，minPrices(i)是区间[0,1,2...,i]内的最低价格。用白话文来说，今天截止时最大的收入是 `前一天收入` 与 `今天价格与前面最低价之间的差额` 的最大值。
 
 ```java
 int maxProfit(vector<int> &prices) {
@@ -96,3 +96,10 @@ int maxProfit(vector<int> &prices) {
 	}
 }
 ```
+
+### 一点感想
+
+动态规划并没有我们认为的那么难懂，也不用把动态规划看做是老虎，它其实只是一种思路，一种思考的方式。我们在遇到各种难题的时候，也可以试试用动态规划的方式来解决我们当前的窘境，比如想想现在状态是什么样的，想要达到的状态是什么样的，我们如何变化才能达到理想状态，也许人生就是这么简单。
+
+明天去参加 [Qcon](http://2016.qconbeijing.com/)北京大会，在毕业后第一次去参加这种全球级别的峰会，确实感到有些兴奋。今年 Google AlphaGo 战胜人类棋手，棋类运动最后一片圣地也被贡献，至于是否这是[天网一代](https://movie.douban.com/subject/1300656/)的前身，人类命运几何，无从知晓，但真切地感受到，科技的车轮将无可阻挡地向前，这一切已经注定。明天
+去现场参观下 Qcon，感受下现在的科技脉搏。
