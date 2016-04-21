@@ -2,7 +2,7 @@
 layout: post
 title: "和Android Memory谈一场不分手的恋爱"
 description: ""
-category: "Android, Program"
+category: "android"
 tags: [Android, Memory]
 ---
 {% include JB/setup %}

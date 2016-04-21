@@ -2,7 +2,7 @@
 layout: post
 title: "Android 事件处理机制分析"
 description: ""
-category: "android, program, java"
+category: "android"
 tags: [android, 事件处理]
 ---
 {% include JB/setup %}

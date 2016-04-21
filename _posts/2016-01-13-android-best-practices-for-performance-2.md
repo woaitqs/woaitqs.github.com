@@ -2,7 +2,7 @@
 layout: post
 title: "Android 最佳实践 (2)"
 description: "Managing Your App's Memory"
-category: "program, java, android"
+category: "android"
 tags: [android, program]
 ---
 {% include JB/setup %}
