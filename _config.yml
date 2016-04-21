@@ -10,6 +10,8 @@ gems: [jekyll-paginate]
 paginate: 5
 paginate_path: "page:num"
 
+future: true
+
 kmarkdown: redcarpet
 redcarpet:
     extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
