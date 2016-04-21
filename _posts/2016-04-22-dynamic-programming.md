@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "dynamic programming"
+title: "也来谈谈动态规划"
 description: ""
 category: "program"
-tags: [program]
+tags: [算法]
 ---
 {% include JB/setup %}
 
