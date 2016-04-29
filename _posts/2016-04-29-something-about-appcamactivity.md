@@ -7,17 +7,21 @@ tags: [program]
 ---
 {% include JB/setup %}
 
-### AppCompatActivity 的由来
-
 Android AppCompatActivity 已经出来一段时间，取代了原来的 ActionBarActivity，在使用一段时间的AppCompatActivity，发现也踩过一些坑，这里做一些总结，打算摘抄到我的小本本上面，以后老了，坐着摇椅慢慢看。 ：）
 
 <!--break-->
+
+----------
+
+### AppCompatActivity 的由来
 
 > The AppCompat Support Library started with humble, but important beginnings: a single consistent Action Bar for all API 7 and higher devices. In revision 21, it took on new responsibility: bringing material color palette, widget tinting, Toolbar support, and more to all API 7+ devices. With that, the name ActionBarActivity didn’t really cover the full scope of what it really did.
 
 引用了官方 ChangeLog 里面的一句话，简单翻译如下：Android 官方的 Support Library 从很简陋的情况，发展到现在这种地步。第一个版本的重点在于：对所有API 7 或者更高版本支持 ActionBar。而在 version 21 版本后，将material color支持，调色板，toolbar支持同样适配到API 7 或者更高版本。然而原来的 ActionBarActivity 不足以覆盖这些新特性，因而 AppCompatActivity 就应运而出。
 
 这次改动不仅是一次对 ActionBarActivity的重命名，而是实现了一定程度的重构。将 APPCompatActivity 中的特性抽取成 AppCompatDelegate ，而通过组合 AppCompatDelegate 这个类的方式，可以在普通Activity里面使用 AppCompat 的相关特性。这样的设计是非常优秀的，如果使用继承来实现这样的方式，那么势必会使得结构复杂度升高，而组合就不一样，使得你能在不增加层级的基础之上，拥有更灵活的适配能力。
+
+----------
 
 ### AppCompatActivity 做了什么？
 
@@ -69,6 +73,8 @@ Title Icon这些都是动态生成，即时插拔的。那么同理，这样也�
 ```
 
 而 Toolbar 也可以在 Fragment 中使用，只需要声明`setHasOptionsMenu(true);`，并复写`onCreateOptionsMenu`方法，并在 `onOptionsItemSelected` 中处理相应的点击事件，就能很轻松地使用 Toolbar 的菜单。
+
+----------
 
 ### 不可思议的 Activity 退出动画
 
