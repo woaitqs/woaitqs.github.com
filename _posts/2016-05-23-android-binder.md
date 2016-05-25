@@ -11,6 +11,8 @@ tags: [program]
 
 <!--break-->
 
+--------------
+
 ### 什么是Binder? 为什么我们需要它？
 
 在提及Binder之前，我们先来看看Android的设计。在Linux系统里面，进程之间是相互隔离的，也就是说进程之间的各个数据是互相独立，互不影响，而如果一个进程崩溃了，也不会影响到另一个进程。这样的前提下将互相不影响的系统功能分拆到不同的进程里面去，有助于提升系统的稳定性，毕竟我们都不想自己的应用进程崩溃会导致整个手机系统的崩溃。而Android是基于Linux系统进行开发的，也充分利用的进程隔离这一特性。
@@ -39,8 +41,18 @@ Binder 是一个基于OpenBinder开发，Google在其中进行了相应的改造
 
 ![Binder 存在的地方](http://i2.buimg.com/f6eaf162ea1a609f.png)
 
+--------------
+
 ### Binder 概述
+
+既然需要重新造轮子，那么接下来让我们沿着设计者的思路，来看看如何一步一步满足前面提及的特殊需求。Binder在本质上需要解决的问题是让两个不同的进程之间能够互相调用的问题，所以从开发者的视角来看，应该就简单地如下图：
+
+![binder-user.png](https://ooo.0o0.ooo/2016/05/24/57451b2f09a3b.png)
+
+--------------
 
 ### 参考文献
 
 1. [http://mindtherobot.com/blog/159/android-guts-intro-to-loopers-and-handlers/](http://mindtherobot.com/blog/159/android-guts-intro-to-loopers-and-handlers/)
+
+--------------
