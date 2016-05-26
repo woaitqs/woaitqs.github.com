@@ -9,6 +9,8 @@ tags: [program]
 
 如果各位玩过《炉石传说》，那么可能对法师的职业卡「不稳定的传送门」很有印象，特别是没有欧洲玩家，经常能够拿到其他职业的强力单卡。Android 也提供了传送门，让我们可以像使用本地方法一样，调用其他进程的方法，他有一个响亮的名字，Binder！
 
+Binder 在Android是如此的重要，承当起整个Android的通信任务，作为优秀的Android工程师有什么理由不了解了？在接下来的文章中，会陆陆续续讲解Android Binder，希望大家持续关注。
+
 <!--break-->
 
 --------------
@@ -74,7 +76,9 @@ Binder 是一个基于OpenBinder开发，Google在其中进行了相应的改造
 在实现跨进程调用的时候，涉及到参数和命令的传递，得有一个合适的数据结构来表达需要远程执行的东西。
 ![binder-data.png](https://ooo.0o0.ooo/2016/05/25/57455aee0c439.png)
 
-Target是指目标binder，Cookie这涵盖着一些内部信息，sender Id则包含了安全相关的信息，data则包含着一些数据的数组。每个数组的Entry是由相关的命令和参数组成的，这部分参数将传递给目标binder。因而在Binder 
+Target是指目标binder，Cookie这涵盖着一些内部信息，sender Id则包含了安全相关的信息，data则包含着一些数据的数组。每个数组的Entry是由相关的命令和参数组成的，这部分参数将传递给目标binder。
+
+而这里面的Sender Id 则非常的重要，不仅可以起到唯一标示Binder的作用，还可以在跨进程的地方作为标记的作用，在接下来的文章里再详细说明。
 
 ### Server Manager
 
@@ -88,5 +92,10 @@ Service Manager 就是来帮助我们解决这个问题。这是Binder Framework
 
 1. [http://mindtherobot.com/blog/159/android-guts-intro-to-loopers-and-handlers/](http://mindtherobot.com/blog/159/android-guts-intro-to-loopers-and-handlers/)
 2. [http://www.androiddesignpatterns.com/2013/08/binders-death-recipients.html](http://www.androiddesignpatterns.com/2013/08/binders-death-recipients.html)
+3. [http://events.linuxfoundation.org/images/stories/slides/abs2013_gargentas.pdf](http://events.linuxfoundation.org/images/stories/slides/abs2013_gargentas.pdf)
+
+4. http://www.androiddesignpatterns.com/2013/08/binders-death-recipients.html
+5. http://www.androiddesignpatterns.com/2013/07/binders-window-tokens.html
+
 
 --------------
