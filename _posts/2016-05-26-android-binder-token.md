@@ -11,6 +11,8 @@ tags: [program]
 
 在这篇文章结束后，将介绍 Binder Token的 妙用，和 Death Notification 的使用场景，感谢大家持续关注。
 
+<!--break-->
+
 ### 我们是怎么上网的？
 
 在互联的时代，将各种设备连接上互联网，是我们使用一个新设备的第一件事情，网络无处不在。在这个互联的社会，是如何标记彼此呢？如何保证我想要上京东的时候，打开的网页不是淘宝？保证每一个网络设备能够被独立标志的功臣就是 Internet Protocol address。 IP 地址就是用于在互联网通信过程中，分配给设备的唯一标示，其他设备可以通过这一唯一标示访问当前设备。下面显示的就是 google.com.hk 的 IP 地址。
@@ -32,10 +34,23 @@ PING www.google.com.hk (74.125.203.94): 56 data bytes
 
 使用域名服务器时，我们需要将我们的服务在域名提供商哪里注册进去，常见的域名提供商是 [万网](wanwang.aliyun.com)、[西部数码](http://www.west.cn/)，在注册过后，自定义域名的实际访问地址，就解决了通过域名访问我们服务的问题。
 
+从域名到目的地并非简单的映射就可以完成，为了更好的扩展性和高效性，需要有完善的算法和设备支持，从这里可以看到[更详细介绍](https://zh.wikipedia.org/wiki/%E8%B7%AF%E7%94%B1)，将这个从源地址传输到目的地址的活动成为路由。
+
 通常情况下，我们访问其他域名，就是将域名对应的地址作为 Server，而我们本身作为 Client，也就是我们常说的 Client\Server 架构。每一次访问相应网址的时候，都是 Client 向 Server 发送请求，并等待 Server 的回复。
 
 ### Binder 架构设计
 
 前面粗略地介绍了 我们是怎么上网的？ 这个看上去和本文没有关系的内容，花那么多时间进行介绍，是为了方便大家理解 Binder 架构。两者之间存在着异曲同工之妙。
 
-Binder 被设计出来是解决 Android IPC（进程间通信） 问题的，为什么选用 Binder，可以参看我的上一篇文章 [Android Binder 全解析（一）](http://woaitqs.github.io/android/2016/05/23/android-binder)。
+Binder 被设计出来是解决 Android IPC（进程间通信） 问题的，为什么选用 Binder，可以参看我的上一篇文章 [Android Binder 全解析（一）](http://woaitqs.github.io/android/2016/05/23/android-binder)。Binder 将两个进程间交互的理解为 Client 向 Server 进行通信，在接下来的内容中，会将两者结合起来进行类比。
+
+先看一张图
+![binder总体架构](https://ooo.0o0.ooo/2016/05/27/5747ecc123898.gif)
+
+如上图所示，Binder 架构分为 Client、Server、Service Manager 和 Binder Driver。
+
+- Client: 服务调用者，一般就是我们应用开发者，通过调用诸如`List<PackageInfo> packs = getActivity().getPackageManager().getInstalledPackages(0);` 这样的代码，来向 ServerManager 请求 Package 服务。
+- Server: 服务提供者，这里面会有许多我们常用的服务，例如 ActivityService 、 WindowMananger， 这些系统服务提供的功能，是的我们能够使用 Wifi，Display等等设备，从而完成我们的需求。
+- Server Manager: 这里是类似于前文中的DNS，绝大多数的服务都是通过 Server Manager来获取，通过这个 DNS 来屏蔽掉 对其他Server的直接操作。
+- Binder Driver: 底层的支持逻辑，在这里承担路由的工作，不论风雨，使命必达，即使对面的server挂掉了，也会给你相应的死亡通知单 (Death Notification)
+
