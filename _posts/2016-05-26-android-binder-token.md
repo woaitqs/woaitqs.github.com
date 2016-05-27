@@ -51,6 +51,41 @@ Binder 被设计出来是解决 Android IPC（进程间通信） 问题的，为
 
 - Client: 服务调用者，一般就是我们应用开发者，通过调用诸如`List<PackageInfo> packs = getActivity().getPackageManager().getInstalledPackages(0);` 这样的代码，来向 ServerManager 请求 Package 服务。
 - Server: 服务提供者，这里面会有许多我们常用的服务，例如 ActivityService 、 WindowMananger， 这些系统服务提供的功能，是的我们能够使用 Wifi，Display等等设备，从而完成我们的需求。
-- Server Manager: 这里是类似于前文中的DNS，绝大多数的服务都是通过 Server Manager来获取，通过这个 DNS 来屏蔽掉 对其他Server的直接操作。
+- Service Manager: 这里是类似于前文中的DNS，绝大多数的服务都是通过 Service Manager来获取，通过这个 DNS 来屏蔽掉 对其他Server的直接操作。
 - Binder Driver: 底层的支持逻辑，在这里承担路由的工作，不论风雨，使命必达，即使对面的server挂掉了，也会给你相应的死亡通知单 (Death Notification)
 
+总结起来说，应用程序(Client) 首先向 Service Manager 发送请求 WindowManager 的服务，Service Manager 查看已经注册在里面的服务的列表，找到相应的服务后，通过 Binder kernel 将其中的 Binder 对象返回给客户端，从而完成对服务的请求。
+
+### Binder Driver 是怎样充当路由角色的？
+
+对于有网络编程经验的人来说，[Socket](http://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html) 是很常用的概念。在Linux系统中，一切都被认为是文件，网络流也是文件，同样 Socket 也是文件，遵循着 `open - write / read - close` 的模式，Binder Framework在设计的时候，也同样设计了类似的概念。
+
+而在 Binder Framework 中 Binder 充当了 Socket 的角色，在不同的进程里面穿梭，提供了通信的基础。对Binder而言，Binder可以看成Server提供的实现某个特定服务的访问接入点， Client通过这个『地址』向Server发送请求来使用该服务；对Client而言，Binder可以看成是通向Server的管道入口，要想和某个Server通信首先必须建立这个管道并获得管道入口。我们知道如果要访问一个对象的话，需要拿到这个对象的引用地址，我们可以这么认为 Binder 就是远程对象的一个地址，通过这个 Binder 就能轻松地拿到远程对象的控制权，也可以说 Binder 是句柄，可能符合现在的场景。
+
+而让 Binder 起到上诉神奇作用的就是 Binder Driver。Binder Driver 在这里的作用就是前面提及的路由器，它工作在内核态，通过一系列 `open()` , `mmap()`, `ioctl()` , `poll()` 等操作，指定了一系列的协议，实现了 Binder 在不同进程之间的传递工作，这里就不再详细阐述了，有兴趣的同学可以自行查看相关文档。
+
+### Service Manager 怎么当DNS的？
+
+根据前文的描述，Service Manager是将相应的服务名字转换成具体的引用，也就是说使得 client 能够通过 bidner 名字来从 Server 中拿到对 binder 实体的引用。这里唯一需要特别说明的地方在于，Service Manager 的特殊性。我们知道 Service Manager 是一个进程，其他 Server 也是另一个进程，他们之间是如何进行通信的了？在没有其他中间服务进程的参与下，Service Manager 与 其他进程如何凭空通信？
+
+这就是先有鸡，还是先有蛋的问题。答案是先有鸡，也就是说 Service Manager 首先就被创建了，并被赋予了一个特殊的句柄，这个句柄就是 0 。换而言之，其他 Server 进程都可以通过这个 `0句柄` 与 Service Manager 进行通信，在整个系统启动时，其他 Server 进程都向这个 `0句柄` 进行注册，从而使得客户端进程在需要调用服务时，能够通过这个 Service Manager 查询到相应的服务进程。
+
+![binder framework 工作原理](http://i2.buimg.com/682809ca13f6a4b5.jpg)
+
+
+### Proxy 的由来
+
+Binder Framework 作为一个底层框架，使用的场景相当的广，但也使得不太适合面向对象开发。为了满足这样的需求，Android 的工程师采用了代理模式 Proxy 来解决这个问题。
+
+![代理模式 UML](http://i4.buimg.com/678a70032c5d5a5b.png)
+
+首先定义一套相同的接口，服务端 和 客户端分别使用这套接口，服务端具体实现了这套接口的相应逻辑，而客户端也实现了这套接口，不过接口里面的具体实现是调用相应的远程服务接口，将函数参数打包，通过Binder向Server发送申请并等待返回值。
+
+做为Proxy设计模式的基础，首先定义一个抽象接口类封装Server所有功能，其中包含一系列纯虚函数留待Server和Proxy各自实现。由于这些函数需要跨进程调用，须为其一一编号，从而Server可以根据收到的编号决定调用哪个函数。而这里的 Binder 具有唯一的标示性，在后面的文章中，再来说明 Android 系统如何使用这一特性。
+
+
+### 参考文献
+
+1. [http://blog.csdn.net/universus/article/details/6211589](http://blog.csdn.net/universus/article/details/6211589)
+2. [http://blog.csdn.net/luoshengyang/article/details/6618363](http://blog.csdn.net/luoshengyang/article/details/6618363)
+3. [http://www.cnblogs.com/innost/archive/2011/01/09/1931456.html](http://www.cnblogs.com/innost/archive/2011/01/09/1931456.html)
