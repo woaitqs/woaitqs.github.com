@@ -9,8 +9,8 @@ tags: [program]
 
 在前面一些细节概念的铺垫下，大体上知道 Binder Framework 是怎么运作的，在这边文章中，将详细说明下 Binder Framework 的具体实现，这一套机制如何盘活整个 Android 系统。
 
-[Android Binder 完全解析（一）概述](http://www.jianshu.com/p/c11333e77910)
-[Android Binder 完全解析（二）设计详解](http://www.jianshu.com/p/93b59272d0c9)
+- [Android Binder 完全解析（一）概述](http://www.jianshu.com/p/c11333e77910)
+- [Android Binder 完全解析（二）设计详解](http://www.jianshu.com/p/93b59272d0c9)
 
 <!--break-->
 
@@ -92,6 +92,8 @@ status_t IPCThreadState::transact(int32_t handle,
 `protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)` 方法即可。
 
 看了一些繁琐的概念后，再看一个美女放松下，稍后继续。
+
+![来自 Lofter Junhee_晴天](https://ooo.0o0.ooo/2016/05/30/574c711ae77c2.jpg)
 
 -------
 
