@@ -10,7 +10,7 @@ tags: [program]
 ### 生产者与消费者
 端午节将至，大家可能已经安排好自己的行程，不久就将出发，有做飞机前往目的地，也有做轮渡在近海游玩。设想，我们做飞机出游，只需按时抵达机场，在等候一段时间，自然有相应的飞机带我们前往心怡许久的地方。
 
-![transport](http://upload-images.jianshu.io/upload_images/2156477-57ace9d6ac197753.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![transport.jpg](https://ooo.0o0.ooo/2016/06/07/5756a5f162217.jpg)
 
 仔细想想，你不需要关心是哪一趟航班将承担此次的出行任务，另一方面，出行的航班也不关心会有哪些旅客将要登记。互相不知道细节，却能彼此很好的协作，这就是 [生产者-消费者](https://program-think.blogspot.com/2009/03/producer-consumer-pattern-0-overview.html) 带来的好处。
 
