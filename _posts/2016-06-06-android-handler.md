@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "android handler机制全解析"
+title: "Android Handler机制全解析"
 description: ""
 category: "android"
 tags: [program]
@@ -74,6 +74,7 @@ public int arg2;
 
 /*package*/ Runnable callback;
 ```
+
 这里 what 类似于标明 Message 的类型 Id，调用者可以通过这个 what 做出相应的逻辑调整。arg1 arg2 以及后面的 object 是用作额外数据传输的。 而 target 则定义了是哪一个消费者来处理哪一个 callback。为什么要使用一个 Target 变量来标明是哪一个消费者了？因为一个 LooperThread 是允许存在多个 Handler 的，也就是多个消费者，而这些消息都被放置到一个 MessageQueue 队列中，target 就起到了区别它们的目的。callback 即实际要执行的东西。
 
 Message 同时提供了 obtain() 方法，不推荐使用 new Message() 的方法，而是重复回收利用 Message，和 ThreadPool 的原理类似。
@@ -93,21 +94,21 @@ Android中的 MessageQueue 就是前文中提及的缓冲区，Android Framework
 前文提及的是，Looper 主要负责的工作是从 MessageQueue 中取出要执行的任务，也就是维护一个消息循环，现在看看 Looper 具体是怎么运作的。
 
 ```java
-  class LooperThread extends Thread {
-      public Handler mHandler;
+class LooperThread extends Thread {
+  public Handler mHandler;
 
-      public void run() {
-          Looper.prepare();
+  public void run() {
+      Looper.prepare();
 
-          mHandler = new Handler() {
-              public void handleMessage(Message msg) {
-                  // process incoming messages here
-              }
-          };
+      mHandler = new Handler() {
+          public void handleMessage(Message msg) {
+              // process incoming messages here
+          }
+      };
 
-          Looper.loop();
-      }
+      Looper.loop();
   }
+}
 ```
 
 这是常用的Looper 示例，通过`Looper.prepare()`进行相应的初始化工作，而`Looper.loop()`则正式开启消息循环。简单来说，Looper 使得一个普通的线程具备了消息循环的能力，也就是获取信息并消费的能力，现在从源码中简单分析下几个重要的方法。
