@@ -11,10 +11,10 @@ paginate_path: "page:num"
 
 future: true
 
-# markdown: redcarpet
-# redcarpet:
-#     extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
-markdown: kramdown
+kmarkdown: redcarpet
+redcarpet:
+    extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
+# markdown: kramdown
 highlighter : rouge
 
 # Themes are encouraged to use these universal variables 
