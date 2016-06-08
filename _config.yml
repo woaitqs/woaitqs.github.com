@@ -24,6 +24,7 @@ kramdown:
 # so be sure to set them if your theme uses them.
 #
 title : Coding and Living
+name : Coding and Living
 description : Android 程序员的自我修养
 tagline: at buaa & wandoulabs
 author :
@@ -32,8 +33,8 @@ author :
   github : woaitqs
   twitter : woaitqs
 
-feed:
-  path: atom.xml
+# feed:
+#   path: atom.xml
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
