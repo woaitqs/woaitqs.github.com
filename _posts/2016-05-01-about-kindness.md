@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "一个科技工作者的良心"
-description: ""
+description: "对于魏则西事件的思考，互联网人应该持有什么样的态度"
+keywords: "魏则西, 反思"
 category: "life"
 tags: [think]
 ---

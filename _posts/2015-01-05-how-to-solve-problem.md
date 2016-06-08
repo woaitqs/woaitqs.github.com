@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "How to Solve Problem"
-description: "Explain how to slove the problem we faced."
+title: "读薄《你的灯还亮着吗？》"
+description: "问题是什么？如何解决问题"
+keywords : "问题, 解决, 发现, 思考"
 category: "logic"
 tags: [logic, problem]
 ---

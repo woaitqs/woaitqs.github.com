@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Android 事件处理机制分析"
-description: ""
+description: "详细说明Android 事件处理机制分析"
+keywords: "Touch, Android, Event, ViewGroup"
 category: "android"
 tags: [android, 事件处理]
 ---

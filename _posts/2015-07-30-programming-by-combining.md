@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "programming by combining"
-description: ""
+title: "从实际例子出发讲解面向组合子编程"
+description: "从实际例子出发讲解面向组合子编程，说明OO 和 CO 的区别"
+keywords: "组合子, 编程实践, OO, CO"
 category: "program"
 tags: [combine, program]
 ---

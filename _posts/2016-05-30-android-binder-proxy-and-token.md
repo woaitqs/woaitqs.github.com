@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Android Binder 全解析(3) -- AIDL原理剖析"
-description: ""
+description: "AIDL是如何基于Binder实现的，其原理是什么？"
+keywords: "Android, Binder, 机制, 实现原理"
 category: "android"
 tags: [program]
 ---

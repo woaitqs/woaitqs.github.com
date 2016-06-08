@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "read source code about VOLLEY"
-description: ""
+title: "VOLLEY 超详细源码解析"
+description: "从源码入手，从设计出发，详细说明 volley 是如何实现的"
+keywords : "源码, volley, 详细, 设计"
 category: "program"
 tags: [volley, android]
 ---

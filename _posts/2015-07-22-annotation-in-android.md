@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "Annotation in Android"
-description: ""
+title: "Android Annotation 实战"
+description: "详细说明 Android 注解"
+keywords: "annotation, android, 注解，详细说明"
 category: "android"
 tags: [annotation, android]
 ---

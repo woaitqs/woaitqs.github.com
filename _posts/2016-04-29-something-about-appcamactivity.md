@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "用好AppCompatActivity"
-description: ""
+description: "AppCompatActivity的由来，自定义调色板，Toolbar，兼容的退出动画"
+keywords: "AppCompatActivity, Toolbar, 调色板, 退出动画"
 category: "android"
 tags: [program]
 ---
