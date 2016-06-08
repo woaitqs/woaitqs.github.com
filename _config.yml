@@ -1,22 +1,24 @@
 # This is the default format. 
 # For more see: http://jekyllrb.com/docs/permalinks/
 permalink: /:categories/:year/:month/:day/:title 
-highlighter : pygments
+
+highlighter : rouge
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 excerpt_separator: "" 
 
-gems: ["jekyll-paginate","jekyll-coffeescript","jekyll-feed"]
+gems: ["jekyll-paginate","jekyll-coffeescript","jekyll-feed","jekyll-sitemap"]
+
 paginate: 5
 paginate_path: "page:num"
 
 future: true
 
-# kramdown: redcarpet
-# redcarpet:
-#     extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
-# kramdown:
-#    input: GFM
-#    hard_wrap: false
+kramdown: redcarpet
+redcarpet:
+    extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
+kramdown:
+   input: GFM
+   hard_wrap: false
 # markdown: kramdown
 
 
@@ -24,13 +26,17 @@ future: true
 # so be sure to set them if your theme uses them.
 #
 title : Coding and Living
+name : Coding and Living
+description : Android 程序员的自我修养
 tagline: at buaa & wandoulabs
 author :
   name : Qisen Tang 
   email : woaitqs@gmail.com
   github : woaitqs
   twitter : woaitqs
-  feedburner : feedname
+
+# feed:
+#   path: atom.xml
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
@@ -40,7 +46,7 @@ author :
 # Else if you are pushing to username.github.io, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-production_url : http://username.github.io
+production_url : http://www.woaitqs.cc
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
@@ -99,7 +105,7 @@ JB :
     duoshuo :
       short_name : woaitqs
   
-  url : 'http://woaitqs.github.com'
+  url : 'http://www.woaitqs.cc'
 
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
