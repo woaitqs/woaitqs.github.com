@@ -3,7 +3,6 @@
 permalink: /:categories/:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-highlighter : rouge
 excerpt_separator: "" 
 
 gems: [jekyll-paginate]
@@ -12,9 +11,11 @@ paginate_path: "page:num"
 
 future: true
 
-kmarkdown: redcarpet
-redcarpet:
-    extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
+# markdown: redcarpet
+# redcarpet:
+#     extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
+markdown: kramdown
+highlighter : rouge
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
