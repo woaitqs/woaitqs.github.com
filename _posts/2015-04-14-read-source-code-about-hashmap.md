@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "Java HashMap 源码解析"
-description: "Source code about HashMap"
+title: "Java HashMap 源码解析终极版"
+description: "Source code about HashMap, hashmap 源码详细说明"
+keywords : "源码, HashMap, 详细, 设计"
 category: "program"
 tags: [java,program]
 ---

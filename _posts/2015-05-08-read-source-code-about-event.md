@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "Read Source Code about Event Bus"
-description: ""
+title: "EventBus 终极源码解析"
+description: "EventBus 源码解析，模块划分"
+keywords: "EventBus, 源码解析, 模块设计"
 category: "program"
 tags: [android,eventbus]
 ---

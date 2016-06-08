@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Android Binder 全解析(1) -- 概述"
-description: ""
+description: "对Android Binder的基本描述"
+keywords: "Android, Binder, 机制, 实现原理"
 category: "android"
 tags: [program]
 ---

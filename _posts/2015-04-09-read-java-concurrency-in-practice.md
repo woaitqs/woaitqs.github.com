@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "read Java Concurrency in Practice"
-description: ""
+title: "读薄《Java 并发实践》"
+keywords : "源码, 并发实践, 详细, 同步, CompletionService"
+description: "读薄《Java 并发实践》, 书中的关键点"
 category: "java"
 tags: [java, program]
 ---

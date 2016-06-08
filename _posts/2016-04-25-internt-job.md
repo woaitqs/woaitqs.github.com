@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "新手向，互联网工作是什么样的？"
-description: "life"
+description: "向新手介绍互联网工作环境是什么样的？有什么样的生存技巧"
+keywords: "互联网, 工作环境"
 category: "life"
 tags: [think]
 ---

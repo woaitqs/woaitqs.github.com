@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "贫穷能教会你什么？"
-description: "deal with unhappience"
+description: "对贫穷的深刻反思"
+keywords : "贫穷, 远见, 目光"
 category: "life"
 tags: [life, think]
 ---

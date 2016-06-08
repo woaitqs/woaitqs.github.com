@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "和Android Memory谈一场不分手的恋爱"
-description: ""
+description: "定位内存泄露问题，内存抖动问题，ArrayMap优化原理，Bitmap优化原理"
+keywords: "Memory, 内存优化, 定位泄露, ArrayMap, Bitmap"
 category: "android"
 tags: [Android, Memory]
 ---

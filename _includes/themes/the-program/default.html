@@ -9,6 +9,19 @@
 	<meta name="baidu-site-verification" content="7XPHBsss1I" />
 	<meta name="google-site-verification" content="k3Hns2vx5WV6_tS-ksuZzO65rP8UyIaE82JjxjF_WU0" />
 	<title>{{ page.title }}</title>
+
+	{% if page.desc %}
+	<meta name="description" content="{{ page.desc }}" />
+	{% else %}
+	<meta name="description" content="I’m a freelance designer and front-end developer with a passion for details and clean interfaces." />
+	{% endif %}
+
+	{% if page.keywords %}
+	<meta name="keywords" content="{{ page.keywords }}" />
+	{% else %}
+	<meta name="keywords" content="android, binder, ui, event, touch, program, design, 设计，框架原理，源码解析" />
+	{% endif %}
+
 	<meta name="author" content="{{ site.author.name }}">
 	<link href='{{ ASSET_PATH }}/css/style.css' rel="stylesheet" media="all">
 	<link href="http://feeds.feedburner.com/{{ site.author.feedbaname }}" rel="alternate" title="{{ page.title }}" type="application/atom+xml">

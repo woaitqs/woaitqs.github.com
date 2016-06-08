@@ -2,6 +2,7 @@
 layout: post
 title: "Android 最佳实践 (1)"
 description: "Managing Your App's Memory"
+keywords: "Memory, Android, 最佳实践, 内存分配"
 category: "android"
 tags: [android, program]
 ---

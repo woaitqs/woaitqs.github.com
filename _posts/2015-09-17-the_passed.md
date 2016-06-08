@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "悼文"
-description: ""
+description: "对外公的深切怀念"
+keywords: "外公, 思恋，反省"
 category: "thinking"
 tags: []
 ---
