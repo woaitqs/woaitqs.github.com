@@ -5,7 +5,7 @@ highlighter : pygments
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 excerpt_separator: "" 
 
-gems: ["jekyll-paginate","jekyll-coffeescript"]
+gems: ["jekyll-paginate","jekyll-coffeescript","jekyll-feed"]
 paginate: 5
 paginate_path: "page:num"
 
