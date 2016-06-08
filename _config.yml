@@ -24,6 +24,7 @@ kramdown:
 # so be sure to set them if your theme uses them.
 #
 title : Coding and Living
+description : Android 程序员的自我修养
 tagline: at buaa & wandoulabs
 author :
   name : Qisen Tang 
@@ -99,7 +100,7 @@ JB :
     duoshuo :
       short_name : woaitqs
   
-  url : 'http://woaitqs.github.com'
+  url : 'http://www.woaitqs.cc'
 
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
