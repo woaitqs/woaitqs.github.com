@@ -1489,7 +1489,6 @@ hr {
   float: right;
 }
 
-
 .morebox {
   background:#f2f2f2;
   display: inline-block;
@@ -1498,4 +1497,58 @@ hr {
   color: #666;
   text-decoration: none;
   transition: background-color 0.5s;
+}
+
+.pagination {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.page-right {
+  width: 48%;
+  float: right;
+  text-align: left;
+}
+
+.page-left {
+  width: 48%;
+  float: left;  
+  text-align: right;
+}
+
+.page-box {
+  font-size: 16px;
+  color: #666;
+  padding: 10px 12px 10px;
+  font-weight: 700;
+  background-color: #f2f2f2;
+  position: relative;
+}
+
+.page-text-left {
+  padding-left: 30px;
+}
+
+.page-text-right {
+  padding-right: 30px;
+}
+
+.previous:before {
+    content: '\2039';
+    left: 10px;
+    font-size: 36px;
+    color: #222;
+    font-weight: 900;
+    position: absolute;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.next:after {
+    content: '\203A';
+    right: 10px;
+    font-size: 36px;
+    color: #222;
+    font-weight: 900;
+    position: absolute;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
 }
