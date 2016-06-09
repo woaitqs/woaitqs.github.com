@@ -1,4 +1,11 @@
-    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<!-- 文章目录 -->
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#toc').toc();
+});
+</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"woaitqs"};
   (function() {
@@ -9,10 +16,11 @@ var duoshuoQuery = {short_name:"woaitqs"};
     (document.getElementsByTagName('head')[0] 
      || document.getElementsByTagName('body')[0]).appendChild(ds);
   })();
-  </script>
+</script>
 <!-- 多说公共JS代码 end -->
 
 <article class="unit-article layout-post">
+
 	<div class="unit-inner unit-article-inner">
 		<div class="content">
 			<header>
@@ -84,5 +92,5 @@ var duoshuoQuery = {short_name:"woaitqs"};
 	</div><!-- unit-inner -->
 </article>
 <!-- 多说评论框 start -->
-  <div class="ds-thread" data-thread-key="{{ page.id }}" data-title="{{page.title}}" data-url="woaitqs.github.io{{ page.url }}"></div>
+<div class="ds-thread" data-thread-key="{{ page.id }}" data-title="{{page.title}}" data-url="www.woaitqs.cc{{ page.url }}"></div>
 <!-- 多说评论框 end -->
