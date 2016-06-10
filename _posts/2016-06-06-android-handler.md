@@ -80,7 +80,7 @@ public int arg2;
 
 Message 同时提供了 obtain() 方法，不推荐使用 new Message() 的方法，而是重复回收利用 Message，和 ThreadPool 的原理类似。
 
-##### MessageQueue
+#### MessageQueue
 
 Android中的 MessageQueue 就是前文中提及的缓冲区，Android Framework 对其做了一些 JNI 的调用，来进行一些保护。这里的具体实现就不提及了，只需要知道线程安全，并提供了 `Message next() ` 和 `boolean enqueueMessage(Message msg, long when)` 接口即可。
 
