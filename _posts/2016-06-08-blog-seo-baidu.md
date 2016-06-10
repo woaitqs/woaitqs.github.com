@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "二十分钟建立一个你的专属博客"
+title: "手把手教你用github pages搭建博客"
 description: "如何使用github pages建立你的网站, 并让百度索引你的网站"
 keywords: "github, pages, blog, 博客, SEO, 百度, 索引"
 category: ""
