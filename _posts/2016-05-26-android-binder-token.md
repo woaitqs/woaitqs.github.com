@@ -46,7 +46,7 @@ PING www.google.com.hk (74.125.203.94): 56 data bytes
 Binder 被设计出来是解决 Android IPC（进程间通信） 问题的，为什么选用 Binder，可以参看我的上一篇文章 [Android Binder 全解析（一）](http://woaitqs.github.io/android/2016/05/23/android-binder)。Binder 将两个进程间交互的理解为 Client 向 Server 进行通信，在接下来的内容中，会将两者结合起来进行类比。
 
 先看一张图
-![binder总体架构](https://ooo.0o0.ooo/2016/05/27/5747ecc123898.gif)
+![binder总体架构](http://img.my.csdn.net/uploads/201211/28/1354093025_3702.png)
 
 如上图所示，Binder 架构分为 Client、Server、Service Manager 和 Binder Driver。
 
