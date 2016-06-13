@@ -30,7 +30,7 @@ public interface IBinder {
 
     /**
      * 执行一个对象的方法，
-     * 
+     *
      * @param 需要执行的命令
      * @param 传输的命令数据，这里一定不能为空
      * @param 目标 Binder 返回的结果，可能为空
@@ -64,12 +64,12 @@ status_t IPCThreadState::transact(int32_t handle,
             (flags & TF_ONE_WAY) == 0 ? "READ REPLY" : "ONE WAY");
         err = writeTransactionData(BC_TRANSACTION, flags, handle, code, data, NULL);
     }
-    
+
     if (err != NO_ERROR) {
         if (reply) reply->setError(err);
         return (mLastError = err);
     }
-    
+
     if ((flags & TF_ONE_WAY) == 0) {
         ... ...
         if (reply) {
@@ -82,19 +82,15 @@ status_t IPCThreadState::transact(int32_t handle,
     } else {
         err = waitForResponse(NULL, NULL);
     }
-    
+
     return err;
 }
 ```
 
 这是截取过后的源码，刨除了一些支线逻辑，从这个代码里面可以看到的主要逻辑就是：根据Uid 和 Pid （用户id和进程id）进行相应的校验，校验通过后，将相应的数据写入 `writeTransactionData `，其后在 `waitForResponse ` 里面读取前面写入的值，并执行相应的方法，最后返回结果。
 
-总结地来说，就是 IBinder 抽象了远程调用的接口，任何一个可远程调用的对象都应该实现这个接口。由于 IBinder 对象是一个高度抽象的结构，直接使用这个接口对于应用层的开发者而言学习成本太高，需要涉及到不少本地实现，因而 Android 实现了 Binder 作为 IBinder 的抽象类，提供了一些默认的本地实现，当开发者需要自定义实现的时候，只需要重写 Binder 中的 
+总结地来说，就是 IBinder 抽象了远程调用的接口，任何一个可远程调用的对象都应该实现这个接口。由于 IBinder 对象是一个高度抽象的结构，直接使用这个接口对于应用层的开发者而言学习成本太高，需要涉及到不少本地实现，因而 Android 实现了 Binder 作为 IBinder 的抽象类，提供了一些默认的本地实现，当开发者需要自定义实现的时候，只需要重写 Binder 中的
 `protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)` 方法即可。
-
-看了一些繁琐的概念后，再看一个美女放松下，稍后继续。
-
-![来自 Lofter Junhee_晴天](https://ooo.0o0.ooo/2016/05/30/574c711ae77c2.jpg)
 
 -------
 

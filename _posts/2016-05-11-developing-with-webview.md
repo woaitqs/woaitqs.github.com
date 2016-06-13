@@ -25,7 +25,7 @@ webview.getSettings().setJavaScriptEnabled(true); 网页的交互是依赖于 JS
 
 * █  自适应屏幕
 严格来讲，对手机屏幕适配是原生网页 CSS 和 JS 的工作，但往往现实很骨感，WebView 也需要对 PC 等宽的网页进行小的视频，不至于显示一塌糊涂。
-webSettings.setUseWideViewPort(true); 
+webSettings.setUseWideViewPort(true);
 webSettings.setLoadWithOverviewMode(true);
 通过设置这两个值，能够保证对 PC 等宽的页面也能良好显示。
 
@@ -112,7 +112,7 @@ webview.loadUrl("javascript:window.history.back();");
 好东西总是留在最后，做个 web 开发的人都知道 Chrome 提供了强大的 Debug 工具，能够让我们比较方便地进行调试。那么有可能，对于 WebView 界面也能有用这么强大的调试功能吗？ 答案是肯定以及肯定的。
 
 ```java
-if (BuildConfig.DEBUG && Build.VERSION.SDK_INT 
+if (BuildConfig.DEBUG && Build.VERSION.SDK_INT
 	>= Build.VERSION_CODES.KITKAT) {
    WebView.setWebContentsDebuggingEnabled(true);
 }
@@ -124,6 +124,3 @@ if (BuildConfig.DEBUG && Build.VERSION.SDK_INT
 2. 打开相应的调试开关
 3. 在 Chrome 中输入 chrome://inspect
 4. 享受这个便捷功能吧，骚年！
-
-![webview_debug.jpg](https://ooo.0o0.ooo/2016/05/11/57331c2fb50cd.jpg)
-![webview_debug_ing.jpg](https://ooo.0o0.ooo/2016/05/11/57331c30ae1fc.jpg)

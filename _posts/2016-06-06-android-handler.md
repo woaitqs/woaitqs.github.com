@@ -11,7 +11,7 @@ tags: [program]
 ### 生产者与消费者
 端午节将至，大家可能已经安排好自己的行程，不久就将出发，有做飞机前往目的地，也有做轮渡在近海游玩。设想，我们做飞机出游，只需按时抵达机场，在等候一段时间，自然有相应的飞机带我们前往心怡许久的地方。
 
-![transport.jpg](https://ooo.0o0.ooo/2016/06/07/5756a5f162217.jpg)
+![transport.jpg](http://o8p68x17d.bkt.clouddn.com/QQ201606138.png)
 
 仔细想想，你不需要关心是哪一趟航班将承担此次的出行任务，另一方面，出行的航班也不关心会有哪些旅客将要登记。互相不知道细节，却能彼此很好的协作，这就是 [生产者-消费者](https://program-think.blogspot.com/2009/03/producer-consumer-pattern-0-overview.html) 带来的好处。
 
@@ -39,7 +39,7 @@ tags: [program]
 
 简要的示意图如下：
 
-![Handler框架](https://ooo.0o0.ooo/2016/06/04/575269914a132.png)
+![Handler框架](http://o8p68x17d.bkt.clouddn.com/QQ20160613-9.png)
 
 ***********************
 
@@ -48,7 +48,7 @@ tags: [program]
 
 ```java
 /**
- * User-defined message code so that the recipient can identify 
+ * User-defined message code so that the recipient can identify
  * what this message is about. Each {@link Handler} has its own name-space
  * for message codes, so you do not need to worry about yours conflicting
  * with other handlers.
@@ -60,7 +60,7 @@ public int what;
  * {@link #setData(Bundle) setData()} if you only need to store a
  * few integer values.
  */
-public int arg1; 
+public int arg1;
 
 /**
  * arg1 and arg2 are lower-cost alternatives to using
@@ -116,7 +116,7 @@ private static void prepare(boolean quitAllowed) {
 	if (sThreadLocal.get() != null) {
 		throw new RuntimeException("Only one Looper may be created per thread");
 	}
-    // 通过ThreadLocal 关键字保证每一个线程只存在一份 
+    // 通过ThreadLocal 关键字保证每一个线程只存在一份
 	sThreadLocal.set(new Looper(quitAllowed));
 }
 ```

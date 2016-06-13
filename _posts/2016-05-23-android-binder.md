@@ -50,11 +50,11 @@ Binder 是一个基于OpenBinder开发，Google在其中进行了相应的改造
 
 既然需要重新造轮子，那么接下来让我们沿着设计者的思路，来看看如何一步一步满足前面提及的特殊需求。Binder在本质上需要解决的问题是让两个不同的进程之间能够互相调用的问题，所以从开发者的视角来看，应该就简单地如下图：
 
-![binder-user.png](https://ooo.0o0.ooo/2016/05/24/57451b2f09a3b.png)
+![binder-user.png](http://o8p68x17d.bkt.clouddn.com/binder-user.png)
 
 同时从效能的角度上出发，希望提供服务调用的程序能够支持并发，这样使得能够尽可能地响应多个程序的IPC请求，由此得出的实际运行图是下面这个样子的。
 
-![biner-multi-thread.png](https://ooo.0o0.ooo/2016/05/25/574552ae80a76.png)
+![biner-multi-thread.png](http://o8p68x17d.bkt.clouddn.com/biner-multi-thread.png)
 
 --------------
 
@@ -70,12 +70,12 @@ Binder 是一个基于OpenBinder开发，Google在其中进行了相应的改造
 
 在设计的时候，Binder Framework 交互模型采用的是客户端/服务器模型。客户端需要调用远程服务的内容时， 会初始化一个连接，并等待服务器的返回，同时会block住自己。Binder Framework在客户端这边实现了一个代理，而在服务端，通过线程池的方式来响应请求。在如下图所示，A进程就是客户端，并且通过Proxy来完成对Binder Driver内核的交互。Process B是系统服务进程，在这个进程里面维护这多个Binder Thread，直到达到设置的线程上限。Proxy对象通过和Binder Driver进行交互，从而使得Binder Driver将信息传递到目标对象。从Android开发者的角度出发，Binder Framework提供的最方便的改进就是能像调用本地方法一样调用远程方法或对象。客户端的进程调用会在Server进程返回之前一直处于block的状况。在这种机制下，客户端就不必提供一个单独的线程模型和回调机制。（同步转异步简单，而异步变同步则很困难）
 
-![binder-proxy.png](https://ooo.0o0.ooo/2016/05/25/57455a8e43601.png)
+![binder-proxy.png](http://o8p68x17d.bkt.clouddn.com/binder-proxy.png)
 
 #### 传递的数据格式
 
 在实现跨进程调用的时候，涉及到参数和命令的传递，得有一个合适的数据结构来表达需要远程执行的东西。
-![binder-data.png](https://ooo.0o0.ooo/2016/05/25/57455aee0c439.png)
+![binder-data.png](http://o8p68x17d.bkt.clouddn.com/binder-data.png)
 
 Target是指目标binder，Cookie这涵盖着一些内部信息，sender Id则包含了安全相关的信息，data则包含着一些数据的数组。每个数组的Entry是由相关的命令和参数组成的，这部分参数将传递给目标binder。
 
@@ -87,7 +87,7 @@ Target是指目标binder，Cookie这涵盖着一些内部信息，sender Id则�
 
 Service Manager 就是来帮助我们解决这个问题。这是Binder Framework的一个特殊节点，也是第一个起点。其作为一个命令服务，起到了DNS的作用，使得可以通过名字的方式来查找相应的Binder接口。这很重要，因为客户端不应该知道远程服务的调用地址，如果知道了这势必会很不安全。每一个Binder需要将自己的名字和Binder Token交给Service Manager，客户端只需要知道服务的名字就可以。
 
-![binder-mananger.png](https://ooo.0o0.ooo/2016/05/25/57455d58d9b61.png)
+![binder-mananger.png](http://o8p68x17d.bkt.clouddn.com/binder-mananger.png)
 
 ### 参考文献
 
