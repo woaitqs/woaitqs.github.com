@@ -10,7 +10,7 @@ tags: []
 
 如果给你40分钟，可以搭建一个如下图所示的网站，你愿意吗？如果你愿意，那我们就开始干！
 
-![[woaitqs.cc](http://www.woaitqs.cc) 博客](https://ooo.0o0.ooo/2016/06/09/57591cf9353d1.png)
+![[woaitqs.cc](http://www.woaitqs.cc) 博客](http://i1.buimg.com/4fe4cfa7bbcff3b0.png)
 
 <!--break-->
 
@@ -23,7 +23,7 @@ tags: []
 2. 天然基于版本控制，便于对代码进行迁移。日后若想进行博客的迁移，只需要支持 Jekyll 或者 Hexo 就行。
 3. Github Pages 本身就是一个 git 项目，其他人可以 fork 或者参与到你的博客建设中，这本身可以独立也可以互相协作，换而言之，这也是你的 contributions , 如下图所示，当别人进入你的 github 主页时，就能看到你的活跃程度了。
 
-![git contributions](https://ooo.0o0.ooo/2016/06/09/5759681d2ec46.png)
+![git contributions](http://i1.buimg.com/2a32ea5db3b9f3d6.png)
 
 Github Pages 需要相应的博客引擎来驱动，主流的有两个 [https://hexo.io/](https://hexo.io/) 和 [https://jekyllrb.com/](https://jekyllrb.com/)。两者的使用频率都比较高，我选择了 Jekyll，因为目前国内的 [coding.net](http://coding.net) （国内的github）只支持 Jekyll , 如果日后 github 被墙 (已经短暂发生过...)，还可以无缝切换到 coding.net 上。
 
@@ -49,7 +49,7 @@ Github 是出名的版本控制仓库，所谓仓库就是存放货物的地方�
 * 安装 [Git 工具](https://git-scm.com/downloads)，点击下载并安装。
 
 * 使用仓库前，标明自己的身份（名字和邮箱）。安装git后，通过命令行打开终端，cmd (windows，需配置环境变量) 或者 Terminal，输入一下命令。
-![git terminal](https://ooo.0o0.ooo/2016/06/09/575974b6381a2.jpg)
+![git terminal](http://i1.buimg.com/7f3b9b9d7e596365.png)
 
 ```shell
 git config --global user.name "YOUR NAME"
@@ -66,7 +66,7 @@ ssh-keygen -t rsa -C "*your_email@youremail.com*"
 这样在 .ssh 目录下会有 id_rsa.pub ，使用 `cat id_rsa.pub` 命令，可参看具体内容。
 
 * 将 id_rsa.pub(令牌) 传递到 Github ，通过 “Account Settings” > Click “SSH Keys” > Click “Add SSH key” 路径可以提交，如下图所示
-![ass ssh key](https://ooo.0o0.ooo/2016/06/09/575978ad462cb.jpg)
+![ass ssh key](http://i1.buimg.com/01a5b6d867f92ce0.png)
 
 * 再测试一下
 
@@ -96,7 +96,7 @@ Hi <em>username</em>! You have successfully authenticated, but GitHub does not p
 **后面的 `USERNAME` 均代表你 Github 的账号，再使用时请自行替换。**
 
 * 进入你的 github 主页，选择 `new repository`，进入到 [新建仓库](https://github.com/new) 的界面。新建一个 USERNAME.github.com 的仓库，这里 `USERNAME` 是你的 Github 的用户名，且只能是你 Github 的账户名。
-![新建仓库](https://ooo.0o0.ooo/2016/06/09/5759c1da4e246.png)
+![新建仓库](http://i1.buimg.com/0a1c38869143441e.png)
 
 * 拉取现有的博客模板进入你的仓库。这里`https://github.com/plusjade/jekyll-bootstrap.git` 也可以是其他博客的仓库地址，在最开始的阶段还是建议选择 `https://github.com/plusjade/jekyll-bootstrap.git` 作为入门的仓库，该仓库提供了几款不错的样式。继续在终端中进行这几个步骤。
 
@@ -111,7 +111,7 @@ git clone https://github.com/plusjade/jekyll-bootstrap.git USERNAME.github.com
 
 * 再耐心等等几分钟，点击 [http://USERNAME.github.com](http://USERNAME.github.com) 就能看到博客界面了。
 
-![cheers.jpg](https://ooo.0o0.ooo/2016/06/09/575a3f85de436.jpg)
+![cheers.jpg](http://i1.buimg.com/b6fa5a2c3c61eb7f.png)
 
 Cheers！来，朋友干一杯！
 
@@ -185,12 +185,12 @@ markdown 语法十分简单，非常有利于写作，这里做一个简单介�
 
 接下来需要告知github，现在你有域名了。在根目录下创建 `CNAME` 的文件，一定要`大写`，在文件中输入你的域名即可。在 Github 上直接操作，或者在本地操作，与提交博客的方式一样上传到 Github 都可以。等上几分钟，就可以通过你的域名进行访问了，点击 [woatiqs.cc](http://www.woaitqs.cc) 就和  [woaitqs.github.io](http://woaitqs.github.io) 同样效果了。
 
-![提交 CNAME](https://ooo.0o0.ooo/2016/06/09/575a362ab9a94.png)
+![提交 CNAME](http://i1.buimg.com/c26e0d64cf0e9b74.png)
 
 接下来解决百度无法索引的问题，从问题出发，既然百度无法对 Github Pages 进行爬虫，那么对百度走单独的通道，不就解决这个问题了吗？那么单独针对百度的镜像从哪里来？可以是国内的 Coding.net 也可以是自行搭建的 VPS。方法与配置 Github Pages 类似，就不在赘述，可参考 [github屏蔽百度爬虫的解决办法](http://youthyblog.com/2015/08/04/github%E5%B1%8F%E8%94%BD%E7%99%BE%E5%BA%A6%E7%88%AC%E8%99%AB%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/)。
 
 现在针对百度和默认，配置相关的域名解析即可，如下图所示。
-![解析配置](https://ooo.0o0.ooo/2016/06/09/575a3a0a130e1.png)
+![解析配置](http://i1.buimg.com/c6cfb15a7812860f.png)
 
 当博客访问量不高的时候，可以试试这个外链工具 [seo 外链生成器](http://tool.lusongsong.com/seo/)
 
@@ -216,7 +216,3 @@ markdown 语法十分简单，非常有利于写作，这里做一个简单介�
 这里重点推荐 [sm.ms](https://sm.ms/)，谁用谁知道。
 
 最后祝大家博客搭建顺利，玩的开心！
-
-----------
-
-![粽子.jpg](https://ooo.0o0.ooo/2016/06/09/575a3f68769b8.jpg)
