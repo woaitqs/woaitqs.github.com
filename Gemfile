@@ -1,3 +1,7 @@
 source "https://rubygems.org"
 
-gem 'jekyll', '3.1.2'
+gem 'jekyll'
+gem 'jekyll-paginate'
+gem 'jekyll-coffeescript'
+gem 'jekyll-feed'
+gem 'jekyll-sitemap'
