@@ -18,7 +18,7 @@ test:
 
 pages:
   script:
-  - gem install jekyll
+  - gem install jekyll jekyll-paginate jekyll-coffeescript jekyll-feed jekyll-sitemap
   - jekyll build -d public/
   artifacts:
     paths:
