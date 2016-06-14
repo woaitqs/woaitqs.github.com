@@ -1,5 +1,20 @@
 image: ruby:2.1
 
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - bundle install --path vendor
+
+# add a job called 'test'
+test:
+  stage: test
+  script:
+    - bundle exec jekyll build -d public/
+  except:
+    - master # the 'test' job will affect all branches expect 'master'
+
 pages:
   script:
   - gem install jekyll
