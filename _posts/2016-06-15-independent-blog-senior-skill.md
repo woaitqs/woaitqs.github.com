@@ -19,6 +19,8 @@ tags: [blog thinking]
 
 读这篇文章之前，建议看看[手把手教你用github pages搭建博客](http://www.woaitqs.cc/2016/06/08/blog-seo-baidu.html) 这里面有详细的使用 Github Pages 进行博客搭建的步骤。接下来我们看看 Jekyll 的一些进阶技巧，这些技巧可以使得你能进行自定义的优化和改进，以期博客能够更好的表达你的观点，让世界看见你。
 
+<!--break-->
+
 -------------
 
 ### 了解 Jekyll
@@ -92,7 +94,7 @@ fruits:
 
 官方并没有提供对摘要功能的支持，因而可以通过人为干预的方式来实现。Jekyll 在语法上是支持管道的，`{{ post.content  || split:'<!--break-->' | first }}` 的意思是，对 `<!--break-->` 进行分割，取其中的第一部分，如果我们在合适的位置 插入 `<!--break-->` 不就是我们想要的摘要了吗？
 
-```html
+```xml
 {% for post in paginator.posts %}
   <h1><a href="{{ post.url }}.html">{{ post.title }}</a></h1>
   <div class="content">
