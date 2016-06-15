@@ -995,7 +995,7 @@ pre {
   }
 }
 /*
-	Not that old computer layout 
+	Not that old computer layout
 */
 @media only screen and (min-width: 1280px) {
   .the-header .unit-head .nav-global .logo {
@@ -1030,7 +1030,7 @@ pre {
   }
 }
 /*
-	Huge-screen layout 
+	Huge-screen layout
 */
 @media only screen and (min-width: 1410px) {
   .the-header {
@@ -1512,7 +1512,7 @@ hr {
 
 .page-left {
   width: 48%;
-  float: left;  
+  float: left;
   text-align: right;
 }
 
@@ -1552,3 +1552,13 @@ hr {
     position: absolute;
     text-shadow: 0 1px 0 rgba(255,255,255,0.4);
 }
+
+#fof{display:block; width:100%; margin:100px 0; line-height:1.6em; text-align:center;}
+#fof .hgroup{text-transform:uppercase;}
+#fof .hgroup h1{margin-bottom:25px; font-size:80px;}
+#fof .hgroup h1 span{display:inline-block; margin-left:5px; padding:2px; border:1px solid #CCCCCC; overflow:hidden;}
+#fof .hgroup h1 span strong{display:inline-block; padding:0 20px 20px; border:1px solid #CCCCCC; font-weight:normal;}
+#fof .hgroup h2{font-size:60px;}
+#fof .hgroup h2 span{display:block; font-size:30px;}
+#fof p{margin:25px 0 0 0; padding:0; font-size:16px;}
+#fof p:first-child{margin-top:0;}
