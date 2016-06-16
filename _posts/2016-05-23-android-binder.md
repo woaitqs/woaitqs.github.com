@@ -8,9 +8,22 @@ tags: [program]
 ---
 {% include JB/setup %}
 
-如果各位玩过《炉石传说》，那么可能对法师的职业卡「不稳定的传送门」很有印象，特别是没有欧洲玩家，经常能够拿到其他职业的强力单卡。Android 也提供了传送门，让我们可以像使用本地方法一样，调用其他进程的方法，他有一个响亮的名字，Binder！
+<div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
-Binder 在Android是如此的重要，承当起整个Android的通信任务，作为优秀的Android工程师有什么理由不了解了？在接下来的文章中，会陆陆续续讲解Android Binder，希望大家持续关注。
+          <span style="position: relative;padding: 5px 15px 5px 15px;background-color: white;bottom: 30px;font-size: 16px;font-weight: bolder;">摘要</span>
+
+          <span style="position: relative;display: block;bottom: 15px;">
+          如果各位玩过《炉石传说》，那么可能对法师的职业卡「不稳定的传送门」很有印象，特别是没有欧洲玩家，经常能够拿到其他职业的强力单卡。Android 也提供了传送门，让我们可以像使用本地方法一样，调用其他进程的方法，他有一个响亮的名字，Binder！
+
+          Binder 在Android是如此的重要，承当起整个Android的通信任务，作为优秀的Android工程师有什么理由不了解了？在接下来的文章中，会陆陆续续讲解Android Binder，希望大家持续关注。
+
+          本文是 Android 系统学习系列文章中的第二章节，在前面一些细节概念的铺垫下，大体上知道 Binder Framework 是怎么运作的，在这边文章中，将详细说明下 Binder Framework 的具体实现，这一套机制如何盘活整个 Android 系统。对此系列感兴趣的同学，可以收藏这个链接 <a herf="http://www.woaitqs.cc/2016/06/16/android-system-learning.html">Android 系统学习</a>，也可以点击 <a href="http://www.woaitqs.cc/feed.xml">RSS订阅</a> 进行订阅。
+          </span>
+</div>
+
+- **DONE:** [Android Binder 完全解析（一）概述](http://www.woaitqs.cc/android/2016/05/23/android-binder.html)
+- **DONE:** [Android Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
+- **DONE:** [Android Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
 
 <!--break-->
 

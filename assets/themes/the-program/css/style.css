@@ -1533,7 +1533,7 @@ hr {
   padding-right: 30px;
 }
 
-.previous:before {
+.page-previous:before {
     content: '\2039';
     left: 10px;
     font-size: 36px;
@@ -1543,7 +1543,7 @@ hr {
     text-shadow: 0 1px 0 rgba(255,255,255,0.4);
 }
 
-.next:after {
+.page-next:after {
     content: '\203A';
     right: 10px;
     font-size: 36px;

@@ -8,10 +8,18 @@ tags: [program]
 ---
 {% include JB/setup %}
 
-在前面一些细节概念的铺垫下，大体上知道 Binder Framework 是怎么运作的，在这边文章中，将详细说明下 Binder Framework 的具体实现，这一套机制如何盘活整个 Android 系统。
+<div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
-- [Android Binder 完全解析（一）概述](http://www.jianshu.com/p/c11333e77910)
-- [Android Binder 完全解析（二）设计详解](http://www.jianshu.com/p/93b59272d0c9)
+          <span style="position: relative;padding: 5px 15px 5px 15px;background-color: white;bottom: 30px;font-size: 16px;font-weight: bolder;">摘要</span>
+
+          <span style="position: relative;display: block;bottom: 15px;">
+          本文是 Android 系统学习系列文章中的第二章节，在前面一些细节概念的铺垫下，大体上知道 Binder Framework 是怎么运作的，在这边文章中，将详细说明下 Binder Framework 的具体实现，这一套机制如何盘活整个 Android 系统。对此系列感兴趣的同学，可以收藏这个链接 <a herf="http://www.woaitqs.cc/2016/06/16/android-system-learning.html">Android 系统学习</a>，也可以点击 <a href="http://www.woaitqs.cc/feed.xml">RSS订阅</a> 进行订阅。
+          </span>
+</div>
+
+- **DONE:** [Android Binder 完全解析（一）概述](http://www.woaitqs.cc/android/2016/05/23/android-binder.html)
+- **DONE:** [Android Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
+- **DONE:** [Android Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
 
 <!--break-->
 

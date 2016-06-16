@@ -22,7 +22,7 @@ title: Coding and Living.
     <div class="page-left">
     <span class="page-box">
           {% if paginator.previous_page %}
-      <a href="{{ paginator.previous_page_path }}" class="page-text-left previous"> 上一页</a>
+      <a href="{{ paginator.previous_page_path }}" class="page-text-left page-previous"> 上一页</a>
     {% else %}
       <span>已是第一页</span>
     {% endif %}
@@ -33,7 +33,7 @@ title: Coding and Living.
     <div class="page-right">
     <span class="page-box">
       {% if paginator.next_page %}
-      <a href="{{ paginator.next_page_path }}" class="next page-text-right">下一页</a>
+      <a href="{{ paginator.next_page_path }}" class="page-next page-text-right">下一页</a>
       {% else %}
         <span>已到末尾</span>
       {% endif %}
