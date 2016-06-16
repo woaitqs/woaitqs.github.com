@@ -95,6 +95,7 @@ Init 进程会启动 Runtime 运行时服务，所谓的 Runtime 服务就是将
 为了加速 App 的启动，Zygote 进程会预先加载 App 在运行时所需的资源和 Class 文件到系统 RAM 中。Zygote 会监听其 Socket (/dev/socket/zygote) 来判断是否需要启动 App。每当监听到需要创建 App 的请求时，就 fork 一个进程即可。这样的好处在于最初始的 Zygote 进程，保有所有的系统 Class 和 App 启动可能需要的资源，这样一来，就不需要启动一个 App 时，动态去加载相应的资源。
 
 监听 /dev/socket/zygote socket.
+
 ```java
 /**
  * Registers a server socket for zygote command connections
