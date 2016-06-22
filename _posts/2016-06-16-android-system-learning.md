@@ -47,7 +47,7 @@ tags: [android program]
 因而这部分的海国图志，是关于上述四部分核心内容的归纳总结，拟定的目录如下：
 
 - 系统服务篇
-    - **DONE:** [Android 如何启动？](http://127.0.0.1:4000/android/2016/06/15/how-android-launch-itself.html)
+    - **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
     - 什么是系统服务
     - ActivityServices
     - SystemServer
