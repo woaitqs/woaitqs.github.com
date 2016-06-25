@@ -48,6 +48,7 @@ tags: [android program]
 
 - 系统服务篇
     - **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
+    - **DONE:** [Android 应用进程启动流程](http://www.woaitqs.cc/android/2016/06/21/activity-service.html)
     - 什么是系统服务
     - ActivityServices
     - SystemServer
@@ -63,7 +64,7 @@ tags: [android program]
         - **DONE:** [Android Handler消息机制源码解析](http://www.woaitqs.cc/android/2016/06/06/android-handler.html)
 
 - 应用组件篇
-    - Application 是什么？应用如何启动？
+    - Application 是什么？
     - Context 分析
     - Activity 组件分析
     - Services 组件分析
@@ -84,8 +85,6 @@ tags: [android program]
 感谢大家的支持！
 
 ------------------------
-
---------------------
 
 ### 文档信息
 * 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
