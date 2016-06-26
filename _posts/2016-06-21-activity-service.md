@@ -518,7 +518,7 @@ static void invokeStaticMain(ClassLoader loader,
 
 ### 应用进程启动总结
 
-![Android Process 启动](http://o8p68x17d.bkt.clouddn.com/Android-App-Processes-cropped.jpg)
+![Android Process 启动流程总结](http://o8p68x17d.bkt.clouddn.com/app_launch_summary.jpg)
 
 Launcher 中的 Icon 点击，broadcast 发送，启动 Service 等组件见的跳转，都会通过 `AndroidManagerProxy` 来进行中转，而 `AndroidManagerProxy` 通过向 `SystemServer` 请求名为 `Activity` 的 `ActivityManagerService` 的 Binder 对象，这个 Binder 对象可以粗略地看作是 `ActivityManagerService` 的句柄，从 Binder 对象可实际操作 `ActivityManagerService`。
 
