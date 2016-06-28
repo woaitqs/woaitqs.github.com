@@ -15,9 +15,9 @@ tags: [program]
           <span style="position: relative;display: block;bottom: 15px;">
           如果各位玩过《炉石传说》，那么可能对法师的职业卡「不稳定的传送门」很有印象，特别是没有欧洲玩家，经常能够拿到其他职业的强力单卡。Android 也提供了传送门，让我们可以像使用本地方法一样，调用其他进程的方法，他有一个响亮的名字，Binder！
 
-          Binder 在Android是如此的重要，承当起整个Android的通信任务，作为优秀的Android工程师有什么理由不了解了？在接下来的文章中，会陆陆续续讲解Android Binder，希望大家持续关注。
+          Binder 在 Android 是如此的重要，承当起整个Android的通信任务，作为优秀的Android工程师有什么理由不了解了？在接下来的文章中，会陆陆续续讲解Android Binder，希望大家持续关注。
 
-          本文是 Android 系统学习系列文章中的第二章节，在前面一些细节概念的铺垫下，大体上知道 Binder Framework 是怎么运作的，在这边文章中，将详细说明下 Binder Framework 的具体实现，这一套机制如何盘活整个 Android 系统。对此系列感兴趣的同学，可以收藏这个链接 <a herf="http://www.woaitqs.cc/2016/06/16/android-system-learning.html">Android 系统学习</a>，也可以点击 <a href="http://www.woaitqs.cc/feed.xml">RSS订阅</a> 进行订阅。
+          本文是 Android 系统学习系列文章中的第二章节，在前面一些细节概念的铺垫下，大体上知道 Binder Framework 是怎么运作的，在这篇文章中，将详细说明下 Binder Framework 的具体实现，这一套机制如何盘活整个 Android 系统。对此系列感兴趣的同学，可以收藏这个链接 <a herf="http://www.woaitqs.cc/2016/06/16/android-system-learning.html">Android 系统学习</a>，也可以点击 <a href="http://www.woaitqs.cc/feed.xml">RSS订阅</a> 进行订阅。
           </span>
 </div>
 
@@ -81,7 +81,7 @@ Binder 是一个基于OpenBinder开发，Google在其中进行了相应的改造
 
 #### Client / Server 架构
 
-在设计的时候，Binder Framework 交互模型采用的是客户端/服务器模型。客户端需要调用远程服务的内容时， 会初始化一个连接，并等待服务器的返回，同时会block住自己。Binder Framework在客户端这边实现了一个代理，而在服务端，通过线程池的方式来响应请求。在如下图所示，A进程就是客户端，并且通过Proxy来完成对Binder Driver内核的交互。Process B是系统服务进程，在这个进程里面维护这多个Binder Thread，直到达到设置的线程上限。Proxy对象通过和Binder Driver进行交互，从而使得Binder Driver将信息传递到目标对象。从Android开发者的角度出发，Binder Framework提供的最方便的改进就是能像调用本地方法一样调用远程方法或对象。客户端的进程调用会在Server进程返回之前一直处于block的状况。在这种机制下，客户端就不必提供一个单独的线程模型和回调机制。（同步转异步简单，而异步变同步则很困难）
+在设计的时候，Binder Framework 交互模型采用的是客户端/服务器模型。客户端需要调用远程服务的内容时， 会初始化一个连接，并等待服务器的返回，同时会block住自己。Binder Framework在客户端这边实现了一个代理，而在服务端，通过线程池的方式来响应请求。在如下图所示，A进程就是客户端，并且通过Proxy来完成对Binder Driver内核的交互。Process B是系统服务进程，在这个进程里面维护着多个Binder Thread，直到达到设置的线程上限。Proxy对象通过和Binder Driver进行交互，从而使得Binder Driver将信息传递到目标对象。从Android开发者的角度出发，Binder Framework提供的最方便的改进就是能像调用本地方法一样调用远程方法或对象。客户端的进程调用会在Server进程返回之前一直处于block的状况。在这种机制下，客户端就不必提供一个单独的线程模型和回调机制。（同步转异步简单，而异步变同步则很困难）
 
 ![binder-proxy.png](http://o8p68x17d.bkt.clouddn.com/binder-proxy.png)
 
@@ -94,7 +94,7 @@ Target是指目标binder，Cookie这涵盖着一些内部信息，sender Id则�
 
 而这里面的Sender Id 则非常的重要，不仅可以起到唯一标示Binder的作用，还可以在跨进程的地方作为标记的作用，在接下来的文章里再详细说明。
 
-### Server Manager
+### Service Manager
 
 我们接触的服务很多，从Display到Location，从Audio到Wifi，如果我们和每一个服务都通过前面描述的方式进行交互，即便通过 Proxy 的方式也是非常的繁琐。而且在调用每个系统服务的时候，必须知道对应的系统服务的地址，而系统服务的地址出于安全性的考虑也不应该暴露出来。那么如何方便我们进行系统服务调用了？
 
