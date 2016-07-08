@@ -7,6 +7,15 @@ tags: [android, 混淆, 反编译]
 ---
 {% include JB/setup %}
 
+<div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
+
+          <span style="position: relative;padding: 5px 15px 5px 15px;background-color: white;bottom: 30px;font-size: 16px;font-weight: bolder;">摘要</span>
+
+          <span style="position: relative;display: block;bottom: 15px;">
+          本文介绍了 Android 代码打包过程，以及基本的反编译技巧，在最后介绍了一种别样的方法用来保护你的代码，值得阅读。
+          </span>
+</div>
+
 在某个风不平浪不静的日子里，接到了一个技术调研的任务，这个技术相对而言毕竟繁琐且门槛很高，于是我在网上搜寻相应的应用，看是否能从他们混淆后的代码中得到一些思考。在经历一段波折的反编译后，虽然对调研需要的内容没有起到太大的作用，反倒是学到了一些如何保护代码的不太常见的技巧，大有无心插柳柳成荫的意思，于是专门写这篇文章分享给大家。
 
 <!--break-->
@@ -222,7 +231,7 @@ invoke-virtual {v0, v6, v7}, Ljava/io/InputStream;->skip(J)J
 
 ### 文档信息
 * 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
-* 发表日期：2016年7月8日
+* 发表日期：2016年7月7日
 * 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
 * Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
 
