@@ -15,6 +15,8 @@ tags: [android, 混淆, 反编译]
 
 如果对应用打包过程和常见反编译方法都有所了解，可以跳过这两部分，直接看最后的章节.
 
+------------------------
+
 ### Android 打包过程
 
 要进行逆向工程，反编译项目，那么首先得知道顺向工程是如何进行的，即我们得知道怎么打包的。Android 的打包过程是通过各种工具将你的工程项目转换成 APK 格式的可安装程序，这个过程其实非常灵活，在每个步骤可以做很多自定义的事情，甚至你可以完全手动完成整个步骤，正是这样灵活的过程也给许多黑色产业可乘之机。接下来我们看看具体的打包过程。
@@ -93,6 +95,8 @@ aapt p[ackage] -f -S <res路径> -I <android.jar路径> -A <assert路径> -M <An
 
 ![apk 组成](http://o8p68x17d.bkt.clouddn.com/apk_compoent.png)
 
+------------------------
+
 ### 常见反编译方法
 
 知道打包是怎么进行后，就可以办轻松地进行反编译的工作，我们感兴趣的内容无非是其中的资源和其中的代码，根据前面提到的打包知识，代码主要在 classes.dex 文件中，因此我们需要做的是两件事情，一是得到被压缩处理的资源文件，二是从 classes.dex 文件中得到相应的代码。
@@ -136,6 +140,8 @@ APK 包本事就是一个 zip 包，所以直接将后缀名改成 zip，就可�
 在这个步骤后，就能得到 `classes-dex2jar.jar`，为了更方便地阅读 jar 文件，可以使用 [JD-GUI](https://github.com/java-decompiler/jd-gui) 进行代码阅读。
 
 ![JD-GUI](https://camo.githubusercontent.com/8286f65f4b148a27de05a78fa366074543e89ce3/687474703a2f2f6a642e62656e6f772e63612f696d672f73637265656e73686f7431372e706e67)
+
+------------------------
 
 ### 保护代码资源
 
@@ -204,8 +210,20 @@ invoke-virtual {v0, v6, v7}, Ljava/io/InputStream;->skip(J)J
 
 期待一个更好，更健康的 Android 生态圈~
 
+------------------------
+
 ### 参考文章
 
 1. [Android APK打包流程](http://shinelw.com/2016/04/27/android-make-apk/)
 2. [Configure Your Build](https://developer.android.com/studio/build/index.html)
 3. [Android 命令行手动编译打包详解](http://jojol-zhou.iteye.com/blog/729254)
+
+------------------------
+
+### 文档信息
+* 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
+* 发表日期：2016年7月8日
+* 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
+* Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
+
+------------------------
