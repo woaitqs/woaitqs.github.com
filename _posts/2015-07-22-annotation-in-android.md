@@ -89,7 +89,7 @@ public Data request(){
 
 从这个例子里面可以看出，注解在一定程度上争强了扩展性和灵活性。
 
-### Android Support Animation 的小例子
+### Android Support Annotation 的小例子
 
 Android 里面的Resource Id都是int, 如果我们想要限制 Res 为Drawable
 

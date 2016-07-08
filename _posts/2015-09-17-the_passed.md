@@ -4,7 +4,7 @@ title: "悼文"
 description: "对外公的深切怀念"
 keywords: "外公, 思恋，反省"
 category: "thinking"
-tags: []
+tags: [反省, 怀念]
 ---
 {% include JB/setup %}
 

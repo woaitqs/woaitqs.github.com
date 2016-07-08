@@ -4,7 +4,7 @@ title: "Android 系统学习计划"
 description: "本文是 Android 系统学习系列文章中的总纲，列举了打算解决的知识点，以及为什么要进行这个计划"
 keywords: "android event 系统学习 handler binder 组件"
 category: "android"
-tags: [android program]
+tags: [android, program]
 ---
 {% include JB/setup %}
 

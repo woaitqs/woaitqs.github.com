@@ -4,7 +4,7 @@ title: "详解 Android 是如何启动的"
 description: "Android 从开机到运行 App，在这个过程中发生了什么？"
 keywords: "android 启动 launch"
 category: "android"
-tags: [android program]
+tags: [android, program]
 ---
 {% include JB/setup %}
 

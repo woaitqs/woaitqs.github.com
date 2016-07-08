@@ -4,7 +4,7 @@ title: "Android 应用进程启动流程"
 description: "分析了 Android 进程在启动时要完成的事情，理解其中发生的事情。"
 keywords: "android ActivityManager 源码解析 binder activity"
 category: "android"
-tags: [android program]
+tags: [android,program]
 ---
 {% include JB/setup %}
 

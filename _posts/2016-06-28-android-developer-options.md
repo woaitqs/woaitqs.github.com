@@ -4,7 +4,7 @@ title: "Android 开发者选项详述"
 description: "如何用好 Android 开发者选项，为你的开发做贡献"
 keywords: "android, 开发者选项, developer options, OverDraw"
 category: "android"
-tags: [android tools]
+tags: [android, tools]
 ---
 {% include JB/setup %}
 

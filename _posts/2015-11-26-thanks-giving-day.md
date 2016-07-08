@@ -3,7 +3,7 @@ layout: post
 title: "感恩节札记"
 description: "感恩节"
 category: "thinking"
-tags: []
+tags: [感恩节]
 ---
 {% include JB/setup %}
 

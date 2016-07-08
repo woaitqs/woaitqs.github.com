@@ -4,7 +4,7 @@ title: "独立博客进阶技巧"
 description: "如何使得你的博客能够脱颖而出？"
 keywords: "github, pages, blog, 博客, SEO, 百度, jekyll"
 category: "blog"
-tags: [blog thinking]
+tags: [blog, thinking]
 ---
 {% include JB/setup %}
 
