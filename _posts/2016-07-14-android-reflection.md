@@ -8,9 +8,18 @@ tags: [android, reflection]
 ---
 {% include JB/setup %}
 
-# Java 反射极简教程，以及在 Android 上的使用示例
+<div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
-## Java 反射简介
+          <span style="position: relative;padding: 5px 15px 5px 15px;background-color: white;bottom: 30px;font-size: 16px;font-weight: bolder;">摘要</span>
+
+          <span style="position: relative;display: block;bottom: 15px;">
+          本文介绍了 Java 反射的基础知识，以及用一个实际的例子介绍了如何在 Android 开发中应用反射。
+          </span>
+</div>
+
+<!--break-->
+
+### Java 反射简介
 
 Java 程序的运行需要相应的环境（Java Runtime Environment）, 而这其中最有名的就是 JVM，JVM 提供了动态运行字节码的能力，除了 JVM 帮我们做链接、加载字节码相关的事情外，也通过反射提供给我们动态修改的能力。反射使得我们能够在运行时，不知道类名、方法名的情况下查看其中的接口、方法和字段等信息，另一方面，也可以动态调用方法、新建对象，甚至篡改字段值。
 
@@ -32,7 +41,7 @@ public class HashMapClass extends HashMap {
 }
 ```
 
-## Class 类简介
+### Class 类简介
 
 在进行接下来的反射教程中，首先应该了解 Class Object。Java 中所有的类型，包括 int、float 等基本类型，都有与之相关的 Class 对象。如果知道对应的 Class name，可以通过 `Class.forName()` 来构造相应的 Class 对象，如果没有对应的 class，或者没有加载进来，那么会抛出 ClassNotFoundException 对象。
 
@@ -63,7 +72,7 @@ Class 封装了一个类所包含的信息，主要的接口如下:
     }
 ```
 
-## 常用反射方法
+### 常用反射方法
 
 下面列举一些反射常见的应用场景，主要从 Student 这个类进行入手。
 
@@ -91,7 +100,7 @@ private int grade = 1;
 }
 ```
 
-### 1）反射构建 Student 对象
+#### 1）反射构建 Student 对象
 
 ```java
 try {
@@ -108,7 +117,7 @@ try {
 }
 ```
 
-### 2）反射修改私有变量
+#### 2）反射修改私有变量
 
 ```java
 try {
@@ -131,7 +140,7 @@ try {
 }
 ```
 
-### 3）反射调用私有方法
+#### 3）反射调用私有方法
 
 ```java
 try {
@@ -254,7 +263,7 @@ public void dispatchMessage(Message msg) {
 
 如果能够替换 callback 变量，这样消息就可以传递到替换后的 callback 里了。这样是否能达到我们的目的？
 
-### 2) 验证是否满足反射条件
+#### 2) 验证是否满足反射条件
 
 如果我们反射的对象，拥有多个实例，那么我们就需要在不同的地方进行处理，显然这样会额外增加实现的复杂度，因而反射尽量在 `单例`或者`静态` 实例上完成，代码的复杂度能提升不少。
 
@@ -264,7 +273,7 @@ public void dispatchMessage(Message msg) {
 
 至此，可以证明这种方式理论上是可以成功的。
 
-### 3）实施代码细节，并在合适的地方进行代码注入
+#### 3）实施代码细节，并在合适的地方进行代码注入
 
 首先，我们自定义出自定义的 callback 对象，这个 callback 作为 `H` 中 callback 的代理，这里需要注意的是 msg 的定义要和底层保持一致，代码如下：
 
@@ -344,6 +353,16 @@ protected void attachBaseContext(Context base) {
 
 activity 其他的生命周期也可以同样处理，这里就不再赘述了。
 
-### 4）反射使用总结
+#### 4）反射使用总结
 
 在通过反射实现相关功能的时候，第一件事情就是认真地阅读源码，理清其中的脉络，其后找寻其中的突破点，这些点一般为 static 方法或者单例对象，最后才是代码落地。
+
+------------------------
+
+### 文档信息
+* 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
+* 发表日期：2016年7月14日
+* 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
+* Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
+
+------------------------
