@@ -46,7 +46,7 @@ tags: [android, program]
 
 ### Zygote 进程
 
-Zygote 的中文意思是受精卵，从这个意思里也可以看出 Zygote 进程是用来分裂复制(fork)的，实际上所有的 App 进程都是通过对 Zygote 进程的 Fork 得来的。当 [app_process](https://github.com/android/platform_frameworks_base/blob/master/cmds/app_process/app_main.cpp) 启动 Zygote 时，Zygote 会在其启动后，预加载必要的 Java Classes（相关列表查看 [预加载文件](https://github.com/android/platform_frameworks_base/blob/master/preloaded-classes)） 和 Resources，并启动 [System Server](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html) ，并打开 `/dev/socket/zygote` socket 去监听启动应用程序的请求，日后。在下面的代码中，显示了 Zygote 进程如何启动，和加载 System Server 的。
+Zygote 的中文意思是受精卵，从这个意思里也可以看出 Zygote 进程是用来分裂复制(fork)的，实际上所有的 App 进程都是通过对 Zygote 进程的 Fork 得来的。当 [app_process](https://github.com/android/platform_frameworks_base/blob/master/cmds/app_process/app_main.cpp) 启动 Zygote 时，Zygote 会在其启动后，预加载必要的 Java Classes（相关列表查看 [预加载文件](https://github.com/android/platform_frameworks_base/blob/master/preloaded-classes)） 和 Resources，并启动 [System Server](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html) ，并打开 `/dev/socket/zygote` socket 去监听启动应用程序的请求。在下面的代码中，显示了 Zygote 进程如何启动，和加载 System Server 的。
 
 ![受精卵](http://worms.zoology.wisc.edu/dd2/echino/cleavage/files/page7_1.jpg)
 
@@ -96,13 +96,13 @@ public static void main(String argv[]) {
 
 #### ActivityManager 架构
 
-在我们编程过程中，涉及到许多 Activity 跳转的事情，在 Launcher 中点击 Icon 进行跳转也是同样的道理，调用 `context.startActivity(intent)` 方法。Launcher 出于一个线程，而启动的 App 则运行在另一个进程中，在这其中势必牵涉到跨进程 (IPC) 调用，这样复杂的过程显然需要一种中介者，或者一个系统来进行中转和管理，而这个服务就是 `ActivityManagerService`。
+在我们编程过程中，涉及到许多 Activity 跳转的事情，在 Launcher 中点击 Icon 进行跳转也是同样的道理，调用 `context.startActivity(intent)` 方法。Launcher 出于一个进程，而启动的 App 则运行在另一个进程中，在这其中势必牵涉到跨进程 (IPC) 调用，这样复杂的过程显然需要一种中介者，或者一个系统来进行中转和管理，而这个服务就是 `ActivityManagerService`。
 
-`ActivityManagerService` 作为一个守护进程运行在 Android Framework 中，如果让开发者直接接触这个类的话，就需要开发者自行处理 IPC 调用的问题，且这有不利于 Android 系统进行安全校验等工作。因而 Android 系统实现了 `ActivityManager`，通过这个 `ActivityManager` 作为一个入口，变相地和 `ActivityManagerService` 打交道。这种模式在 Android 系统中极为常见，类似的还有 `WifiManager`, `LocationManager`，`WindowsManager` 等等。而这些 Manger 在背后调用的东西就是前面提及的 Binder 机制。下面以 ActivityManger 为例看看其背后的运作方式。
+`ActivityManagerService` 作为一个守护进程运行在 Android Framework 中，如果让开发者直接接触这个类的话，就需要开发者自行处理 IPC 调用的问题，且这有不利于 Android 系统进行安全校验等工作，因而 Android 系统实现了 `ActivityManager`，通过这个 `ActivityManager` 作为一个入口，变相地和 `ActivityManagerService` 打交道。这种模式在 Android 系统中极为常见，类似的还有 `WifiManager`, `LocationManager`，`WindowsManager` 等等。而这些 Manger 在背后调用的东西就是前面提及的 Binder 机制。下面以 ActivityManger 为例看看其背后的运作方式。
 
 Binder 体系架构可以分为 Client 和 Server 两端，为了更方便 Client 的调用，这次采用了 AIDL 的方式，具体参考链接 [Android Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html) 。这里再用类比的方式来说明，方便大家理解。历史上有不少垂帘听政的故事，背后操作的人实际是通过控制傀儡来控制朝政，通过给傀儡皇帝传递命令，傀儡皇帝只是复述命令，起到传递的作用。更有甚者，不想去上朝的控权者，会通过手下的太监或者婢女，转述给傀儡皇上。这种模式被我们称为代理模式，`ActivityManger` 所使用的就是这种模式。
 
-首先这里要针对要执行的命令进行抽象，这样掌权者、太监、皇上和朝政才能听懂。`IActivityManager` 就是对这个进行的抽象，点击查看 [源码](https://android.googlesource.com/platform/frameworks/base/+/c80f952/core/java/android/app/IActivityManager.java)，这几种就包括常见的 startActivity, showWaitingForDebugger, finishActivity 等等。`ActivityManagerProxy` 就相当于其他的太监或者婢女，Proxy 不需要懂具体的业务，只需要把指令传递过去就行。`ActivityManagerService` 就是具体的执行者，就是大臣们。`ActivityManger` 则就是具体的业务逻辑的外观类(参加GOF的设计模式)，也就是具体的掌权者们。它们的关系如下图所示：
+首先这里要针对要执行的命令进行抽象，这样掌权者、太监、皇上和朝政才能听懂。`IActivityManager` 就是对这个进行的抽象，点击查看 [源码](https://android.googlesource.com/platform/frameworks/base/+/c80f952/core/java/android/app/IActivityManager.java)，这几种就包括常见的 startActivity, showWaitingForDebugger, finishActivity 等等方法。`ActivityManagerProxy` 就相当于其他的太监或者婢女，Proxy 不需要懂具体的业务，只需要把指令传递过去就行。`ActivityManagerService` 就是具体的执行者，就是大臣们。`ActivityManger` 则就是具体的业务逻辑的外观类(参加GOF的设计模式)，也就是具体的掌权者们。它们的关系如下图所示：
 
 ![ActivityManager Service](http://o8p68x17d.bkt.clouddn.com/activity_manager_extend_relation.png)
 
@@ -110,7 +110,7 @@ Binder 体系架构可以分为 Client 和 Server 两端，为了更方便 Clien
 
 接下来分析下，在源码里是具体操作的，也验证我们前面的说法。
 
-(1) 点击 Launcher 的图标，会调用到 Activity 的 startActivity 方法。在继续往下看过去，这个里面会调用到 startActivityForResult 方法，在 startActivityForResult 方法中，疏通同归，最后会调用 `mInstrumentation.execStartActivity` 方法。
+(1) 点击 Launcher 的图标，会调用到 Activity 的 startActivity 方法。在继续往下看过去，这个里面会调用到 startActivityForResult 方法，在 startActivityForResult 方法中，殊途同归，最后会调用 `mInstrumentation.execStartActivity` 方法。
 
 ```java
 @Override
@@ -284,7 +284,7 @@ IBinder b = ServiceManager.getService("activity");
 
 上面这段代码返回的即是 `ActivityManagerService`。所有的系统服务都是 IBinder 对象，即他们必须支持远程调用。而每个系统服务都会通过在 ServiceManager 注册别名的方式，告知 ServiceManager 通过相应的别名即可访问到我。而 activity 正是 ActivityManagerService 的别名。
 
-##### 从 ActivityManagerService 到 进程启动
+#### 从 ActivityManagerService 到 进程启动
 
 ActivityManagerService 在接受到相应的 Intent 请求后（Activity、Broadcast、Service、ContentProvider），会查看是否需要进行新建进程的工作，这里以 Activity 为例，其他组件的步骤与此原理相同，就不再赘述。
 
@@ -538,8 +538,8 @@ Launcher 中的 Icon 点击，broadcast 发送，启动 Service 等组件见的�
 
 ### 文档信息
 * 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
-* 发表日期： 2016年6月16日
-* 社交媒体： [weibo](http://weibo.com/woaitqs)
+* 发表日期：2016年6月16日
+* 社交媒体：[weibo](http://weibo.com/woaitqs)
 * Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
 
 ------------------------

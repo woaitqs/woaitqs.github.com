@@ -3,6 +3,7 @@ layout: post
 title: "Android 代码保护攻防战，以及一种别样的技巧"
 description: "Android 保护代码的一种进阶技巧，利用官方的 AssertManager 和 加壳的方式来做相应保护的事情"
 category: "android"
+keywords: "android, 混淆, 反编译"
 tags: [android, 混淆, 反编译]
 ---
 {% include JB/setup %}
