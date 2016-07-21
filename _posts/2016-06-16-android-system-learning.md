@@ -67,6 +67,7 @@ tags: [android, program]
     - Application 是什么？
     - Context 分析
     - Activity 组件分析
+        - **DONE:** [Android Activity生命周期是如何实现的](http://www.woaitqs.cc/android/2016/07/19/how-activity-lifecircle-work.html)
     - Services 组件分析
     - ContentProvider 组件分析
     - Broadcast 组件分析
