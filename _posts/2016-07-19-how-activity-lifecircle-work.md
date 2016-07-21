@@ -34,8 +34,7 @@ tags: [android, program]
 * Instrumentation: Android 提供的用于监听 Activity 与系统交互的机制。
 * ActivityManagerService: Android 核心的组件服务，用于管理控制各类组件。
 
-![列表页面，以下简称 From Activity](http://img.wdjimg.com/mms/screenshot/3/7c/d56bf2bc1a3d6fa7e455d5ffd768f7c3_320_570.jpeg)
-![详情页面，以下简称 To Activity](http://img.wdjimg.com/mms/screenshot/1/10/8d1e58638d55109e33d57b9de72c2101_320_570.jpeg)
+![From Activity 和 To Activity](http://o8p68x17d.bkt.clouddn.com/from_to.png)
 
 从实际的例子出发，会更方便理解，这里以从列表页面（以下简称 From Activity）跳转到详情页面（以下简称 To Activity）为例，说明在这个过程中发生的事情。
 
