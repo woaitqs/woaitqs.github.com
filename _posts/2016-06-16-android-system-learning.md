@@ -52,6 +52,7 @@ tags: [android, program]
     - 什么是系统服务
     - ActivityServices
     - SystemServer
+    - **DONE:** [Android 应用安装过程源码解析 -- PackageManagerService](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html)
     - WindowManagerService
     - Zoyote 前世今生
 
