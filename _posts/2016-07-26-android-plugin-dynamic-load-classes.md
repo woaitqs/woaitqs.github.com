@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Android 插件化"
+title: "Android ClassLoader 加载机制"
 description: "Android ClassLoader 相关的原理"
 keywords: "android lifecycle 源码解析 binder activity"
 category: "android"
