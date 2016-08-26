@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Android ClassLoader 加载机制"
+title: "大话插件 - ClassLoader 加载机制"
 description: "Android ClassLoader 相关的原理"
-keywords: "android lifecycle 源码解析 binder activity"
+keywords: "android 插件 lifecycle 源码解析 binder activity"
 category: "android"
 tags: [android, program]
 ---
