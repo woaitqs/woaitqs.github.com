@@ -14,6 +14,8 @@ tags: [android, program]
 
 在正式开始写之前，我还是想额外地扯扯淡。就我自身看来，插件化技术本身的未来是不明朗的，在后续日趋稳定的类 Reactive Native 技术稳定（国内有 Weex）后，可以帮助我们屏蔽不同版本的兼容性问题，实现动态功能的成本也更低，可能更适合于长远方向。但我依旧还在学习插件化技术，是在于插件化技术的深入理解需要依托于对 Android Framework 层的透彻了解上，通过对此的学习，对自身内功的修炼很有裨益。Android 技术也日新月异的发展，而背后的 Framework 层则相对稳定，设计理念也是大体相同，对于 Framework 层的理解能帮我们构建出更好的程序。这就是你所不能被其他人替代的地方，因为你的不可替代性，也能赢得更好的机会。
 
+<!--break-->
+
 ### 利用接口伪装
 
 [dynamic-load-apk](https://github.com/singwhatiwanna/dynamic-load-apk) 作为第一个将 Android 插件化开源方案出去的项目，提供了最初的解决方案，

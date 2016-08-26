@@ -12,6 +12,8 @@ tags: [android, program]
 
 在具体讲解前，最好先阅读下 [Android 应用安装过程源码解析](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html), 这里详细说明了 Android 是如何安装一个应用，对这一过程的了解，有助于我们在此基础上，通过反射、代理等方式，绕过系统限制，达成我们不通过系统安装过程的情况下，加载对应的 APK 文件。
 
+<!--break-->
+
 ### 解析 APK 信息
 
 Android 对 APK 信息的解析主要围绕 PackageParser 来进行，其负责解析 APK 中包含的信息。PackageParser 源码支持单个 APK ，也支持多个 APK 组合起来的情况。既然我们的目的是获取 APK 相关的信息，那直接调用不就行了吗？PackageParser 这个类使用了 @hide 注解, 使得我们无法在编译的时候申明对这个类的使用。Google 官方是这么申明的:
