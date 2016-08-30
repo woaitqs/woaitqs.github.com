@@ -564,11 +564,11 @@ html {
 }
 /* LINK */
 a:link {
-  color: #2d2d2d;
+  color: #1863A1;
   text-decoration: none;
 }
 a:visited {
-  color: #124466;
+  color: #751590;
   text-decoration: none;
 }
 a:hover {
@@ -628,7 +628,7 @@ pre {
 .unit-article .entry-content h4,
 .unit-article .entry-content h5,
 .unit-article .entry-content h6 {
-  color: #64CDFF;
+  color: #0085A1!important;
 }
 .unit-article .entry-content h2 a:link,
 .unit-article .entry-content h3 a:link,
