@@ -46,36 +46,36 @@ tags: [android, program]
 
 因而这部分的海国图志，是关于上述四部分核心内容的归纳总结，拟定的目录如下：
 
-- 系统服务篇
-    - **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
-    - **DONE:** [Android 应用进程启动流程](http://www.woaitqs.cc/android/2016/06/21/activity-service.html)
-    - 什么是系统服务
-    - ActivityServices
-    - SystemServer
-    - **DONE:** [Android 应用安装过程源码解析 -- PackageManagerService](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html)
-    - WindowManagerService
-    - Zoyote 前世今生
+##### 系统服务篇
+    - 1. **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
+    - 2. **DONE:** [Android 应用进程启动流程](http://www.woaitqs.cc/android/2016/06/21/activity-service.html)
+    - 3. 什么是系统服务
+    - 4. ActivityManagerService
+    - 5. SystemServer
+    - 6. **DONE:** [Android 应用安装过程源码解析 -- PackageManagerService](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html)
+    - 7. WindowManagerService
+    - 8. Zoyote 前世今生
 
-- 通信框架篇
-    - Binder 完全解析
+##### 通信框架篇
+    - 1. Binder 完全解析
         - **DONE:** [Android Binder 完全解析（一）概述](http://www.woaitqs.cc/android/2016/05/23/android-binder.html)
         - **DONE:** [Android Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
         - **DONE:** [Android Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
-    - Handler 通信框架
+    - 2. Handler 通信框架
         - **DONE:** [Android Handler消息机制源码解析](http://www.woaitqs.cc/android/2016/06/06/android-handler.html)
 
-- 应用组件篇
-    - Application 是什么？
-    - Context 分析
-    - Activity 组件分析
+##### 应用组件篇
+    - 1. Application 是什么？
+    - 2. Context 分析
+    - 3. Activity 组件分析
         - **DONE:** [Android Activity生命周期是如何实现的](http://www.woaitqs.cc/android/2016/07/19/how-activity-lifecircle-work.html)
-    - Services 组件分析
-    - ContentProvider 组件分析
-    - Broadcast 组件分析
+    - 4. Services 组件分析
+    - 5. ContentProvider 组件分析
+    - 6. Broadcast 组件分析
 
-- 珠玑拾遗
-    - Gradle 用法
-    - 混淆一二事
+##### 珠玑拾遗
+    - 1. Gradle 用法
+    - 2. 混淆一二事
 
 ------------------------
 
