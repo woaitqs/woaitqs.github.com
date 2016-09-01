@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "kindle unlimited 包月读书计划"
+title: "Kindle Unlimited 包月读书计划"
 description: "kindle unlimited 包月读书计划"
 keywords: "kindle unlimited"
 category: "think"
