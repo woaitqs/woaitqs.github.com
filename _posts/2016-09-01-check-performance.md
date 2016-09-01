@@ -139,3 +139,13 @@ public void postFrameCallback(FrameCallback callback) {
 如上，Choreographer 提供了注入 FrameCallback 的入口。我们只需要对两次 `doFrame` 的时间间隔进行计算，超过 16.67ms 就算卡顿。
 
 但根据作者的统计，这种方法比较难拿到堆栈消息，只适合在线上进行量化的统计，不方便进行卡顿原因的分析。
+
+------------------------
+
+### 文档信息
+* 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
+* 发表日期：2016年9月1日
+* 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
+* Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
+
+------------------------

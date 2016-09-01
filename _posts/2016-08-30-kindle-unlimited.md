@@ -28,3 +28,13 @@ Kindle 在出世很久后，受到了广泛的好评，水墨屏的设计极大�
   2. 不再拥有该本电子书，而是一个月的阅读权，可以进行续借。
 
 就推荐到这里了，如果这个方案适合你，就快来尝试下。
+
+------------------------
+
+### 文档信息
+* 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
+* 发表日期：2016年8月30日
+* 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
+* Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
+
+------------------------
