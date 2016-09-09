@@ -10,6 +10,8 @@ tags: [android, program]
 
 Context 对于开发人员实在太常见了，各种 API 调用都需要 Context 的参与，如此广泛地出现，那就很有必要进行下深入地学习和理解，避免错误用法导致的内存泄露等等问题。
 
+<!--break-->
+
 ------------------------------------------
 
 ### 0X00 Context 是什么
@@ -332,7 +334,7 @@ private void handleCreateService(CreateServiceData data) {
 
 Service 与 Activity 类似，也是与 Service 同样生命周期。
 
-### 各种 Context 的使用场景
+### 0X04 各种 Context 的使用场景
 
 ![图片来自 http://www.jianshu.com/p/94e0f9ab3f1d ](http://o8p68x17d.bkt.clouddn.com/context_usage.png)
 

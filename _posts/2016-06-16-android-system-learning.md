@@ -69,7 +69,7 @@ tags: [android, program]
 #### 三、应用组件篇
 
 1. Application 是什么？
-2. Context 分析
+2. **DONE:** [Context 分析](http://www.woaitqs.cc/android/2016/09/07/android-context-implemention.html)
 3. Activity 组件分析
     - **DONE:** [Activity生命周期是如何实现的](http://www.woaitqs.cc/android/2016/07/19/how-activity-lifecircle-work.html)
 4. Services 组件分析
