@@ -4,7 +4,7 @@ title: "Android 事件处理机制分析"
 description: "详细说明Android 事件处理机制分析"
 keywords: "Touch, Android, Event, ViewGroup"
 category: "android"
-tags: [android, 事件处理]
+tags: [android, 事件处理, event]
 ---
 {% include JB/setup %}
 
@@ -34,7 +34,7 @@ public boolean onTouchEvent(MotionEvent ev)
 
 我们在说明下这几个函数的返回值代表的意义，这对于我们的理解非常重要。
 
-> dispatchTouchEvent(MotionEvent ev)； 
+> dispatchTouchEvent(MotionEvent ev)；
 
 事件处理系统中的路由部分，`True`表示在当前View进行消费，并停止向下发放， `False`表明是指交由父亲View的`OnTouchEvent`来处理。
 
@@ -76,6 +76,6 @@ A.dispatchTouchEvent()的目的就是通过[hit testing algorithm](https://en.wi
 1. http://codetheory.in/understanding-android-input-touch-events/
 2. http://balpha.de/2013/07/android-development-what-i-wish-i-had-known-earlier/
 3. http://pierrchen.blogspot.hk/2014/03/pipeline-of-android-touch-event-handling.html
-4. https://thenewcircle.com/s/post/1567/mastering_the_android_touch_system 
+4. https://thenewcircle.com/s/post/1567/mastering_the_android_touch_system
 
 -- EOF --

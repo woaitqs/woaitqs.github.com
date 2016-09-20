@@ -4,7 +4,7 @@ title: "Webview 开发要点"
 description: "Android Webview 开发中坑和解决方法"
 keywords: "Android, Webview, 坑, 解决方法"
 category: "android"
-tags: [program]
+tags: [android, program, webview]
 ---
 {% include JB/setup %}
 

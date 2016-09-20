@@ -4,7 +4,7 @@ title: "自动检测性能问题 - BlockCanary 原理解析"
 description: "Android BlockCanary 原理解析，自动检测泄露问题"
 keywords: "android 插件 lifecycle 原理解析 binder activity"
 category: "android"
-tags: [android, program]
+tags: [android, program, performance]
 ---
 {% include JB/setup %}
 

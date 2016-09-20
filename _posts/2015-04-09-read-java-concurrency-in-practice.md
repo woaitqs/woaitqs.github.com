@@ -4,7 +4,7 @@ title: "读薄《Java 并发实践》"
 keywords : "源码, 并发实践, 详细, 同步, CompletionService"
 description: "读薄《Java 并发实践》, 书中的关键点"
 category: "java"
-tags: [java, program]
+tags: [java, program, 并发]
 ---
 {% include JB/setup %}
 
@@ -50,7 +50,7 @@ public class LazyRace<T> {
 ### java的基础锁机制
 ``` java
 synchronized (lock){
-	
+
 }
 ```
 synchronized 是可以重入的，换言之某个线程试图获得一个已经由自己持有的锁，那么这个请求就会成功。获得锁的基础单位是「线程」
@@ -119,12 +119,12 @@ public class UnSafeProgram {
 
 public class Holder {  
     private int n;  
-  
+
     public Holder(int n) {
     	// Object会先于子类的构造函数执行，赋予默认值。
-        this.n = n; 
+        this.n = n;
     }  
-  
+
     public void assertSanity() {  
         if (n != n) {
         	// 除了发布的线程外，其他线程看到的Holder域是一个失效值，因此可能看到一个空引用
@@ -132,7 +132,7 @@ public class Holder {
             throw new AssertionError("This statement is false.");  
         }
     }  
-} 
+}
 ```
 
 由于不可变对象是一种非常安全的对象，因此java内存模型为不可变对象的共享提供了一个特殊的初始化安全性保证。即便某个对象的引用对其他线程是可见的，也不意味着对象状态对使用该对象的线程一定是可见的。

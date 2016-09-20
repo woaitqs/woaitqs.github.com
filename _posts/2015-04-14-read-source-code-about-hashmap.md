@@ -4,7 +4,7 @@ title: "Java HashMap 源码解析终极版"
 description: "Source code about HashMap, hashmap 源码详细说明"
 keywords : "源码, HashMap, 详细, 设计"
 category: "program"
-tags: [java,program]
+tags: [java, program]
 ---
 {% include JB/setup %}
 
@@ -319,4 +319,3 @@ private void readObject(ObjectInputStream stream) throws IOException,
     }
 }
 ```
-

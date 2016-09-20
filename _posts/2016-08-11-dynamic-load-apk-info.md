@@ -4,7 +4,7 @@ title: "大话插件 - 解析 APK 信息"
 description: "Android ClassLoader 相关的原理，如何用动态解析 APK 信息"
 keywords: "android 插件 APK 源码解析 "
 category: "android"
-tags: [android, program]
+tags: [android, program, plugin]
 ---
 {% include JB/setup %}
 

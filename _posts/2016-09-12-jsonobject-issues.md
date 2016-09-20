@@ -4,7 +4,7 @@ title: "JsonObject null 的神坑"
 description: "JsonObject 对null的神奇判断"
 keywords: "android Object null"
 category: "java"
-tags: [java, program]
+tags: [java, program, json]
 ---
 {% include JB/setup %}
 

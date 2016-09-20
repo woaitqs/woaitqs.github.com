@@ -4,7 +4,7 @@ title: "understand viewpager and pageradapter"
 description: "对Viewpager 和 pageradapter 的实现讲解"
 keywords: "ViewPager, Android, pageradapter, 坑, 源码解析"
 category: "android"
-tags: [android,viewpager]
+tags: [android, viewpager]
 ---
 {% include JB/setup %}
 

@@ -4,7 +4,7 @@ title: "Android Binder 全解析(2) -- 设计详解"
 description: "Binder Framework 是如何设计实现的"
 keywords: "Android, Binder, 机制, 实现原理"
 category: "android"
-tags: [program]
+tags: [android, program, binder]
 ---
 {% include JB/setup %}
 

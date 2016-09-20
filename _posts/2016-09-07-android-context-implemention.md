@@ -4,7 +4,7 @@ title: "详细了解Android Context"
 description: "Android context 原理解析"
 keywords: "android context 原理解析"
 category: "android"
-tags: [android, program]
+tags: [android, context, program]
 ---
 {% include JB/setup %}
 

@@ -4,7 +4,7 @@ title: "大话插件 - 动态加载插件 Activity"
 description: "Android ClassLoader 相关的原理，动态加载 Activity 的技术"
 keywords: "android 插件 lifecycle 源码解析 binder activity"
 category: "android"
-tags: [android, program]
+tags: [android, program, plugin]
 ---
 {% include JB/setup %}
 

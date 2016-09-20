@@ -4,7 +4,7 @@ title: "Android Activity 生命周期是如何实现的"
 description: "描述了 Activity 生命周期是如何实现的"
 keywords: "android lifecycle 源码解析 binder activity"
 category: "android"
-tags: [android, program]
+tags: [android, program, activity]
 ---
 {% include JB/setup %}
 

@@ -4,7 +4,7 @@ title: "Android Handler机制全解析"
 description: "详细说明Android Handler机制，以及Looper，MessageQueue，Handler在里面扮演的角色"
 keywords: "Android, Handler, 机制, 实现原理"
 category: "android"
-tags: [program]
+tags: [android, program, handler]
 ---
 {% include JB/setup %}
 

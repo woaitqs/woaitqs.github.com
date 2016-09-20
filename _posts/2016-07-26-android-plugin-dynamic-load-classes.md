@@ -4,7 +4,7 @@ title: "大话插件 - ClassLoader 加载机制"
 description: "Android ClassLoader 相关的原理"
 keywords: "android 插件 lifecycle 源码解析 binder activity"
 category: "android"
-tags: [android, program]
+tags: [android, program, plugin]
 ---
 {% include JB/setup %}
 

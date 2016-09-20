@@ -4,7 +4,7 @@ title: "Android 极简反射教程，及应用示例"
 description: "介绍了 Android 反射相关的方法"
 category: "android"
 keywords: "android, 反射, 教程"
-tags: [android, reflection]
+tags: [android, reflection, program, plugin]
 ---
 {% include JB/setup %}
 

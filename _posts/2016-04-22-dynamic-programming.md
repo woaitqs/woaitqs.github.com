@@ -4,7 +4,7 @@ title: "也来谈谈动态规划"
 description: "从简单的例子入手分析动态规划，明白动态规划的原理"
 keywords: "动态规划, 详细讲解"
 category: "program"
-tags: [算法]
+tags: [算法, 动态规划]
 ---
 {% include JB/setup %}
 

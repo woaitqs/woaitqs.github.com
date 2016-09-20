@@ -4,7 +4,7 @@ title: "Kindle Unlimited 包月读书计划"
 description: "kindle unlimited 包月读书计划"
 keywords: "kindle unlimited"
 category: "think"
-tags: [think]
+tags: [think, kindle]
 ---
 {% include JB/setup %}
 

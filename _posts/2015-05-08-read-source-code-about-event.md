@@ -4,7 +4,7 @@ title: "EventBus 终极源码解析"
 description: "EventBus 源码解析，模块划分"
 keywords: "EventBus, 源码解析, 模块设计"
 category: "program"
-tags: [android,eventbus]
+tags: [android, eventbus]
 ---
 {% include JB/setup %}
 
@@ -214,7 +214,7 @@ List<SubscriberMethod> findSubscriberMethods(Class<?> subscriberClass) {
 private void subscribe(Object subscriber, SubscriberMethod subscriberMethod, boolean sticky, int priority) {
     Class<?> eventType = subscriberMethod.eventType;
     // 获取订阅了某种类型数据的 Subscription 。 使用了 CopyOnWriteArrayList ，这个是线程安全的，
-    // CopyOnWriteArrayList 会在更新的时候，重新生成一份 copy，其他线程使用的是 
+    // CopyOnWriteArrayList 会在更新的时候，重新生成一份 copy，其他线程使用的是
     // copy，不存在什么线程安全性的问题。
     CopyOnWriteArrayList<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
     Subscription newSubscription = new Subscription(subscriber, subscriberMethod, priority);

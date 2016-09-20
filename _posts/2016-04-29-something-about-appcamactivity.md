@@ -4,7 +4,7 @@ title: "用好AppCompatActivity"
 description: "AppCompatActivity的由来，自定义调色板，Toolbar，兼容的退出动画"
 keywords: "AppCompatActivity, Toolbar, 调色板, 退出动画"
 category: "android"
-tags: [program]
+tags: [android, program, appcompat]
 ---
 {% include JB/setup %}
 
@@ -32,7 +32,7 @@ Android AppCompatActivity 已经出来一段时间，取代了原来的 ActionBa
 <resources>
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat">
- 
+
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/material_blue_500</item>
         <item name="colorPrimaryDark">@color/material_blue_700</item>

@@ -4,7 +4,7 @@ title: "Android 应用安装过程源码解析"
 description: "Android 应用安装过程源码解析"
 keywords: "android apk PackageManageService 安装 源码 Installer"
 category: "android"
-tags: [android, program]
+tags: [android, program, package]
 ---
 {% include JB/setup %}
 
