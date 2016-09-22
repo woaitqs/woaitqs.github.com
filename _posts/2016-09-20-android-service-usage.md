@@ -108,11 +108,7 @@ public ComponentName startService(IApplicationThread caller, Intent service,
 }
 ```
 
-看起来具体的逻辑，都在类型为 ActiveServices 的 mServices 对象中。
-
-#### ActiveServices
-
-ActiveServices 是 AMS 专门用来管理 Service 的类，大部分和 Services 相关的逻辑都在这里面。
+看起来具体的逻辑，都在类型为 ActiveServices 的 mServices 对象中。ActiveServices 是 AMS 专门用来管理 Service 的类，大部分和 Services 相关的逻辑都在这里面。
 
 ```java
 ComponentName startServiceLocked(IApplicationThread caller, Intent service, String resolvedType,
@@ -724,7 +720,7 @@ void publishServiceLocked(ServiceRecord r, Intent intent, IBinder service) {
 }
 ```
 
-#### 0X02 总结
+### 0X02 总结
 
 Service 作为四大组件之一，提供了不需要前台页面情况下，在后台继续执行任务的能力。Service 一般有两种使用方式，分别是通过 startService 和 bindService，前者适合执行一次性的任务，而后者则具备一定交互的能力，可以用作处理相对复杂的后台逻辑。
 
