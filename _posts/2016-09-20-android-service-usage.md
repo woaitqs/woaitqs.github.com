@@ -27,20 +27,13 @@ Service 作为 Android 提供的四大组件之一，主要负责一些没有前
 
 关于如何使用 Service，官方教程已经说明得足够详细了，如果对这些用法，还有不清晰的地方，请戳这里进行查看，-> [官方教程](https://developer.android.com/guide/components/services.html)。官方教程里面包括，startService 和 bindService 的区别，在不同场景下应该选用哪种 Service 实现方式。
 
+![Service 生命周期](http://o8p68x17d.bkt.clouddn.com/service_lifecycle.png)
+
 ------------------------
 
 ### 0X01 startService 调用流程
 
-从前面的教程里面，可以知道 Service 的启动一般有两种方式，分别是 bindService 和 startService。具体的实现逻辑在 ContextImpl 中，我们看看源码是怎么实现的。
-
-```java
-@Override
-public boolean bindService(Intent service, ServiceConnection conn,
-        int flags) {
-    warnIfCallingFromSystemProcess();
-    return bindServiceCommon(service, conn, flags, Process.myUserHandle());
-}
-```
+从前面的教程里面，可以知道 Service 的启动一般有两种方式，分别是 bindService 和 startService。这里主要说明 startService， 具体的实现逻辑在 ContextImpl 中，我们看看源码是怎么实现的。
 
 ```java
 @Override
@@ -50,29 +43,7 @@ public ComponentName startService(Intent service) {
 }
 ```
 
-接下来，看看两个方法内部具体是怎么实现的。
-
-```java
-private boolean bindServiceCommon(Intent service, ServiceConnection conn, int flags,
-        UserHandle user) {
-    // ignore some codes ...
-    validateServiceIntent(service);
-    try {
-        // ignore some codes ...
-        int res = ActivityManagerNative.getDefault().bindService(
-            mMainThread.getApplicationThread(), getActivityToken(), service,
-            service.resolveTypeIfNeeded(getContentResolver()),
-            sd, flags, getOpPackageName(), user.getIdentifier());
-        if (res < 0) {
-            throw new SecurityException(
-                    "Not allowed to bind to service " + service);
-        }
-        return res != 0;
-    } catch (RemoteException e) {
-        throw new RuntimeException("Failure from system", e);
-    }
-}
-```
+接下来，看看方法内部具体是怎么实现的。
 
 ```java
 private ComponentName startServiceCommon(Intent service, UserHandle user) {
@@ -622,7 +593,142 @@ handleServiceArgs 方法中，`s.onStartCommand` 就是我们书写后台代码�
 
 ### 0X01 bindService 调用流程
 
-// TODO. 待填坑
+bindService 相较于 startService 要复杂一些，通过这种方式实现的 Service，容易多个组件绑定到它，通过 ServiceConnection 的方式来进行通信。当没有任何其他组件，连接到这个 Service 时，该 Service 会自动销毁。
+
+bindService 方法是这样声明的。
+
+```java
+@Override
+public boolean bindService(Intent service, ServiceConnection conn,
+        int flags) {
+    warnIfCallingFromSystemProcess();
+    return bindServiceCommon(service, conn, flags, Process.myUserHandle());
+}
+```
+
+```java
+private boolean bindServiceCommon(Intent service, ServiceConnection conn, int flags,
+        UserHandle user) {
+    // ignore some codes ...
+    validateServiceIntent(service);
+    try {
+        // ignore some codes ...
+        int res = ActivityManagerNative.getDefault().bindService(
+            mMainThread.getApplicationThread(), getActivityToken(), service,
+            service.resolveTypeIfNeeded(getContentResolver()),
+            sd, flags, getOpPackageName(), user.getIdentifier());
+        if (res < 0) {
+            throw new SecurityException(
+                    "Not allowed to bind to service " + service);
+        }
+        return res != 0;
+    } catch (RemoteException e) {
+        throw new RuntimeException("Failure from system", e);
+    }
+}
+```
+
+可以看到同样是通过 gDefault 这个遥控器来通知 AMS 进行相应的操作的，原理与上面 startService 相同，接收到遥控器的指令后，ActiveServices 的 bindSericeLocked 方法开始执行。bindSericeLocked 在进行一些校验，确认进程创建成功等等步骤后，还是通过 `app.thread` 发送 `BIND_SERVICE` 消息，来执行对应的逻辑。
+
+```java
+private void handleBindService(BindServiceData data) {
+    Service s = mServices.get(data.token);
+    if (DEBUG_SERVICE)
+        Slog.v(TAG, "handleBindService s=" + s + " rebind=" + data.rebind);
+    if (s != null) {
+        try {
+            data.intent.setExtrasClassLoader(s.getClassLoader());
+            data.intent.prepareToEnterProcess();
+            try {
+                if (!data.rebind) {
+                    IBinder binder = s.onBind(data.intent);
+                    ActivityManagerNative.getDefault().publishService(
+                            data.token, data.intent, binder);
+                } else {
+                    s.onRebind(data.intent);
+                    ActivityManagerNative.getDefault().serviceDoneExecuting(
+                            data.token, SERVICE_DONE_EXECUTING_ANON, 0, 0);
+                }
+                ensureJitEnabled();
+            } catch (RemoteException ex) {
+            }
+        } catch (Exception e) {
+            if (!mInstrumentation.onException(s, e)) {
+                throw new RuntimeException(
+                        "Unable to bind to service " + s
+                        + " with " + data.intent + ": " + e.toString(), e);
+            }
+        }
+    }
+}
+```
+
+在 onBind 方法，给调用者返回 Binder 对象，通过 publishService 方法通过到 AMS 内部去，我们看看接下来发生了什么。
+
+```java
+public void publishService(IBinder token, Intent intent, IBinder service) {
+    // Refuse possible leaked file descriptors
+    if (intent != null && intent.hasFileDescriptors() == true) {
+        throw new IllegalArgumentException("File descriptors passed in Intent");
+    }
+
+    synchronized(this) {
+        if (!(token instanceof ServiceRecord)) {
+            throw new IllegalArgumentException("Invalid service token");
+        }
+        mServices.publishServiceLocked((ServiceRecord)token, intent, service);
+    }
+}
+```
+
+ActiveServices 中的代码也相对简单, 遍历建立起的 ServiceConnection，并调用它们的 connected 方法，这也是我们需要编写后台代码的地方。
+
+```java
+void publishServiceLocked(ServiceRecord r, Intent intent, IBinder service) {
+    final long origId = Binder.clearCallingIdentity();
+    try {
+        if (DEBUG_SERVICE) Slog.v(TAG_SERVICE, "PUBLISHING " + r
+                + " " + intent + ": " + service);
+        if (r != null) {
+            Intent.FilterComparison filter
+                    = new Intent.FilterComparison(intent);
+            IntentBindRecord b = r.bindings.get(filter);
+            if (b != null && !b.received) {
+                b.binder = service;
+                b.requested = true;
+                b.received = true;
+                for (int conni=r.connections.size()-1; conni>=0; conni--) {
+                    ArrayList<ConnectionRecord> clist = r.connections.valueAt(conni);
+                    for (int i=0; i<clist.size(); i++) {
+                        ConnectionRecord c = clist.get(i);
+                        if (!filter.equals(c.binding.intent.intent)) {
+                            continue;
+                        }
+                        if (DEBUG_SERVICE) Slog.v(TAG_SERVICE, "Publishing to: " + c);
+                        try {
+                            c.conn.connected(r.name, service);
+                        } catch (Exception e) {
+                            Slog.w(TAG, "Failure sending service " + r.name +
+                                  " to connection " + c.conn.asBinder() +
+                                  " (in " + c.binding.client.processName + ")", e);
+                        }
+                    }
+                }
+            }
+
+            serviceDoneExecutingLocked(r, mDestroyingServices.contains(r), false);
+        }
+    } finally {
+        Binder.restoreCallingIdentity(origId);
+    }
+}
+```
+
+#### 0X02 总结
+
+Service 作为四大组件之一，提供了不需要前台页面情况下，在后台继续执行任务的能力。Service 一般有两种使用方式，分别是通过 startService 和 bindService，前者适合执行一次性的任务，而后者则具备一定交互的能力，可以用作处理相对复杂的后台逻辑。
+
+关于更多详细的用法，还是建议阅读官方教程，[Services](https://developer.android.com/guide/components/services.html).
 
 ------------------------
 
