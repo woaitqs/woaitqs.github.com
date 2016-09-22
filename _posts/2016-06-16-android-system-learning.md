@@ -48,38 +48,38 @@ tags: [android, program, 系统学习]
 
 #### 一、系统服务篇
 
-1. **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
-2. **DONE:** [Android 应用进程启动流程](http://www.woaitqs.cc/android/2016/06/21/activity-service.html)
-3. 什么是系统服务？
-4. ActivityManagerService
-5. SystemServer
-6. **DONE:** [Android 应用安装过程源码解析](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html)
-7. WindowManagerService
-8. Zoyote 前世今生
+- [ ] **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
+- [x] **DONE:** [Android 应用进程启动流程](http://www.woaitqs.cc/android/2016/06/21/activity-service.html)
+- [ ] 什么是系统服务？
+- [ ] ActivityManagerService
+- [ ] SystemServer
+- [x] **DONE:** [Android 应用安装过程源码解析](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html)
+- [ ] WindowManagerService
+- [ ] Zoyote 前世今生
 
 #### 二、通信框架篇
 
-1. Binder 完全解析
-    - **DONE:** [Binder 完全解析（一）概述](http://www.woaitqs.cc/android/2016/05/23/android-binder.html)
-    - **DONE:** [Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
-    - **DONE:** [Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
-2. Handler 通信框架
-    - **DONE:** [Handler消息机制源码解析](http://www.woaitqs.cc/android/2016/06/06/android-handler.html)
+- [x] Binder 完全解析
+    - [x] **DONE:** [Binder 完全解析（一）概述](http://www.woaitqs.cc/android/2016/05/23/android-binder.html)
+    - [x] **DONE:** [Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
+    - [x] **DONE:** [Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
+- [x] Handler 通信框架
+    - [x] **DONE:** [Handler消息机制源码解析](http://www.woaitqs.cc/android/2016/06/06/android-handler.html)
 
 #### 三、应用组件篇
 
-1. Application 是什么？
+- [ ] Application 是什么？
 2. **DONE:** [Context 分析](http://www.woaitqs.cc/android/2016/09/07/android-context-implemention.html)
-3. Activity 组件分析
-    - **DONE:** [Activity生命周期是如何实现的](http://www.woaitqs.cc/android/2016/07/19/how-activity-lifecircle-work.html)
-4. Services 组件分析
-5. ContentProvider 组件分析
-6. Broadcast 组件分析
+- [ ] Activity 组件分析
+    - [x] **DONE:** [Activity生命周期是如何实现的](http://www.woaitqs.cc/android/2016/07/19/how-activity-lifecircle-work.html)
+- [ ] Services 组件分析
+- [ ] ContentProvider 组件分析
+- [ ] Broadcast 组件分析
 
 #### 四、珠玑拾遗
 
-1. Gradle 用法
-2. 混淆一二事
+- [ ] Gradle 用法
+- [ ] 混淆一二事
 
 ------------------------
 
