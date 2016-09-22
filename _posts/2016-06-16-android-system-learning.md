@@ -48,7 +48,7 @@ tags: [android, program, 系统学习]
 
 #### 一、系统服务篇
 
-- [ ] **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
+- :clock1: **DONE:** [Android 如何启动？](http://www.woaitqs.cc/android/2016/06/15/how-android-launch-itself.html)
 - [x] **DONE:** [Android 应用进程启动流程](http://www.woaitqs.cc/android/2016/06/21/activity-service.html)
 - [ ] 什么是系统服务？
 - [ ] ActivityManagerService
