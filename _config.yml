@@ -5,7 +5,7 @@ highlighter : rouge
 exclude: [vendor, "Gemfile", "Gemfile.lock", ".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 excerpt_separator: ""
 
-gems: ["jekyll-paginate","jekyll-coffeescript","jekyll-feed","jekyll-sitemap","jekyll-emoji"]
+gems: ["jekyll-paginate","jekyll-coffeescript","jekyll-feed","jekyll-sitemap"]
 paginate: 5
 paginate_path: "page:num"
 
