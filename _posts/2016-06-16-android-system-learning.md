@@ -80,6 +80,11 @@ tags: [android, program, 系统学习]
 
 1. <input type="checkbox" disabled=""> Gradle 用法
 2. <input type="checkbox" disabled=""> 混淆一二事
+3. <input type="checkbox" checked>  Binder 完全解析
+    - <input type="checkbox" checked> [Android View 全解析(一) -- 窗口管理系统](http://www.woaitqs.cc/android/2016/10/10/android-view-theory-1.html)
+    - <input type="checkbox" checked> [Android View 全解析(二) -- OnMeasure](http://www.woaitqs.cc/android/2016/10/18/android-view-theory-2.html)
+    - <input type="checkbox" checked>  [Android View 全解析(三) -- onLayout](http://www.woaitqs.cc/android/2016/10/25/android-view-theory-3.html)
+    - <input type="checkbox" checked>  [Android View 全解析(四) -- onDraw](http://www.woaitqs.cc/android/2016/10/28/android-view-theory-4.html)
 
 ------------------------
 
