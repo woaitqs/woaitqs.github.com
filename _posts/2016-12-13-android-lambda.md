@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "android lambda 入门教程"
+title: "Android lambda 入门教程"
 description: "android lambda 入门教程"
 category: "android"
 keywords: "lambda, android"
