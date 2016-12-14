@@ -8,7 +8,6 @@ tags: [lambda, android]
 ---
 {% include JB/setup %}
 
-# Lambda
 用20分钟的时间，再来了解下 Lambda 表达式。为什么要学习 Lambda 表达式呢？毕竟现在的 Android 使用的 JDK 版本官方并不支持 Lambda。这里列出了一些需要理由，来说明为什么要学习 Lambda 表达式。
 
 * Lambda 表达式在后续的 Android 版本中必将得到官方支持，一些其他的 Android 开发语言例如 kotlin，未雨绸缪总是好事。
@@ -138,6 +137,7 @@ Lambda表达式不会从超类中继承任何变量名，也不会引入一个�
 
 1. 下载并安装 Java 8
 2. 在 gradle 文件中，加入以下代码。
+
 ```java
 buildscript {
   repositories {
