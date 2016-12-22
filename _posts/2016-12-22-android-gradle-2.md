@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Groovy 基本用法？ -- Gradle教程(二)"
+title: "Groovy 基本用法 -- Gradle教程(二)"
 description: "Gradle 系列教程"
 category: "gradle"
 keywords: "gradle, android, 教程"
@@ -35,6 +35,7 @@ println "Hello Groovy"
 ### 变量申明
 
 申明下变量
+
 ```groovy
 def x = 5
 println x
