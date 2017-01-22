@@ -82,14 +82,14 @@ Binder 被设计出来是解决 Android IPC（进程间通信） 问题的，为
 
 这就是先有鸡，还是先有蛋的问题。答案是先有鸡，也就是说 Service Manager 首先就被创建了，并被赋予了一个特殊的句柄，这个句柄就是 0 。换而言之，其他 Server 进程都可以通过这个 `0句柄` 与 Service Manager 进行通信，在整个系统启动时，其他 Server 进程都向这个 `0句柄` 进行注册，从而使得客户端进程在需要调用服务时，能够通过这个 Service Manager 查询到相应的服务进程。
 
-![binder framework 工作原理](http://i2.buimg.com/682809ca13f6a4b5.jpg)
+![binder framework 工作原理](http://o8p68x17d.bkt.clouddn.com/binder_framework.jpg)
 
 
 ### Proxy 的由来
 
 Binder Framework 作为一个底层框架，使用的场景相当的广，但也使得不太适合面向对象开发。为了满足这样的需求，Android 的工程师采用了代理模式 Proxy 来解决这个问题。
 
-![代理模式 UML](http://i4.buimg.com/678a70032c5d5a5b.png)
+![代理模式 UML](http://o8p68x17d.bkt.clouddn.com/proxy_uml.png)
 
 首先定义一套相同的接口，服务端 和 客户端分别使用这套接口，服务端具体实现了这套接口的相应逻辑，而客户端也实现了这套接口，不过接口里面的具体实现是调用相应的远程服务接口，将函数参数打包，通过Binder向Server发送申请并等待返回值。
 
