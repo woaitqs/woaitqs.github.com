@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "simple intro to process and thread"
-description: ""
-category: ""
-tags: []
+title: "回眸进程和线程"
+description: "回眸进程和线程"
+category: "system"
+keywords: "system"
+tags: [system]
 ---
 {% include JB/setup %}
 
