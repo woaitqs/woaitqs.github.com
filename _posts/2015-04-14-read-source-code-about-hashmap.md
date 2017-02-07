@@ -12,7 +12,7 @@ tags: [java, program]
 ConCurrentHashMap 是一个被忽视的Java Concurrent包下面的类，在满足并发的「安全性」，和「活跃性」的前提下，做到了与不考虑线程安全的 HashMap 同等效率. 作者是大名鼎鼎的[Doug Lea](http://en.wikipedia.org/wiki/Doug_Lea)，他老人家在Java 并发领域做的贡献，确实是我们的榜样。下篇文章，对ConCurrentHashMap做一个分析，希望这个代码中的闪光点，能够对各位读者产生启发。这里先介绍HashMap做的实现，便于后面我们理解2者的差异，以及[Doug Lea]完成的ConCurrentHashMap类具有那些惊为天人的地方。
 
 ## JDK 是如何定义Map接口的
-在设计一个通用的模块和功能的时候，我们需要静下心来分析下根本需求是什么？根据这个需求来建立我们的根本需求。
+在设计一个通用的模块和功能的时候，我们需要静下心来分析下根本需求是什么？根据这个需求来理清我们的思路。
 
 Map，就是Key-Value对，通过Key可以快速找到对应的Value，核心的需求是Put和Get方法。
 
@@ -48,7 +48,7 @@ Map可以用Collection来实现，但不一定意味着Map就一定是Collection
 
 2）为什么没有实现Iterator接口？
 
-Map在定义上面就没有要求一定是可以迭代的，有人可能疑问用EntrySet来实现迭代啊？但是从设计的角度上去理解，如果用EntrySet的方式在接口里面申明Iterator接口，就意味着把内部的实现细节暴露出去了。所以宁愿提供`entrySet()`的接口。
+Map在定义上面就没有要求一定是可以迭代的，有人可能疑问用EntrySet来实现迭代啊？但是从设计的角度上去理解，如果用EntrySet的方式在接口里面申明Iterator接口，就意味着把内部的实现细节暴露出去了。所以宁愿提供 `entrySet()` 的接口。
 
 
 ```java
@@ -68,7 +68,7 @@ public Set<Map.Entry<K,V>> entrySet();
 
 HashMap作为我们经常用的类，几乎没有程序猿不熟悉Map的用法, 没有道理不去熟悉下HashMap的实现原理。
 
-HashMap使用java提供的基础类型中的数组，用*HashMapEntry<K, V>[] table*来进行Key-Value键值对的存储。Hash需要完成的工作即是将Key通过Hash的算法，将Key hash到某一个小于数组长度的数值*i*上面，从而在这个位置*i*记录下对应的Value，亦即`table[i] = value`，这样调用者在调用`get(key)`方法时，先通过hash计算出i，调用`table[i]`可以迅速找到相应的Value，这是HashMap查询速度快的原因。
+HashMap使用java提供的基础类型中的数组，用 *HashMapEntry<K, V>[] table* 来进行Key-Value键值对的存储。Hash需要完成的工作即是将Key通过Hash的算法，将Key hash到某一个小于数组长度的数值 *i* 上面，从而在这个位置 *i* 记录下对应的Value，亦即`table[i] = value`，这样调用者在调用`get(key)`方法时，先通过hash计算出i，调用`table[i]`可以迅速找到相应的Value，这是HashMap查询速度快的原因。
 
 JDK首先构建了对基础单元的抽象-`HashMapEntry`，里面的核心成员变量如下代码，其中hash值一个用于缓存，便于进行比较，而next字段则实现了C++的指针，通过这个指针可以链式地找到下一位。这个链式结构的设计目的是为了解决Hash冲突的情况。
 
@@ -86,9 +86,9 @@ HashMapEntry<K, V> next;
 1. 开放地址，亦即如果hash冲突，则在空闲的位置进行插入
 2. hash复用，同一个hash值，链式地加入多个value
 
-HashMap通过递归，选择了第二种方式来解决冲突的问题。
+HashMap 选择了第二种方式来解决冲突的问题。
 
-整个HashMap的核心部分是hash方法，我们先从最核心的方法看起，``HashMap``是如何实现将hashCode值映射到table数组里面的索引里面的。
+整个HashMap的核心部分是hash方法，我们先从最核心的方法看起，HashMap 是如何实现将hashCode值映射到table数组里面的索引里面的。
 
 ```java
 @Override public V put(K key, V value) {
@@ -118,11 +118,13 @@ HashMap通过递归，选择了第二种方式来解决冲突的问题。
     return null;
 }
 ```
+
 ```java
 // Collections.secondaryHash(key)方法里面使用了
 int hash = Collections.secondaryHash(key);
 int index = hash & (tab.length - 1);
 ```
+
 在这里面可以看到Hash的代码主要是Wang/Jenkins hash方法，这个方法具有两个属性
 
 1. 雪崩性（更改输入参数的任何一位，就将引起输出有一半以上的位发生变化）
@@ -172,7 +174,7 @@ if (size++ > threshold) {
 }
 ```
 
-JDK给出的方案是扩容，doubleCapacity()方法，比如原来容量为16，当现在的使用量大于*DEFAULT_LOAD_FACTOR\*Capacity*，下次直接把容量扩展到32.
+JDK给出的方案是扩容，doubleCapacity()方法，比如原来容量为16，当现在的使用量大于 *DEFAULT_LOAD_FACTOR\*Capacity*，下次直接把容量扩展到32.
 这段代码注解说的是这整个类的精华，我们必须好好研究下.
 >> Rehash the bucket using the minimum number of field writes, and this is the most subtle and delicate code in the class.
 
@@ -230,7 +232,7 @@ private HashMapEntry<K, V>[] doubleCapacity() {
 int highBit = e.hash & oldCapacity;
 newTable[j | highBit] = e;
 ```
-我们现在来说明，oldCapacity假设为16(00010000), **int highBit = e.hash & oldCapacity**能够得到高位的值，因为低位全为0，经过与操作过后，低位一定是0。J 在这里是index，J 与 高位的值进行与操作过后，就能得到在扩容后面的新的index值。
+我们现在来说明，oldCapacity假设为16(00010000), **int highBit = e.hash & oldCapacity** 能够得到高位的值，因为低位全为0，经过与操作过后，低位一定是0。J 在这里是index，J 与 高位的值进行与操作过后，就能得到在扩容后面的新的index值。
 
 设想一下，理论上我们得到的新的值应该是 `newValue = hash & (newCapacity - 1)` ，与 `oldValue = hash & (oldCapacity - 1)` 的区别仅在于高位上。 因此我们用 `J | highBit` 就可以得到新的index值。
 
@@ -238,7 +240,7 @@ newTable[j | highBit] = e;
 
 首先HashMap提供了3种形式的迭代方法，分别是针对Entry，Key和Value的迭代器，这里实现的代码就比较简单，看下具体的例子就可以知道。实现方式主要是依赖于对HashEntity数组进行遍历即可实现。
 
-问题在于如何保证迭代的时候，基于正确的输出，聪明的你一定看出来了，难度在于「多线程情况的处理」。在迭代的时候，外部可以通过调用put和remove的方法，来改变正在迭代的对象。但从设计之处，HashMap自身就不是线程安全的，因此HashMap在迭代的时候使用了一种Fast—Fail的实现方式，在HashIterator里面维持了一个 expectedModCount 的变量，在每次调用的时候如果发现 `ModCount != expectedModCount`，则抛出ConcurrentModificationException 异常。但本身这种检验不能保证在发生错误的情况下，一定能抛出异常，所以我们需要在使用HashMap的时候，心里知道这是「非线程安全」的。
+问题在于如何保证迭代的时候，基于正确的输出，聪明的你一定看出来了，难度在于「多线程情况的处理」。在迭代的时候，外部可以通过调用put和remove的方法，来改变正在迭代的对象。但从设计之处，HashMap自身就不是线程安全的，因此HashMap在迭代的时候使用了一种Fast—Fail的实现方式，在HashIterator里面维持了一个 expectedModCount 的变量，在每次调用的时候如果发现 `ModCount != expectedModCount`，则抛出 ConcurrentModificationException 异常。但本身这种检验不能保证在发生错误的情况下，一定能抛出异常，所以我们需要在使用HashMap的时候，心里知道这是「非线程安全」的。
 
 ```java
 HashMapEntry<K, V> nextEntry() {
@@ -266,7 +268,7 @@ HashMap是实现了Serializable接口的，这种Hash的结构如何实现序列
 transient int modCount;
 ```
 
-避免这些常量参与到序列化的细节里面去，在另一方面重写 **writeObject()** 和 **readObject()**方法，通过这样的方式来实现序列化，在代码里面添加了注释，便于大家理解。
+避免这些常量参与到序列化的细节里面去，在另一方面重写 **writeObject()** 和 **readObject()** 方法，通过这样的方式来实现序列化，在代码里面添加了注释，便于大家理解。
 
 ```java
 private void writeObject(ObjectOutputStream stream) throws IOException {
