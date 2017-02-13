@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "understand viewpager and pageradapter"
+title: "ViewPager 中的那些坑"
 description: "对Viewpager 和 pageradapter 的实现讲解"
 keywords: "ViewPager, Android, pageradapter, 坑, 源码解析"
 category: "android"
@@ -70,7 +70,7 @@ public boolean isViewFromObject(View view, Object object) {
 
 ```java
 public Object instantiateItem(ViewGroup container, int position) {
-	// new fragment
+	// new view
 	View view = ViewUtils.inflate(R.layout.fruit_item);
 	view.setImageResource(fruit.getResId());
 	// return result.
@@ -81,9 +81,19 @@ public boolean isViewFromObject(View view, Object object) {
 	return ((View)object).getView() == view;
 }
 ```
+
 ### ViewPager 是如何与 PagerAdapter 进行沟通的
 
 在前面的叙述中，ViewPager 是与 PagerAdapter 进行交互的，在具体实现中，ViewPager 在 PagerAdapter 里面注入了一个 Observer, 在 `setAdapter(PagerAdapter adapter)` 调用 `mAdapter.registerDataSetObserver(mObserver);`。
+
+```java
+if (mAdapter != null) {
+    if (mObserver == null) {
+        mObserver = new PagerObserver();
+    }
+    mAdapter.registerDataSetObserver(mObserver);
+}
+```
 
 ```java
 private class PagerObserver extends DataSetObserver {
@@ -98,7 +108,80 @@ private class PagerObserver extends DataSetObserver {
 }
 ```
 
-当PagerAdapter 中的数据发生变化时，PagerAdapter 调用 `mObservable.notifyChanged();` 来通知 ViewPager 进行相应的处理。ViewPager 会收到相应的回调, 在 `dataSetChanged()` 方法中进行相应的处理。
+当PagerAdapter 中的数据发生变化时，PagerAdapter 调用 `mObservable.notifyChanged();` 来通知 ViewPager 进行相应的处理。ViewPager 会收到相应的回调, 在 `dataSetChanged()` 方法中进行相应的处理，从而更新页面。
+
+```java
+void dataSetChanged() {
+  // This method only gets called if our observer is attached, so mAdapter is non-null.
+
+  final int adapterCount = mAdapter.getCount();
+  mExpectedAdapterCount = adapterCount;
+  boolean needPopulate = mItems.size() < mOffscreenPageLimit * 2 + 1 &&
+          mItems.size() < adapterCount;
+  int newCurrItem = mCurItem;
+
+  boolean isUpdating = false;
+  for (int i = 0; i < mItems.size(); i++) {
+      final ItemInfo ii = mItems.get(i);
+      final int newPos = mAdapter.getItemPosition(ii.object);
+
+      if (newPos == PagerAdapter.POSITION_UNCHANGED) {
+          continue;
+      }
+
+      if (newPos == PagerAdapter.POSITION_NONE) {
+          mItems.remove(i);
+          i--;
+
+          if (!isUpdating) {
+              mAdapter.startUpdate(this);
+              isUpdating = true;
+          }
+
+          mAdapter.destroyItem(this, ii.position, ii.object);
+          needPopulate = true;
+
+          if (mCurItem == ii.position) {
+              // Keep the current item in the valid range
+              newCurrItem = Math.max(0, Math.min(mCurItem, adapterCount - 1));
+              needPopulate = true;
+          }
+          continue;
+      }
+
+      if (ii.position != newPos) {
+          if (ii.position == mCurItem) {
+              // Our current item changed position. Follow it.
+              newCurrItem = newPos;
+          }
+
+          ii.position = newPos;
+          needPopulate = true;
+      }
+  }
+
+  if (isUpdating) {
+      mAdapter.finishUpdate(this);
+  }
+
+  Collections.sort(mItems, COMPARATOR);
+
+  if (needPopulate) {
+      // Reset our known page widths; populate will recompute them.
+      final int childCount = getChildCount();
+      for (int i = 0; i < childCount; i++) {
+          final View child = getChildAt(i);
+          final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+          if (!lp.isDecor) {
+              lp.widthFactor = 0.f;
+          }
+      }
+
+      setCurrentItemInternal(newCurrItem, false, true);
+      requestLayout();
+  }
+}
+```
 
 ### FragmentPagerAdapter 与 FragmentStatePagerAdapter
 
