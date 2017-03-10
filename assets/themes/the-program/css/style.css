@@ -133,7 +133,7 @@ kbd,
 samp {
   font-family: monospace, serif;
   _font-family: 'courier new', monospace;
-  font-size: 0.95em;
+  font-size: 0.85em;
 }
 /* Improve readability of pre-formatted text in all browsers */
 pre {
@@ -459,7 +459,7 @@ dl {
 }
 img {
   margin-top: 0;
-  width: 60%;
+  width: 70%;
   margin-bottom: 1.625em;
 }
 small,
@@ -997,7 +997,7 @@ pre {
 /*
 	Not that old computer layout
 */
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 1080px) {
   .the-header .unit-head .nav-global .logo {
     border-bottom: 0 none;
     display: block;
