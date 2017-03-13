@@ -87,7 +87,7 @@ Debug.stopMethodTracing();
 
 ### 官方的偷天换日
 
-对于大型 APK 而言，优化并非那么简单，牵涉到很多模块，某些模块的初始化必须在此启动，在这种情况下，Google 官方教程推出了 [Launch-Time Performance | Android Developers](https://developer.android.com/topic/performance/launch-time.html) 这篇文章。这里简单地介绍下这种偷天换日的方案，让用户在体验上感觉应用快了那么一点点。
+对于大型 APK 而言，优化并非那么简单，牵涉到很多模块，某些模块的初始化必须在此启动，在这种情况下，Google 官方教程推出了 [Launch-Time Performance](https://developer.android.com/topic/performance/launch-time.html) 这篇文章。这里简单地介绍下这种偷天换日的方案，让用户在体验上感觉应用快了那么一点点。
 
 在启动 Activity 之间，系统会先生成一个空白的 Window，等到 Activity 的各类资源准备完毕后，将其放置到 Window 上去。偷天换日的方案就是在这个 window 上做手脚，先将 window 的背景替换成类似于主界面的背景，这样用户会以为此时界面已经在加载中了。等一段时间后，再将这个 Window 替换为实际的 Activity 界面。
 

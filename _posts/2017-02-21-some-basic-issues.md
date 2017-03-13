@@ -200,6 +200,14 @@ public Node reverseList(Node node) {
 
 -------------------
 
+### 常见 Android 领域知识
+
+[Activity正常和异常情况下的生命周期](http://blog.csdn.net/geekerhw/article/details/48749935)
+
+[Service 和 IntentService 的区别](http://blog.qiji.tech/archives/2693)
+
+-------------------
+
 ### 总结
 
 在前面的算法章节中，简单地说明了面试官常常考虑的方面，希望对打算找工作的朋友有所帮助。相关代码在这，[https://github.com/woaitqs/common_algorithm](https://github.com/woaitqs/common_algorithm) 欢迎 fork。
