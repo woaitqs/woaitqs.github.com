@@ -83,8 +83,6 @@ ActivityManagerNative 的 getDefault 方法是这么实现的。可以看到，g
 
 如果上述内容不容易理解的话，我们可以类比地来看这个问题。我们遥控电视的时候，例如进行增加音量的操作，这个操作实际不是由遥控器完成的，而是电视中的电子元件完成的。遥控器会和电视进行协商，先声明有哪些操作可以执行，然后将这些协商后的操作在遥控器端和电视端 📺 都实现，区别在于电视机是真的实现，而遥控器只是发送操作指令而已。前面代码中提及的 gDefault 就是 ActivityManagerService 的遥控器。
 
-![电视遥控器](http://ec1img.pchome.com.tw/pic/v1/data/item/201011/A/F/A/A/1/Z/AFAA1Z-A50974180000_4cf4d79632dd5)
-
 接着往下看看电视端是具体怎么操作的，这里的电视端就是 ActivityManagerService.
 
 ```java
