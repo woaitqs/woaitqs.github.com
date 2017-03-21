@@ -144,3 +144,14 @@ public int largestRectangleArea(int[] heights) {
     return maxArea;
   }
 ```
+
+--------------
+
+### 文档信息
+
+* 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
+* 发表日期：2017年3月18日
+* 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
+* Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
+
+------------------------
