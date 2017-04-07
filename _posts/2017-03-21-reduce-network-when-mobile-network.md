@@ -14,6 +14,8 @@ tags: [android, network]
 
 既然是与服务端协定，那么我们就看看在 Http 协议中有哪些地方可以支持我们的需求。当我们获取到 Response 的时候，通常还会有一些 Http Headers 相关信息，这些信息里面包括内容长度、类型、缓存指令等等。下面的内容就展示了一个常见的 Response Headers，这些 Headers 要求客户端最多缓存 3600 秒，也给出了一个 `pub1259380237;gz` 的校验值。
 
+<img src="http://o8p68x17d.bkt.clouddn.com/http-cache-control-highlight.png" alt="http headers" title="http headers" width="300" height="300" align="right" vspace="20" hspace="20"/>
+
 ```text
 HTTP/1.x 200 OK
 Transfer-Encoding: chunked
@@ -32,7 +34,6 @@ Content-Encoding: gzip
 Vary: Accept-Encoding, Cookie, User-Agent
 ```
 
-![http headers](http://o8p68x17d.bkt.clouddn.com/http-cache-control-highlight.png)
 
 对于缓存而言，我们主要用了 Etag，Cache-Control 和 Last-Modified。
 
