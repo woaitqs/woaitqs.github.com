@@ -8,13 +8,13 @@ tags: [android, network]
 ---
 {% include JB/setup %}
 
+<img src="http://o8p68x17d.bkt.clouddn.com/http-cache-control-highlight.png" alt="http headers" title="http headers" width="300" height="300" align="right" vspace="20" hspace="20"/>
+
 日常开发中，为了不让用户等得着急，或多或少都会用到 Cache。对于一个有着固定链接的图片资源而言，我们可以简单地将其存储起来，以供后续的访问。但对于那些 Uri 一致，但内容可能随时变化的情形而言，就显得有些不太合适了。简单的例子就是微博的 FeedLine，特别是你关注的人很多时，同样的 Uri 在几秒内对应的内容都可能差别很多。另一方面，要将判断 Cache 是否有效的逻辑与 Back End(后端) 结合起来，否则一定在客户端写死，就很难满足动态的需求了。在这边文章里面，不讨论如何去实现一个 Cache 系统，而是就如何与后端结合起来保证 Cache 的有效性来说明。
 
 <!--break-->
 
 既然是与服务端协定，那么我们就看看在 Http 协议中有哪些地方可以支持我们的需求。当我们获取到 Response 的时候，通常还会有一些 Http Headers 相关信息，这些信息里面包括内容长度、类型、缓存指令等等。下面的内容就展示了一个常见的 Response Headers，这些 Headers 要求客户端最多缓存 3600 秒，也给出了一个 `pub1259380237;gz` 的校验值。
-
-<img src="http://o8p68x17d.bkt.clouddn.com/http-cache-control-highlight.png" alt="http headers" title="http headers" width="300" height="300" align="right" vspace="20" hspace="20"/>
 
 ```text
 HTTP/1.x 200 OK
