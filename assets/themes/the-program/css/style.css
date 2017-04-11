@@ -997,7 +997,7 @@ pre {
 /*
 	Not that old computer layout
 */
-@media only screen and (min-width: 1080px) {
+@media only screen and (min-width: 1280px) {
   .the-header .unit-head .nav-global .logo {
     border-bottom: 0 none;
     display: block;
