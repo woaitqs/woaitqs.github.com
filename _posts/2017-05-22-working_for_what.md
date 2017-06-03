@@ -40,6 +40,13 @@ tags: [life, think]
 
 这本身并不是什么鸡汤，而且事情也是一件小事，只是我们在拥有选择的时候，不妨试着搏一把，这样生活会比较不单调。
 
-### 秀秀作品？
+--------------
 
-最近在试着学一些拍摄技巧，在这里就厚颜无耻地放出来，欢迎批评指正。
+### 文档信息
+
+* 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
+* 发表日期：2017年5月12日
+* 社交媒体：[weibo.com/woaitqs](http://weibo.com/woaitqs)
+* Feed订阅：[www.woaitqs.cc/feed.xml](http://www.woaitqs.cc/feed.xml)
+
+------------------------
