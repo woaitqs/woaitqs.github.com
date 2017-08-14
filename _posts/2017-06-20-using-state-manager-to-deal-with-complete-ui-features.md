@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "利用状态机处理复杂业务逻辑"
+title: "利用状态机处理复杂业务逻辑(一)"
 description: "遇到超复杂的业务逻辑，如何使得逻辑清晰呢"
 category: "android"
 tags: [android, ui, state]
