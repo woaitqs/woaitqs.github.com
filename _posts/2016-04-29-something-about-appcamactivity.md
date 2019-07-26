@@ -6,11 +6,11 @@ keywords: "AppCompatActivity, Toolbar, 调色板, 退出动画"
 category: "android"
 tags: [android, program, appcompat]
 ---
-{% include JB/setup %}
+
 
 Android AppCompatActivity 已经出来一段时间，取代了原来的 ActionBarActivity，在使用一段时间的AppCompatActivity，发现也踩过一些坑，这里做一些总结，打算摘抄到我的小本本上面，以后老了，坐着摇椅慢慢看。 ：）
 
-<!--break-->
+<!--more-->
 
 ----------
 

@@ -6,13 +6,13 @@ keywords: "kindle unlimited"
 category: "think"
 tags: [think, kindle]
 ---
-{% include JB/setup %}
+
 
 Kindle 在出世很久后，受到了广泛的好评，水墨屏的设计极大程度上贴近了纸质书的阅读体验，后期推出的 Paper White，通过背光灯的技术，实现了宣传中的在夜色的树下读书的场景。
 
 ![Kindle Logo](https://lh5.ggpht.com/sxnFjIWmIPhBg09VXkKdVY-Rwn7l1Bfxq-eo6wIM1d2wWHDApGk3w-3NN77Td_BwYz4=w300)
 
-<!--break-->
+<!--more-->
 
 如果没有尝试过 Kindle 的读者，建议尝试一下，便捷的可携带性，提高了碎片时间的利用效率。这里专门说一下，Amazon 推出的一套 Kindle Unlimited 服务。该服务一月12元，全年118元，每天3毛钱左右，可是使你在 4 万部书里面进行畅读，不需要额外付出费用。
 

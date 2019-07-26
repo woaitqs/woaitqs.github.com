@@ -6,11 +6,11 @@ keywords: "android 插件 lifecycle 原理解析 binder activity"
 category: "android"
 tags: [android, program, performance]
 ---
-{% include JB/setup %}
+
 
 大家应该对 [LeakCanary](https://github.com/square/leakcanary) 比较熟悉，这个 Square 公司推出的自动检测内存泄露的工具，给开发人员带来了极大的便利。而国人也开发出一个用于自动检测性能卡顿的工具，[BlockCanary](https://github.com/markzhai/AndroidPerformanceMonitor), 今天将从原理上分析 BlockCanary 是如何实现的。
 
-<!--break-->
+<!--more-->
 
 ### 怎么定义卡顿
 

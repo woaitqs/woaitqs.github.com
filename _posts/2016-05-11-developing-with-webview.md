@@ -6,7 +6,7 @@ keywords: "Android, Webview, 坑, 解决方法"
 category: "android"
 tags: [android, program, webview]
 ---
-{% include JB/setup %}
+
 
 ### 为什么要用Webview
 
@@ -14,7 +14,7 @@ tags: [android, program, webview]
 
 尽管是官方提供的控件，`WebView` 的使用依然是坑无数，想要获得一个较好的用户体验更是难上加难。在接下来的文章中，将详细说一下个人总结出了的一些经验，能够对大家的开发带来一些好处，就更高兴了。
 
-<!--break-->
+<!--more-->
 
 ### webview 基础设置
 

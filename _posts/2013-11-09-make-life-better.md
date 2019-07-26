@@ -6,7 +6,7 @@ keywords : "贫穷, 远见, 目光"
 category: "life"
 tags: [life, think]
 ---
-{% include JB/setup %}
+
 
 ### 不算好过的小时候 ###
 

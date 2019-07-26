@@ -6,7 +6,7 @@ keywords: "android lifecycle 源码解析 binder activity"
 category: "android"
 tags: [android, program, activity]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -17,7 +17,7 @@ tags: [android, program, activity]
           </span>
 </div>
 
-<!--break-->
+<!--more-->
 
 ### 背景知识介绍
 
@@ -33,8 +33,6 @@ tags: [android, program, activity]
 * ApplicationThreadProxy: Binder Proxy 对象，传递到 ActivityManagerService 中，当 ActivityManagerService 需要让 Activity 做相应诸如启动、销毁等事情时，会通过 ActivityThread.ApplicationThread 执行具体的业务逻辑。
 * Instrumentation: Android 提供的用于监听 Activity 与系统交互的机制。
 * ActivityManagerService: Android 核心的组件服务，用于管理控制各类组件。
-
-![From Activity 和 To Activity](http://o8p68x17d.bkt.clouddn.com/from_to.png)
 
 从实际的例子出发，会更方便理解，这里以从列表页面（以下简称 From Activity）跳转到详情页面（以下简称 To Activity）为例，说明在这个过程中发生的事情。
 

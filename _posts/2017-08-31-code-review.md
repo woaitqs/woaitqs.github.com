@@ -1,17 +1,16 @@
 ---
 layout: post
-title: "如何做 Code Review"
-description: "如何做 Code Review"
+title: "如何做好 Code Review"
+description: "如何做好 Code Review"
 category: "code"
 tags: [code, review]
 ---
-{% include JB/setup %}
 
 最近公司的业务正在发展，参与的人也越来越多。但人数的增加也伴随着风险的提升，良莠不齐的人员配置，会使得代码质量难以控制。这个时候，就需要在代码入库之前，加上一道质检步骤，通过这个质检步骤，能够有限地规避一些风险。
 
 本文以 Git 作为说明，其他 VCS 工具，原理也大致相同。
 
-<!--break-->
+<!--more-->
 
 实现代码审查，现在大体有两种方式，分别是 类 Gerrit 或者 类 GitHub/Gitlab，这篇文章主要介绍后者。
 
@@ -58,8 +57,6 @@ developer 的权限只能在 features/version? 上进行工作。那么如何�
 ![merge request](http://o8p68x17d.bkt.clouddn.com/close_issue_mr.png)
 
 是不是很简单？更多信息可以查看官方文档，还有这篇[博客](https://blog.assembla.com/AssemblaBlog/tabid/12618/bid/87980/Git-Review-and-Merge-like-a-Boss.aspx)
-
-
 
 -----------------
 

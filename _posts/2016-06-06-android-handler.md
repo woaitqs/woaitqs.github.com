@@ -6,16 +6,16 @@ keywords: "Android, Handler, 机制, 实现原理"
 category: "android"
 tags: [android, program, handler]
 ---
-{% include JB/setup %}
+
 
 ### 生产者与消费者
 端午节将至，大家可能已经安排好自己的行程，不久就将出发，有做飞机前往目的地，也有做轮渡在近海游玩。设想，我们做飞机出游，只需按时抵达机场，在等候一段时间，自然有相应的飞机带我们前往心怡许久的地方。
 
-![transport.jpg](http://o8p68x17d.bkt.clouddn.com/QQ201606138.png)
+![airport](https://i.loli.net/2019/03/04/5c7c8ff8d3924.jpg)
 
 仔细想想，你不需要关心是哪一趟航班将承担此次的出行任务，另一方面，出行的航班也不关心会有哪些旅客将要登记。互相不知道细节，却能彼此很好的协作，这就是 [生产者-消费者](https://program-think.blogspot.com/2009/03/producer-consumer-pattern-0-overview.html) 带来的好处。
 
-<!--break-->
+<!--more-->
 
 生产者-消费者模式，在实际开发中极为常见，源于其主要的两个好处。
 
@@ -39,7 +39,7 @@ tags: [android, program, handler]
 
 简要的示意图如下：
 
-![Handler框架](http://o8p68x17d.bkt.clouddn.com/QQ20160613-9.png)
+![Handler框架](https://i.loli.net/2019/03/04/5c7cb95d8eef7.png)
 
 ***********************
 

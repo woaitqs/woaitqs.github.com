@@ -6,11 +6,11 @@ category: "android"
 keywords: "RecyclerView,header,footer"
 tags: [android,RecyclerView]
 ---
-{% include JB/setup %}
+
 
 添加头部和尾部的需求，在 Android 开发中特别常见，那么有什么优雅的方法来完成这个工作了？
 
-<!--break-->
+<!--more-->
 
 ### 0X0000 怎么为优雅的方式
 

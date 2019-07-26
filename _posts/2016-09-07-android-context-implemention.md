@@ -6,11 +6,11 @@ keywords: "android context 原理解析"
 category: "android"
 tags: [android, context, program]
 ---
-{% include JB/setup %}
+
 
 Context 对于开发人员实在太常见了，各种 API 调用都需要 Context 的参与，如此广泛地出现，那就很有必要进行下深入地学习和理解，避免错误用法导致的内存泄露等等问题。
 
-<!--break-->
+<!--more-->
 
 ------------------------------------------
 
@@ -43,7 +43,7 @@ public static Toast makeText(Context context, CharSequence text, @Duration int d
 
 作为一个上下文环境，该如何实现呢？接下来直接明了地，看看 Context 具体的设计图。
 
-![图片来自 http://www.cnblogs.com/goodhacker/p/4241466.html](http://o8p68x17d.bkt.clouddn.com/context.png)
+![context.png](https://i.loli.net/2019/03/14/5c89ccc5b1bf8.png)
 
 Context 本身是一个抽象类，声明了作为一个 Context 对象需要实现的方法，也就是需要提供的上下文信息，例如 `getResources`,`getPackageManager` 等等。
 
@@ -336,7 +336,7 @@ Service 与 Activity 类似，也是与 Service 同样生命周期。
 
 ### 0X04 各种 Context 的使用场景
 
-![图片来自 http://www.jianshu.com/p/94e0f9ab3f1d ](http://o8p68x17d.bkt.clouddn.com/context_usage.png)
+![图片来自 http://www.jianshu.com/p/94e0f9ab3f1d ](https://i.loli.net/2019/03/14/5c89d21e49b9d.png)
 
 ------------------------
 

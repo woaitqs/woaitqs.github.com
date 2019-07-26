@@ -6,7 +6,7 @@ keywords: "android 插件 lifecycle 源码解析 binder activity"
 category: "android"
 tags: [android, program, plugin]
 ---
-{% include JB/setup %}
+
 
 有时候稍不注意, 忘记在 Manifest 文件中注册 Activity，在运行的时候启动 Activity 时就会触发 `ActivityNotFoundException` 的异常。对于每一个运行的 Activity 都需要进行注册，这个常识我们都很清楚，但是在插件中这样的要求就有些难以实现，由于宿主程序在设计的时候，不知道插件的细节，更不用说在宿主程序的 Manifest 里面提前注册插件 Activity。
 
@@ -14,7 +14,7 @@ tags: [android, program, plugin]
 
 在正式开始写之前，我还是想额外地扯扯淡。就我自身看来，插件化技术本身的未来是不明朗的，在后续日趋稳定的类 Reactive Native 技术稳定（国内有 Weex）后，可以帮助我们屏蔽不同版本的兼容性问题，实现动态功能的成本也更低，可能更适合于长远方向。但我依旧还在学习插件化技术，是在于插件化技术的深入理解需要依托于对 Android Framework 层的透彻了解上，通过对此的学习，对自身内功的修炼很有裨益。Android 技术也日新月异的发展，而背后的 Framework 层则相对稳定，设计理念也是大体相同，对于 Framework 层的理解能帮我们构建出更好的程序。这就是你所不能被其他人替代的地方，因为你的不可替代性，也能赢得更好的机会。
 
-<!--break-->
+<!--more-->
 
 ### 利用接口伪装
 

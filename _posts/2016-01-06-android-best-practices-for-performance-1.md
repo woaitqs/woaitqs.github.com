@@ -6,7 +6,7 @@ keywords: "Memory, Android, 最佳实践, 内存分配"
 category: "android"
 tags: [android, program]
 ---
-{% include JB/setup %}
+
 
 RAM 在任何软件开发中都是非常珍贵的资源，在内存受限的手机系统中显得更加弥足珍贵。尽管Android的Davlik虚拟机能够对内存自动进行垃圾回收，但这并不意味着你能忽略你的应用对内存的分配和释放。
 
@@ -14,7 +14,7 @@ RAM 在任何软件开发中都是非常珍贵的资源，在内存受限的手�
 
 接下来的内容将说明Android系统如何管理 app 进程，内存分配，和如何在开发 Android 应用的时候降低内存使用。当需要得知一些如何在 Java 编程中合理利用内存资源，可以参考一些网上的其他书籍。Android 系统提供了比较方面的方式便于你去分析你应用的内存占用情况，链接在[Investigating Your RAM Usage](http://developer.android.com/intl/zh-tw/tools/debugging/debugging-memory.html)
 
-<!--break-->
+<!--more-->
 
 ## Android 如何管理内存
 

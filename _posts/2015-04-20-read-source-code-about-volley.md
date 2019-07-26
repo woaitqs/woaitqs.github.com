@@ -6,7 +6,7 @@ keywords : "源码, volley, 详细, 设计"
 category: "program"
 tags: [volley, android]
 ---
-{% include JB/setup %}
+
 
 ## 为什么需要阅读Volley的源码
 
@@ -14,7 +14,7 @@ Volley是Google在2013年推出的一个网络库，用于解决复杂网络环�
 
 ![在多如箭雨的情形下，Volley是如何帮你搞定一切的](http://img.blog.csdn.net/20130702124537953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdDEyeDM0NTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-<!--break-->
+<!--more-->
 
 ## Volley组件化的设计
 

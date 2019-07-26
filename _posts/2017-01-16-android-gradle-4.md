@@ -6,11 +6,11 @@ category: "gradle"
 keywords: "gradle, android, 教程"
 tags: [android, gradle, build]
 ---
-{% include JB/setup %}
+
 
 在了解 Gradle 的基本情况和 Groovy 的基本用法后，现在来看看有哪些常见的 “Android 轮子” 可以直接使用的。在 Gradle 的官方页面中并没有查找到与 Android 相关的详细文档，反倒是 Android 官网找到了，这里把地址列出来，有兴趣的同学，可自行前往学习[https://developer.android.google.cn/studio/build/index.html](https://developer.android.google.cn/studio/build/index.html)。
 
-<!--break-->
+<!--more-->
 
 ------------------------
 

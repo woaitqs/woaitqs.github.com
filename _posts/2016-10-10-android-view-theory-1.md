@@ -6,13 +6,13 @@ keywords: "窗口管理, view"
 category: "android"
 tags: [view, window, 窗口管理]
 ---
-{% include JB/setup %}
+
 
 一直在写 Android Framework 层的东西，虽然很重要，但一直写这方面的内容，还是有些不够接地气。思前想后一番后，打算写写关于 View 这个在 Android 中平常得不能更平常的东西。由浅入深，仔细梳理，帮助我，也希望能帮助你，更好地再次认识 View。
 
 第一篇文章主要讲 Android 的窗口管理系统，依托于这套系统，我们才能将 View 显示到屏幕上。了解这套系统，有助于更好地理解 Android View 的来龙去脉。但这个系统复杂，涉及到的方面众多，在这里也只是简述，还望见谅。
 
-<!--break-->
+<!--more-->
 
 ### 窗口管理系统大家族
 

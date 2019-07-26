@@ -6,7 +6,7 @@ category: "gradle"
 keywords: "gradle, android, 教程"
 tags: [android, gradle, build]
 ---
-{% include JB/setup %}
+
 
 我们在命令行执行 Android 打包的时候，通常会执行这样的命令，`gradle installDebug`。这就是 Gradle 的常见用法，`gradle [option...] [task…]`，这里的 installDebug 就是 Tasks 之一。
 
@@ -14,7 +14,7 @@ tags: [android, gradle, build]
 
 那么这些 Task 是怎么定义的了？这就涉及到 Groovy 了，让我们走进这个动态语言，看看里面的花花世界。
 
-<!--break-->
+<!--more-->
 
 --------
 

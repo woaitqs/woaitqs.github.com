@@ -6,11 +6,11 @@ keywords: "android Object null"
 category: "java"
 tags: [java, program, json]
 ---
-{% include JB/setup %}
+
 
 现在开源的 Json 序列化方案层出不穷，在性能和使用方面，都取得了很好的效果，比较常用的包括 `Gson`,`FastJson` 等等。然后对于初学者而言，或者不想引入额外框架的情况下，在这些场景下，还是会使用 `JsonObject` 这种基础对象。今天的文章，就是说一说 `JsonObject` 的神坑。
 
-<!--break-->
+<!--more-->
 
 来看看这个例子，这样的一个 Json 键值对。
 

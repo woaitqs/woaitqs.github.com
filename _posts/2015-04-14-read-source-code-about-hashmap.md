@@ -6,7 +6,7 @@ keywords : "源码, HashMap, 详细, 设计"
 category: "program"
 tags: [java, program]
 ---
-{% include JB/setup %}
+
 
 ## 序言
 ConCurrentHashMap 是一个被忽视的Java Concurrent包下面的类，在满足并发的「安全性」，和「活跃性」的前提下，做到了与不考虑线程安全的 HashMap 同等效率. 作者是大名鼎鼎的[Doug Lea](http://en.wikipedia.org/wiki/Doug_Lea)，他老人家在Java 并发领域做的贡献，确实是我们的榜样。下篇文章，对ConCurrentHashMap做一个分析，希望这个代码中的闪光点，能够对各位读者产生启发。这里先介绍HashMap做的实现，便于后面我们理解2者的差异，以及[Doug Lea]完成的ConCurrentHashMap类具有那些惊为天人的地方。
@@ -86,7 +86,7 @@ HashMapEntry<K, V> next;
 1. 开放地址，亦即如果hash冲突，则在空闲的位置进行插入
 2. hash复用，同一个hash值，链式地加入多个value
 
-HashMap 选择了第二种方式来解决冲突的问题。
+HashMap 选择了第二种方式来解决冲突的问题，注意在 1.6 和 1.7 版本中，Java 对链式存储做了一些优化。如果链表的长度大于 8 个，就不再使用链表，而是采用红黑树，避免一些极限情况下的效率问题。
 
 整个HashMap的核心部分是hash方法，我们先从最核心的方法看起，HashMap 是如何实现将hashCode值映射到table数组里面的索引里面的。
 

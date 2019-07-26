@@ -6,7 +6,7 @@ keywords: "ViewPager, Android, pageradapter, 坑, 源码解析"
 category: "android"
 tags: [android, viewpager]
 ---
-{% include JB/setup %}
+
 
 ViewPager 作为展示一组页面的容器，在Android上被广泛使用，这边文章将围绕 ViewPager 如何显示页面展开，接口如何设计展开。
 
@@ -16,7 +16,7 @@ ViewPager 是与一组页面进行交互的容器，那么怎么设计交互的�
 
 我们要达成的协议应该如下，ViewPager 负责显示页面，刷新页面，处理滑动等逻辑，而 PagerAdapter 负责实现如何渲染界面等具体接口。ViewPager 不直接操作页面，把这一切逻辑都放在 PagerAdapter 里面去，甚至页面复用这些逻辑也交由 PageAdapter 处理。那么我们来看看 PagerAdapter 是如何定义的？
 
-<!--break-->
+<!--more-->
 
 PagerAdapter 提供了4种最基础的方法需要实现。
 

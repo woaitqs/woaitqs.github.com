@@ -6,11 +6,11 @@ keywords: "OnMeasure, view"
 category: "android"
 tags: [view, window, OnMeasure]
 ---
-{% include JB/setup %}
+
 
 在[上篇文章](http://www.woaitqs.cc/android/2016/10/10/android-view-theory-1.html)中，介绍了 view 与窗口系统的关系，以及在这个系统中是怎么触发 View 的三类重要事件的。接下来说说，三类事件中 onMeasure 事件，并以 FrameLayout 的 onMeasure 为例详细说明 measure 过程是如何进行的。
 
-<!--break-->
+<!--more-->
 
 ------------------------
 

@@ -6,7 +6,7 @@ keywords: "android ActivityManager 源码解析 binder activity"
 category: "android"
 tags: [android, program, binder, process]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -23,7 +23,7 @@ tags: [android, program, binder, process]
 
 讲应用进程启动的文章不是很多，也都没有说到点上，大抵都是对源码的堆叠，没有个人的理解在里面。如果非要看调用栈的话，在合适的地方挂上断点，或者通过输出异常栈的方式都可以看到，如下图所示。老罗的文章 [Android应用程序启动过程源代码分析](http://blog.csdn.net/luoshengyang/article/details/6689748) 事无巨细，但感觉还是没有说到点子上，因而这篇文章只做到抛砖引玉的作用，希望有更好的文章出现。细节是复杂的，原理是简单的，这里尽可能地从原理角度出发进行说明，加深大家的理解。
 
-<!--break-->
+<!--more-->
 
 对这篇文章阅读后，你能了解从用户点击 Launcher 上的 App 图标，到显示出 App 界面时主要发生的事情，而通过对这个一过程的了解，将知晓以下知识点。
 

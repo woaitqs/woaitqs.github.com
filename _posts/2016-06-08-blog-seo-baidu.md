@@ -6,13 +6,13 @@ keywords: "github, pages, blog, 博客, SEO, 百度, 索引"
 category: "blog"
 tags: [blog]
 ---
-{% include JB/setup %}
+
 
 如果给你40分钟，可以搭建一个如下图所示的网站，你愿意吗？如果你愿意，那我们就开始干！
 
 ![[woaitqs.cc](http://www.woaitqs.cc) 博客](http://i1.buimg.com/4fe4cfa7bbcff3b0.png)
 
-<!--break-->
+<!--more-->
 
 ----------
 
@@ -210,7 +210,7 @@ markdown 语法十分简单，非常有利于写作，这里做一个简单介�
 继承他人的样式，或者自定义修改。
 
 摘要：
-我采用了<!--break-->这个注释的方式，如果检查到这个注释，就不再往下显示。
+我采用了<!--more-->这个注释的方式，如果检查到这个注释，就不再往下显示。
 
 图床：
 这里重点推荐 [sm.ms](https://sm.ms/)，谁用谁知道。

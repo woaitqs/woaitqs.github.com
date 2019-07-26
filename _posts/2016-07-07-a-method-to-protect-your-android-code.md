@@ -6,7 +6,7 @@ category: "android"
 keywords: "android, 混淆, 反编译"
 tags: [android, 混淆, 反编译]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -19,7 +19,7 @@ tags: [android, 混淆, 反编译]
 
 在某个风不平浪不静的日子里，接到了一个技术调研的任务，这个技术相对而言毕竟繁琐且门槛很高，于是我在网上搜寻相应的应用，看是否能从他们混淆后的代码中得到一些思考。在经历一段波折的反编译后，虽然对调研需要的内容没有起到太大的作用，反倒是学到了一些如何保护代码的不太常见的技巧，大有无心插柳柳成荫的意思，于是专门写这篇文章分享给大家。
 
-<!--break-->
+<!--more-->
 
 ![无心插柳](http://image.datatang.com/news/2015/4/3/130725029301353521.png)
 

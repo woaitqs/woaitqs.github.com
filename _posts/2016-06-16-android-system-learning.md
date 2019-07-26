@@ -6,7 +6,7 @@ keywords: "android event 系统学习 handler binder 组件"
 category: "android"
 tags: [android, program, 系统学习]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -17,7 +17,7 @@ tags: [android, program, 系统学习]
           </span>
 </div>
 
-<!--break-->
+<!--more-->
 
 ------------------------------
 

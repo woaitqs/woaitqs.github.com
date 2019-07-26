@@ -6,7 +6,7 @@ keywords: "Touch, Android, Event, ViewGroup"
 category: "android"
 tags: [android, 事件处理, event]
 ---
-{% include JB/setup %}
+
 
 
 智能手机的操作都是通过各种事件来进行处理的，了解Android的事件处理机制，对日常的应用开发具有很多的好处。本篇文章将围绕事件处理机制进行展开，进行尽可能详实地分析，说明事件是如何在多个View层级之间进行传递的。
@@ -15,20 +15,28 @@ tags: [android, 事件处理, event]
 
 由于篇幅的限定，我们只关注最基本的几种事件：Down、Move、Up和Cancel。一个Android定义的操作手势[Gestures](http://developer.android.com/training/gestures/index.html) 往往是由用户点击屏幕触发Down事件，用户移动手指会触发Move操作，操作结束的时候，会触发Up或者Cancel。可见对于这几个基本的事件的了解非常有助于我们学习Android的事件处理机制。同时为了叙述的方便，这里排除多点触摸的情况。
 
-<!--break-->
+<!--more-->
 
 ### 二、处理事件概述
 
-Android 中可见元素的基础单元就是View(ViewGroup)，事件处理也主要围绕着这两个类展开。用简明扼要的方法来说就是`从上往下传递，从下往上处理`，理解这一句话，就对Android的事件处理机制有了大体的认识。在ViewGroup中定义了几种基本方法，用来构建整个事件处理机制。
+Android 中可见元素的基础单元就是View(ViewGroup)，事件处理也主要围绕着这两个类展开。用简明扼要的方法来说就是`从上往下传递，从下往上处理`，理解这一句话，就对Android的事件处理机制有了大体的认识。在 View/ViewGroup 中定义了几种基本方法，用来构建整个事件处理机制。
 
 ```java
 // 事件派发
+// Pass the touch screen motion event down to the target view, or this
+// view if it is the target.
+// True if the event was handled by the view, false otherwise.
 public boolean dispatchTouchEvent(MotionEvent ev)
 
 // 事件拦截
+// Return true to steal motion events from the children and have
+// them dispatched to this ViewGroup through onTouchEvent().
+// The current target will receive an ACTION_CANCEL event, and no further
+// messages will be delivered here.
 public boolean onInterceptTouchEvent(MotionEvent ev)
 
 // 事件消费
+// True if the event was handled, false otherwise
 public boolean onTouchEvent(MotionEvent ev)
 ```
 
@@ -62,7 +70,7 @@ A.dispatchTouchEvent()的目的就是通过[hit testing algorithm](https://en.wi
 
 > View 事件处理
 
-如果定义了View.onTouchListener，那么时间会先传递到这，如果未被消费（return true），那么View自身会通过View.onTouchEvent来进行处理。
+如果定义了View.onTouchListener，那么事件会先传递到这，如果未被消费（return true），那么View自身会通过View.onTouchEvent来进行处理。
 
 如果View.onTouchListener返回ture，那么这将会变成所有后续事件的终点。如果return false，那么触摸事件将沿着View 层级从底往上传递到每一层。
 

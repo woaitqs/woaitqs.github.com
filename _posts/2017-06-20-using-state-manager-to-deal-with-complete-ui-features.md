@@ -6,7 +6,7 @@ category: "android"
 tags: [android, ui, state]
 keywords: "android, ui, state"
 ---
-{% include JB/setup %}
+
 
 我们来设想这么一种情形，需要实现一个下载按钮，这个下载按钮有这么如下几个功能：
 
@@ -19,7 +19,7 @@ keywords: "android, ui, state"
 
 是不是想想就很头疼，这个按钮是该有多复杂的情形呀，难免在代码中会有不少 `if-else if - else` 的代码，可想而知，出错误的可能会非常得多。这篇文章就是说说，有没有什么好的方法来解决这个问题了？ 
 
-<!--break-->
+<!--more-->
 
 -----------------
 

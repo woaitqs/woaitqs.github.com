@@ -6,7 +6,7 @@ keywords : "问题, 解决, 发现, 思考"
 category: "logic"
 tags: [logic, problem]
 ---
-{% include JB/setup %}
+
 
 本文链接：http://woaitqs.github.io/logic/2015/01/05/how-to-solve-problem/
 

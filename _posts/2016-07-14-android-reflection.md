@@ -6,7 +6,7 @@ category: "android"
 keywords: "android, 反射, 教程"
 tags: [android, reflection, program, plugin]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -17,7 +17,7 @@ tags: [android, reflection, program, plugin]
           </span>
 </div>
 
-<!--break-->
+<!--more-->
 
 ### Java 反射简介
 

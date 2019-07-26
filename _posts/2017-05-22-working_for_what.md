@@ -6,7 +6,7 @@ keywords: "清明, 哲思"
 category: "life"
 tags: [life, think]
 ---
-{% include JB/setup %}
+
 
 ### 过去的一个月发生了什么？
 

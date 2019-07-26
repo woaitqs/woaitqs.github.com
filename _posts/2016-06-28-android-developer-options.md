@@ -6,7 +6,7 @@ keywords: "android, 开发者选项, developer options, OverDraw"
 category: "android"
 tags: [android, tools]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -23,7 +23,7 @@ tags: [android, tools]
 
 使用说明：调试时屏幕一直常亮，妈妈再也不用担心调试的时候，黑屏啦！
 
-<!--break-->
+<!--more-->
 
 #### 2. Process Stats (进程统计信息)
 

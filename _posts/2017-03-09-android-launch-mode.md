@@ -6,11 +6,11 @@ category: "android"
 keywords: "android, launch, mode"
 tags: [android, launch, mode]
 ---
-{% include JB/setup %}
+
 
 我们所最常用的组件就是 Activity，Android 系统为了满足各种开发的需要，赋予了 Activity 四种不同的启动模式。虽然大家很可能都从各个地方了解过 Activity 的启动模式，但还是建议大家看看这篇文章，我会尽可能地理清思路，便于大家更好地理解启动模式。
 
-<!--break-->
+<!--more-->
 
 ### 任务栈
 

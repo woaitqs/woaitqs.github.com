@@ -6,11 +6,11 @@ keywords: "android 插件 lifecycle 源码解析 binder activity"
 category: "android"
 tags: [android, program, plugin]
 ---
-{% include JB/setup %}
+
 
 Java 代码在编译过后，会生成相应的 Class 文件，在实际执行的时候，Java 虚拟机（JVM）会实际运行相应的 Class 文件。对于 Davlik 虚拟机和 ART 虚拟机也是类似的机制。如果要通过插件的形式来执行插件中的逻辑，因为我们需要动态地加载插件中的 class 文件，巧妇难为无米之炊，就是这个道理，因而这篇文章的目的，就是了解 Android 的类加载机制，以及通过实际的例子来看看如何运用这个来达到我们加载插件的目的。
 
-<!--break-->
+<!--more-->
 
 --------------------------------
 

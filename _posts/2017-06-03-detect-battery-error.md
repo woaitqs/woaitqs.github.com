@@ -6,13 +6,13 @@ category: "android"
 tags: [android, battery]
 keywords: "android, battery, profile, dumpsys"
 ---
-{% include JB/setup %}
+
 
 厂商在预装你的 APP 之前，通常会进行功耗测试。这种功耗测试，与研发进行的测试不同，可不是通过 `ADB` 或者 `Android Studio Monitor` 进行验证的，而是通过特定的 `功耗仪` 来进行的。以前，厂商在进行测试的时候，会扣取手机的电池，并换上对应的仪器，通过这个仪器上的电流消耗，可以较准确地判断该应用是否有功耗问题。
 
 那么，如果我们的应用被厂商告知，有性能问题时，又不提供相应的仪器(`测量方式一般为机密`)情况下，如何快速定位功耗问题了？
 
-<!--break-->
+<!--more-->
 
 ---------------
 

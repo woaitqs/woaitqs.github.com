@@ -6,11 +6,11 @@ keywords: "Memory, 内存优化, 定位泄露, ArrayMap, Bitmap"
 category: "android"
 tags: [android, memory, performance]
 ---
-{% include JB/setup %}
+
 
 爱情大多数时候都是美好而甜蜜的，但也时常让我们烦恼，内存也是这样的，自动垃圾回收使得我们不用管内存的分配和释放，但稍微不注意，可能就掉进坑里面了。这边文章将主要围绕 Android Memory的各个方面进行展开，让我们知道如何与 Memory 谈恋爱，并尽可能地甜蜜。
 
-<!--break-->
+<!--more-->
 
 ----------
 

@@ -6,11 +6,11 @@ keywords: "onLayout, view"
 category: "android"
 tags: [view, window, onLayout]
 ---
-{% include JB/setup %}
+
 
 在[上一篇文章](http://www.woaitqs.cc/android/2016/10/18/android-view-theory-2.html)中，主要介绍了 onMeasure 的执行过程，这篇文章接着介绍下一个主要节点，onLayout。通过这篇文章的学习，可以了解 onLayout 的工作过程，已经常用的方法。最后以 FrameLayout 的 onLayout 方法来说明一下怎么自定义 onLayout 方法。
 
-<!--break-->
+<!--more-->
 
 ------------------------
 

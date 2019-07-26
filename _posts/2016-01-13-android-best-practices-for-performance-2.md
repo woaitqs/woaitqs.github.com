@@ -6,7 +6,7 @@ keywords: "Memory, Android, 最佳实践, 内存分配"
 category: "android"
 tags: [android, program]
 ---
-{% include JB/setup %}
+
 
 这篇文章主要讲一些能改善性能的一些小 Tips。使用正确的算法和数据结构是第一优先级的事情，但不在本文的讨论范围中。本文中的一些小 Tips 能够显著改善一些编程习惯。
 
@@ -17,7 +17,7 @@ tags: [android, program]
 
 在 Android 系统中进行开发面临的一个显著问题就是我们所开发的 App 将在多个机型上运行，这些机型的分辨率，性能等差异巨大。
 
-<!--break-->
+<!--more-->
 
 ## 避免创建不必要的对象
 

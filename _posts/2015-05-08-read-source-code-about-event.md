@@ -6,7 +6,7 @@ keywords: "EventBus, 源码解析, 模块设计"
 category: "program"
 tags: [android, eventbus]
 ---
-{% include JB/setup %}
+
 
 ## EventBus 需要解决的问题
 
@@ -27,7 +27,7 @@ ImageRequest request = new ImageRequest(url,
     });
 ```
 
-<!--break-->
+<!--more-->
 
 此时，你会发现并且开始思考一个问题，如果很多``观察者模式``需要使用了？ 比如，你正在开发一个东西，需要监听网络状态变化，App的安装情况，内容的下载情况。当存在很多``观察者模式``，「如何将这些事件通知到监听者」是可以复用的模块，这就是``EventBus``存在的意义。这里需要大家想明白一个问题，``观察者模式``本身就是一个可以复用的模块。
 

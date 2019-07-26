@@ -6,13 +6,13 @@ keywords: "onDraw, view"
 category: "android"
 tags: [view, window, onDraw]
 ---
-{% include JB/setup %}
+
 
 在前面介绍了 [onMeasure](http://www.woaitqs.cc/android/2016/10/18/android-view-theory-2.html) 用于确定 view 大小，[onLayout](http://www.woaitqs.cc/android/2016/10/25/android-view-theory-3.html) 用于确定 view 的位置后，最后我们看看三大事件中最后压轴出场的 onDraw，这确定了 view 长什么模样。
 
 onDraw 相对前面两者，涉及到的知识面非常的广。从 Canvas 提供的种类繁多的 API，到 Paint、Path 贝塞尔曲线等等高阶的工具，如果要细讲的话，估计这篇文章就得老长老长了。在这些工具的支持下，圆角按钮、复杂的下拉动画等等都手到擒来。关于这些工具的具体用法，在文末提供一些参考链接，有兴趣的同学可以去学习下。
 
-<!--break-->
+<!--more-->
 
 接下来就用一些实际的例子，来给没有怎么用过自定义 View 的同学开一扇窗，看看在 onDraw 方法里面可以玩出什么样的花样。这些例子的难度由简入难，学习曲线良好。
 

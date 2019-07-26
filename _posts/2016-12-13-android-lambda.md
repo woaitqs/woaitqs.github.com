@@ -6,7 +6,7 @@ category: "android"
 keywords: "lambda, android"
 tags: [lambda, android]
 ---
-{% include JB/setup %}
+
 
 用20分钟的时间，再来了解下 Lambda 表达式。为什么要学习 Lambda 表达式呢？毕竟现在的 Android 使用的 JDK 版本官方并不支持 Lambda。这里列出了一些需要理由，来说明为什么要学习 Lambda 表达式。
 
@@ -15,7 +15,7 @@ tags: [lambda, android]
 * 使用 Lambda 能够简化我们的代码，是很甜的语法糖，让我们能更好地专注于实现逻辑。
 * Android N 将官方支持 Lambda！
 
-<!--break-->
+<!--more-->
 
 ------------------------
 

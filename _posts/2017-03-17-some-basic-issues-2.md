@@ -6,11 +6,11 @@ category: "program"
 keywords: "算法, Stack, 栈"
 tags: [算法, 动态规划, 数据结构, 栈]
 ---
-{% include JB/setup %}
+
 
 栈是什么呢？很简单，就是实现后进先出(LIFO)的数据结构，在某些算法题中，就会利用栈的这种特性来达成目的。所有代码都已经同步至 [https://github.com/woaitqs/common_algorithm](https://github.com/woaitqs/common_algorithm)，欢迎关注。
 
-<!--break-->
+<!--more-->
 
 ### 0X000 例子1
 

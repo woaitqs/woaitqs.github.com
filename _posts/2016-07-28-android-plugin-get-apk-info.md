@@ -6,7 +6,7 @@ keywords: "android apk PackageManageService 安装 源码 Installer"
 category: "android"
 tags: [android, program, package]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -19,7 +19,7 @@ tags: [android, program, package]
 
 接下来的分析，如果没有特别提及，是基于 SDK-23 版本进行的。
 
-<!--break-->
+<!--more-->
 
 ### 系统解析安装包过程
 

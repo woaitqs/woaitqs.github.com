@@ -6,7 +6,7 @@ keywords: "Android, Binder, 机制, 实现原理"
 category: "android"
 tags: [android, program, binder]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -25,7 +25,7 @@ tags: [android, program, binder]
 - **DONE:** [Android Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
 - **DONE:** [Android Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
 
-<!--break-->
+<!--more-->
 
 --------------
 
@@ -53,21 +53,17 @@ Linux System 在IPC中，做了很多工作，提供了不少进程间通信的�
 由于前面提及的特殊性，先前的轮子已经不能满足所有的需求了，因而就有了今天的主角 Binder。
 Binder 是一个基于OpenBinder开发，Google在其中进行了相应的改造和优化，在面向对象系统里面的IPC/组件，适配了相关特性，并致力于建立具有扩展性、稳定、灵活的系统。
 
-在这一小节结束的时候，来看一看Binder在Android系统中的使用场景，也就是图中的IPC模块。
-
-![Binder 存在的地方](http://i2.buimg.com/f6eaf162ea1a609f.png)
-
 --------------
 
 ### Binder Framework 愿景
 
 既然需要重新造轮子，那么接下来让我们沿着设计者的思路，来看看如何一步一步满足前面提及的特殊需求。Binder在本质上需要解决的问题是让两个不同的进程之间能够互相调用的问题，所以从开发者的视角来看，应该就简单地如下图：
 
-![binder-user.png](http://o8p68x17d.bkt.clouddn.com/binder-user.png)
+![binder_user.png](https://i.loli.net/2019/03/04/5c7cd327df11b.png)
 
 同时从效能的角度上出发，希望提供服务调用的程序能够支持并发，这样使得能够尽可能地响应多个程序的IPC请求，由此得出的实际运行图是下面这个样子的。
 
-![biner-multi-thread.png](http://o8p68x17d.bkt.clouddn.com/biner-multi-thread.png)
+![binder_effect.png](https://i.loli.net/2019/03/04/5c7cd327e460b.png)
 
 --------------
 

@@ -6,11 +6,11 @@ category: "gradle"
 keywords: "gradle, android, 教程"
 tags: [android, gradle, build]
 ---
-{% include JB/setup %}
+
 
 开发 Android 的同时，也应该了解其构建构建工具。特别是在实际的生产开发项目中，对于需要分发的包有各式各样的需求，灵活应用构建工具将会极大地提升生产效率，另一方面，在日常开发中，对构建工具的了解，也能帮你省去不少额外工作。Gradle 他是你最亲密的战友之一，好好珍惜他。
 
-<!--break-->
+<!--more-->
 
 ### Android 构建过程
 

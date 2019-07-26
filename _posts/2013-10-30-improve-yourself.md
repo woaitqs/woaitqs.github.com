@@ -6,7 +6,7 @@ keywords : "洱海, 闲暇, 思考"
 category: "think"
 tags: [改变, think]
 ---
-{% include JB/setup %}
+
 
 #### 云南-丽江-大理
 

@@ -6,13 +6,13 @@ category: "android"
 tags: [android, ui, state]
 keywords: "android, ui, state"
 ---
-{% include JB/setup %}
+
 
 在思考之下，这次决定写关于如何根据实际的代码情况来实现 Android 有限状态机。在这篇文章中介绍自己的一点理解，希望能对诸君有所帮助。
 
 这片文章是从需求出发，自己所开发的状态机，需要支持什么功能呢？博主最近在做播放器相关的功能，对于有哪些需要，算是心知肚明。
 
-<!--break-->
+<!--more-->
 
 ### 多维度的状态机
 

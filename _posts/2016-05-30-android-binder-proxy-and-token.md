@@ -6,7 +6,7 @@ keywords: "Android, Binder, 机制, 实现原理"
 category: "android"
 tags: [android, program, binder]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -21,7 +21,7 @@ tags: [android, program, binder]
 - **DONE:** [Android Binder 完全解析（二）设计详解](http://www.woaitqs.cc/android/2016/05/26/android-binder-token.html)
 - **DONE:** [Android Binder 完全解析（三）AIDL实现原理分析](http://www.woaitqs.cc/android/2016/05/30/android-binder-proxy-and-token.html)
 
-<!--break-->
+<!--more-->
 
 ### IBinder 与 Binder
 

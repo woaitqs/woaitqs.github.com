@@ -6,11 +6,11 @@ keywords: "动态规划, 详细讲解"
 category: "program"
 tags: [算法, 动态规划]
 ---
-{% include JB/setup %}
+
 
 今天刚好遇到两个动态规划的例子，分别来自于 去哪儿 和 涂鸦的面试题，这两个题目都涉及到简单的动态规划，这里整理一下，作为对 [也来谈谈动态规划](http://www.woaitqs.cc/program/2016/04/22/dynamic-programming) 的补充。
 
-<!--break-->
+<!--more-->
 
 ### 个数最小完全平方和
 

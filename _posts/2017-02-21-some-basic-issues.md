@@ -6,13 +6,13 @@ category: "program"
 keywords: "算法"
 tags: [算法, 动态规划, 数据结构]
 ---
-{% include JB/setup %}
+
 
 当踏入社会，或者需要跳槽的时候，都需要进行面试，一次好的面试发挥，往往会给你后续带来更多福利，无论是`待遇涨幅`，还是`职级 title`。在经过一些成功和失败的面试后，也总结出一些经验，这里将这些经验无私地分享给各位，希望对你们能有所帮助。如果侥幸帮到了您，别忘了和我分享你的喜悦。
 
 后面文章中提及的代码，在这个 [https://github.com/woaitqs/common_algorithm](https://github.com/woaitqs/common_algorithm) 链接中都有反馈，有兴趣的同学可以fork，我也会时不时更新。
 
-<!--break-->
+<!--more-->
 
 -------------------
 

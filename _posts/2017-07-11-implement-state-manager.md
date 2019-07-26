@@ -6,11 +6,11 @@ category: "android"
 tags: [android, ui, state]
 keywords: "android, ui, state"
 ---
-{% include JB/setup %}
+
 
 在[上一篇文章](http://www.woaitqs.cc/android/2017/06/20/using-state-manager-to-deal-with-complete-ui-features)中，介绍了在开发中，多状态情况下，View 需要处理的情形较多，一般的书写方式逻辑复杂，很容易出问题。其后，引入了自动机的概念，在这篇文章中，将对有限自动机进行更为详细地说明。
 
-<!--break-->
+<!--more-->
 
 ### 火箭发射的例子
 

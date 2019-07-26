@@ -6,11 +6,11 @@ category: "gradle"
 keywords: "gradle, android, 教程"
 tags: [android, gradle, build]
 ---
-{% include JB/setup %}
+
 
 Groovy 闭包是代码块，可以被引用、带参数、作为方法参数传递、作为返回值从方法调用返回。
 
-<!--break-->
+<!--more-->
 
 ### 语法简介
 

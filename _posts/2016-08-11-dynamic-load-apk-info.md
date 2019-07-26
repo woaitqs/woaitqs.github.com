@@ -6,13 +6,13 @@ keywords: "android 插件 APK 源码解析 "
 category: "android"
 tags: [android, program, plugin]
 ---
-{% include JB/setup %}
+
 
 在上一篇文章 [Android ClassLoader 加载机制](http://www.woaitqs.cc/android/2016/07/26/android-plugin-dynamic-load-classes.html) 简单介绍了 Android 的类加载机制，以及我们如何通过这个机制，加载位于 SD 中的APK，并通过同一接口的方式，来实现宿主程序和插件程序之间的解耦。接下来在这篇文章中，将说明如何获取插件 APK 的 Activity, Service 等组件信息，如何将这些内容据为己用。
 
 在具体讲解前，最好先阅读下 [Android 应用安装过程源码解析](http://www.woaitqs.cc/android/2016/07/28/android-plugin-get-apk-info.html), 这里详细说明了 Android 是如何安装一个应用，对这一过程的了解，有助于我们在此基础上，通过反射、代理等方式，绕过系统限制，达成我们不通过系统安装过程的情况下，加载对应的 APK 文件。
 
-<!--break-->
+<!--more-->
 
 ### 解析 APK 信息
 

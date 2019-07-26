@@ -6,7 +6,7 @@ keywords: "android 启动 launch"
 category: "android"
 tags: [android, program, process]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -17,7 +17,7 @@ tags: [android, program, process]
           </span>
 </div>
 
-<!--break-->
+<!--more-->
 
 -------------------------
 

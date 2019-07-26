@@ -6,7 +6,7 @@ keywords: "android source service"
 category: "android"
 tags: [android, service]
 ---
-{% include JB/setup %}
+
 
 <div style="border:solid 1.5px #ccc;padding:20px 20px 10px 20px;margin-bottom: 20px;border-radius: 6px;">
 
@@ -17,7 +17,7 @@ tags: [android, service]
           </span>
 </div>
 
-<!--break-->
+<!--more-->
 
 ------------------------------------------
 

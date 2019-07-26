@@ -6,7 +6,7 @@ description: "读薄《Java 并发实践》, 书中的关键点"
 category: "java"
 tags: [java, program, 并发]
 ---
-{% include JB/setup %}
+
 
 ## 并发编程的目的
 
@@ -110,6 +110,7 @@ ThreadLocal - 使线程中的某个值与保存的对象关联起来
 不可变对象一定是线程安全的，Java内存模型里面，final域能够确保初始化过程的安全性。除非某个域是可变的，否则应该将他声明为Final
 
 #### 安全发布
+
 ```java
 public class UnSafeProgram {
 	public Holder holder;

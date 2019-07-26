@@ -6,11 +6,11 @@ keywords: "custom, view"
 category: "android"
 tags: [view, android]
 ---
-{% include JB/setup %}
+
 
 在前面的[系列文章](http://www.woaitqs.cc/android/2016/10/10/android-view-theory-1.html)之后,大家已经对 View 绘制中的各个过程熟悉了，这篇文章就根据前面所学的知识，来实际动手做一个自定义 View，这也是整个系列的完结篇了，会尽可能地涵盖自定义 View 中的各个方面，以及可能遇到的各种坑。在经过一番考量后，决定使用一个 PagerIndicator 作为例子进行讲解。在开始后面的文章之前，建议 Clone 下 [https://github.com/woaitqs/FPageIndicator](https://github.com/woaitqs/FPageIndicator)，对照着源码阅读，食用效果更佳。
 
-<!--break-->
+<!--more-->
 
 最后我们需要实现的效果如图所示：
 
