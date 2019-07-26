@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="这篇文章将重点介绍了，照片背后的原理">
+<meta name="keywords" content="camera,photo,wb,focus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="光影的秘密">
+<meta property="og:url" content="http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="这篇文章将重点介绍了，照片背后的原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be5827a3c95a.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be582aa2c3b6.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be582f532f8e.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be582ff681fc.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be58350c2ff2.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be58351d22a8.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be585adeb1ed.jpg">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be585ae38c92.jpg">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be585ae48061.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be585b14cac3.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be63676daf54.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6366e870fd.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6366e7353b.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be636c9bf628.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be636c947edd.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be636c9b2f30.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6375485897.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6375534d68.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6378b4d8ed.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be637aa9726d.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be637ab0e61b.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6390a6946d.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be639634daec.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be639639e86a.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be63963b6af6.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be63963d6036.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/10/5be6396496261.png">
+<meta property="og:updated_time" content="2019-07-26T14:35:58.893Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="光影的秘密">
+<meta name="twitter:description" content="这篇文章将重点介绍了，照片背后的原理">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/09/5be5827a3c95a.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>光影的秘密</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&text=光影的秘密"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&is_video=false&description=光影的秘密"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=光影的秘密&body=Check out this article: http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&name=光影的秘密&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#相机的基本原理"><span class="toc-number">1.</span> <span class="toc-text">相机的基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相机的三要素"><span class="toc-number">2.</span> <span class="toc-text">相机的三要素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#光圈"><span class="toc-number">2.1.</span> <span class="toc-text">光圈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快门"><span class="toc-number">2.2.</span> <span class="toc-text">快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#感光度"><span class="toc-number">2.3.</span> <span class="toc-text">感光度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何清晰成像"><span class="toc-number">3.</span> <span class="toc-text">如何清晰成像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测光"><span class="toc-number">4.</span> <span class="toc-text">测光</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#平均测光"><span class="toc-number">4.1.</span> <span class="toc-text">平均测光</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中央重点测光"><span class="toc-number">4.2.</span> <span class="toc-text">中央重点测光</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点测光、局部测光"><span class="toc-number">4.3.</span> <span class="toc-text">点测光、局部测光</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#曝光补偿"><span class="toc-number">5.</span> <span class="toc-text">曝光补偿</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#色温-白平衡"><span class="toc-number">6.</span> <span class="toc-text">色温(白平衡)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HDR-模式"><span class="toc-number">7.</span> <span class="toc-text">HDR 模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">8.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">9.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        光影的秘密
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-09-01T08:52:50.000Z" itemprop="datePublished">2018-09-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/camera/">camera</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/camera/">camera</a>, <a class="tag-link" href="/tags/focus/">focus</a>, <a class="tag-link" href="/tags/photo/">photo</a>, <a class="tag-link" href="/tags/wb/">wb</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="相机的基本原理"><a href="#相机的基本原理" class="headerlink" title="相机的基本原理"></a>相机的基本原理</h2><p>手机拍摄的原理，解释起来并不复杂，大体上就是小孔成像的升级版。光源通过光圈在设定时间内，让光进入传感器，并停留指定时间，经过数字化处理，最后呈现出图像。听上去很乏味，对吧，但给自己一点点耐心，要看我哦。( <del>并不是为了给我面子</del> )</p>
+<p>人眼能直接看到的，是直射或者反射的光线。当光线打在一个物体上时，会进行反射，从而我们能够看到物体。通常情况下，物体表面不是光滑的，光射到粗糙物体表面时，会无序地向各个方向反射，这种现象又称为漫反射。设想我们在墙壁上凿一个小孔，漫反射的光会进入小孔，从而在另一端的墙壁上显出一个倒立的影子。这就是小孔成像啦，相机基于的原理也就是这个。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be5827a3c95a.png" alt="小孔成像"></p>
+<hr>
+<h2 id="相机的三要素"><a href="#相机的三要素" class="headerlink" title="相机的三要素"></a>相机的三要素</h2><p>有很多方面可以决定一张照片的质量，有多少光线进入镜头，多长时间段的光线进入，队这些光线的敏感度如何，这分别就是相机的三要素。</p>
+<h3 id="光圈"><a href="#光圈" class="headerlink" title="光圈"></a>光圈</h3><p>光圈的大小直接影响进入传感器的光的大小。</p>
+<blockquote>
+<p>光圈是一个用来控制光线透过镜头，进入机身内感光面的光量的装置，它通常是在镜头内。表达光圈大小我们是用f值。对于已经制造好的镜头，我们不可能随意改变镜头的直径，但是我们可以通过在镜头内部加入多边形或者圆型，并且面积可变的孔状光栅来达到控制镜头通光量，这个装置就叫做光圈。</p>
+</blockquote>
+<p><img src="https://i.loli.net/2018/11/09/5be582aa2c3b6.png" alt="光圈示例"></p>
+<p>下面分别展示大光圈和小光圈下的两张图片，区别一目了然。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be582f532f8e.png" alt="大光圈"><br><img src="https://i.loli.net/2018/11/09/5be582ff681fc.png" alt="小光圈"></p>
+<p>P.S. 大部分手机设备，都没有做多级光圈的支持，也就是说大部分设备都是一种光圈。所以除非自身的手机支持，这一条可以忽略啦，来打我呀。写在这里，是作为科普知识哒~</p>
+<h3 id="快门"><a href="#快门" class="headerlink" title="快门"></a>快门</h3><p>决定的是，允许多长时间的光进入传感器。快门时间越长，进入的光线也就越多，从而照片会偏亮。拍摄较暗环境时，需要较长的快门，否则容易显示不清晰；反过来对于光亮充足的环境下，需要较短的快门，否则容易过度曝光。</p>
+<p>下图分别是 0.6S 和 15S 快门下的两组照片，足够长的快门下，就有足量的光进入传感器，从而有车流的感受。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be58350c2ff2.png" alt="短快门"><br><img src="https://i.loli.net/2018/11/09/5be58351d22a8.png" alt="长快门"></p>
+<h3 id="感光度"><a href="#感光度" class="headerlink" title="感光度"></a>感光度</h3><blockquote>
+<p>感光度，又称为ISO值，是衡量底片对于光的灵敏程度，由敏感度测量学及测量数个数值来决定，最近已经被国际标准化组织标准化。</p>
+</blockquote>
+<p>感光度很好理解，感光度越高，对光的敏感程度也越好，越容易拍亮物体。但值得注意的是，感光度越高，噪点也会更明显，想要用得好，还得多实践。</p>
+<p><del>此处有视频演示，微信公众号上传视频真麻烦，有兴趣的童鞋微信联系…</del></p>
+<hr>
+<h2 id="如何清晰成像"><a href="#如何清晰成像" class="headerlink" title="如何清晰成像"></a>如何清晰成像</h2><p>一束光经过透镜后，会在一个平面上清晰呈现，这个点叫做焦点，这个平面叫做焦平面，对于单一物体有且只有一个焦平面。实际上我们人眼在一定范围内都能认为是清晰成像的，无法做到那么严苛。</p>
+<blockquote>
+<p>对焦是指使用照相机时调整好焦点距离，使得画面能够在指定的部位呈现出想要的效果(大部分情况下都是希望清晰)。</p>
+</blockquote>
+<p>手机上的对焦与相机上的对焦有一定的差异，需要单独的说明下。一般而言，前置摄像都使用的是定焦镜头，且一般都是超焦距镜头。换而言之，只要用前置摄像头拍摄的照片，0.5m到无限远，都比较清晰。可能有人会问，我点击前置摄像头，画面变化很大的呀，那不是变焦，只是在测光，23333。</p>
+<p>再来谈谈变焦效果，手机那么薄，配置一个需要前后伸缩的变焦镜头不太现实。那么手机的变焦效果是怎么实现的了？双摄！一般的摄像头，都会长焦和短焦搭配起来使用，我们看到的变焦效果，往往是两个摄像头配合起来工作，加上软件实现的算法才能工作。所以手机上的变焦速度，变焦效果，就能看出手机开发商的硬实力了。咳咳，我并没有批评某些手机哈~</p>
+<p>现在手机为了大家更方便地进行拍摄，往往是测光加对焦，都可以轻触完成（哪里不清晰就点哪里）。此外，用户可以通过长按，来锁定焦距，这样就能完成不同的焦距效果。下面两张图片分别展示在不同焦距下的两张图片，照片清晰的部位不一样，意境也不相同。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be585adeb1ed.jpg" alt="对焦近处"></p>
+<p><img src="https://i.loli.net/2018/11/09/5be585ae38c92.jpg" alt="对焦远处"></p>
+<p>接下来谈谈弥散圆和景深效果。</p>
+<p>在焦点前后，光线从聚集到扩散，点的影象从圆到点（焦点），继而有扩散到圆，这个焦点前面和后面的圆就叫做弥散圆，效果如下图。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be585ae48061.png" alt="弥散圆"></p>
+<p>这里继续提及一下景深的概念，网上没有找到精确的定义，就我个人理解而言，景深是::能在相机中清晰成像的物体距离::。也就是说在其他条件固定不变的情况下，前后移动都能清晰成像的距离。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be585b14cac3.png" alt="图片来自于知乎(Marshal Lil)"></p>
+<p>（1）光圈越大，景深越小；光圈越小，景深越大。<br>（2）镜头焦距越长，景深越小；焦距越短，景深越大。<br>（3）物距越长，景深越大；物距越短，景深越小。</p>
+<hr>
+<h2 id="测光"><a href="#测光" class="headerlink" title="测光"></a>测光</h2><p>前面提到了相机的三要素，那么通过这三个要素来达到什么样的目的呢？这里需要介绍下曝光的概念。一张照片如果太黑，那么用户看不清主体，反过来一张照片过白，用户也看不清主体。合适滴捕捉光影，是主体能够清晰地呈现，这就是曝光啦。理想上曝光是::18%灰::。</p>
+<blockquote>
+<p>18%的灰就是中性灰，指的是人眼看到的黑和白中间的那个亮度，相机上测光就是按照中性灰来测光的。</p>
+</blockquote>
+<p>18%灰不是指灰色这个色彩，而是指18度灰的反射率，在设计拍摄中，那物体靠近黑色的反射率就被判断为曝光不足，相机会给你增加曝光；而太靠近白色时的反射率就会被判断为曝光过度，相机会自动减少曝光。</p>
+<p>拍雪景中的人，相机以为场景太白会给你减少曝光，人物就欠曝了。而你在黑色的煤场拍人，相机以为场景太黑会给你增加曝光，人物就会过曝。</p>
+<p>相机本身是无法区分各种光线的，都是以 18% 作为曝光基准，如果画面达到这种程度，那么就会认为是曝光正确。所为测光，也就是使得测光的区域能达到这个标准。</p>
+<p>单发相机相较于手机会多一些测光模式，这里都简要地说一下。</p>
+<h3 id="平均测光"><a href="#平均测光" class="headerlink" title="平均测光"></a>平均测光</h3><p>平均测光的原理是将画面划分为多个区域，每个区域进行独立测光，然后依此计算出整个画面的测光平均值。</p>
+<p>在拍摄光源较为充足的情况下，拍摄大气风景，人群团队的时候，很适用。</p>
+<p><img src="https://i.loli.net/2018/11/10/5be63676daf54.png" alt="平均测光"></p>
+<h3 id="中央重点测光"><a href="#中央重点测光" class="headerlink" title="中央重点测光"></a>中央重点测光</h3><blockquote>
+<p>中央平均测光是采用最多的一种测光模式，几乎所有的相机生产厂商都将中央平均测光作为相机默认的测光方式。测光偏重于取景器中央，然后平均到整个场景。</p>
+</blockquote>
+<p>虽然是考虑整个画面，但会对中央区域进行加权，从而有所突出。这在拍摄人脸，中央突出等情况时，很好用。</p>
+<p><img src="https://i.loli.net/2018/11/10/5be6366e870fd.png" alt="中央重点测光"></p>
+<h3 id="点测光、局部测光"><a href="#点测光、局部测光" class="headerlink" title="点测光、局部测光"></a>点测光、局部测光</h3><blockquote>
+<p>画面中很小的一个点状区域进行精确、独立的测光，而忽略画面其它部分。局部测光与点测光相似，选择画面的一部分进行测光，面积相对大一些，更适合拍摄体育题材、舞台剧题材等场景。</p>
+</blockquote>
+<p><img src="https://i.loli.net/2018/11/10/5be6366e7353b.png" alt="局部测光"></p>
+<p>一下三组图片，分别展示了平均测光、中央重点测光、点测光下拍摄的照片。</p>
+<p><img src="https://i.loli.net/2018/11/10/5be636c9bf628.png" alt="平均测光"><br><img src="https://i.loli.net/2018/11/10/5be636c947edd.png" alt="中央重点测光"><br><img src="https://i.loli.net/2018/11/10/5be636c9b2f30.png" alt="点测光"></p>
+<p>下面这个视频，是华为 Honor 上进行的拍摄完成的。该手机上快门固定，光圈固定，随着测光区域的变化，相机只能调节 ISO 感光度来使得::测光区域达到 18% 灰的效果::。</p>
+<p><del>此处有视频演示，微信公众号上传视频真麻烦，有兴趣的童鞋微信联系…</del></p>
+<hr>
+<h2 id="曝光补偿"><a href="#曝光补偿" class="headerlink" title="曝光补偿"></a>曝光补偿</h2><p>看上去很高级的东西，实际上就是一个::语法糖::。名义上，曝光补偿是相机提供的单独功能，能使得照片变亮与变暗。曝光补偿越大，图片越亮，反之就会越暗。</p>
+<p>下面我拍了两张图片，分别是在不同曝光补偿的情况下拍摄的。可以明显地看到两张图片的色彩有明显差异。可我们在快门信息里面，没有看到曝光补偿相关的数据，难道是 Google Pixel 偷懒吗？实际上，曝光补偿只是一个语法糖，相机会根据你的曝光需求，动态地调整「快门」+「光圈」+「感光度」，已达到发亮的效果。所以快门信息里面，可以没有曝光补偿，而且有了了曝光补偿会更容易发生误解，快门、感光度这些信息是补偿前的，还是补偿后的？</p>
+<blockquote>
+<p>世上本没有曝光补偿，调节亮度的需求多了，也就有了曝光补偿。</p>
+</blockquote>
+<p><img src="https://i.loli.net/2018/11/10/5be6375485897.png" alt="不同曝光补偿下的照片"><br><img src="https://i.loli.net/2018/11/10/5be6375534d68.png" alt="不同曝光补偿下的照片"></p>
+<p>两张图片，快门信息分别是，F1.8 1/125 4.46mm ISO118，F1.8 1/120 4.46mm ISO325。个人猜想在手机上，调整曝光补偿，大体上都是控制感光度来实现的吧。</p>
+<p>录制了一个简单的视频，来展示曝光补偿对照片产生的变化。</p>
+<p><del>此处有视频演示，微信公众号上传视频真麻烦，有兴趣的童鞋微信联系…</del></p>
+<hr>
+<h2 id="色温-白平衡"><a href="#色温-白平衡" class="headerlink" title="色温(白平衡)"></a>色温(白平衡)</h2><p>设想一下，我们坐在火炉旁烤火，期初的时候温度较低，炉火的颜色偏红，而后温度逐渐升高，炉火逐渐偏蓝，似乎看起来颜色表现出了的色值与问题的温度有关。根据维基百科上的描写，一标准黑体加热，温度升高到一定程度时颜色变化，称为色温。由于在定义的时候，是将标准黑体进行加热，发生颜色变化，这里就沿用了开尔文单位(K)来表达色温。</p>
+<p><img src="https://i.loli.net/2018/11/10/5be6378b4d8ed.png" alt="色温图"></p>
+<p><strong>::色温越高，颜色越偏蓝，反正越偏红::</strong>。</p>
+<p>下面的图来自于<a href="https://zhuanlan.zhihu.com/p/26899270" target="_blank" rel="noopener">摄影入门之白平衡 - 知乎</a>，下面两张图分别是在高色温(阴天)和低色温(黄昏)情况下的图片。阴天情况下，冷光更多地折射下来，颜色偏蓝，由此色温更高。在黄昏的时候，暖光会相对更多，颜色偏黄，色温也就更低些。</p>
+<p><img src="https://i.loli.net/2018/11/10/5be637aa9726d.png" alt="高色温"><br><img src="https://i.loli.net/2018/11/10/5be637ab0e61b.png" alt="低色温"></p>
+<p>讲到这里，就继续说明下白平衡啦~ 我们人眼是可以自行脑补各种色温的，但相机不行，分辨不出是在何种光源下进行的拍摄。那么告诉相机当前所处于哪种光源，相机矫正色温，这就是白平衡。</p>
+<p>下面的视频演示的是，三星 Note8 设置白平衡的视频。视频中，可以看到 K 值越小，显示出来的视频越蓝。(这里K值是告诉相机当前所处的色温值，K值越小，就越得向色温高的方向进行补偿，因而画面会偏蓝)</p>
+<p><del>此处有视频演示，微信公众号上传视频真麻烦，有兴趣的童鞋微信联系…</del></p>
+<hr>
+<h2 id="HDR-模式"><a href="#HDR-模式" class="headerlink" title="HDR 模式"></a>HDR 模式</h2><p>High-Dynamic Range，高动态范围。听上去很玄学，实际上并不复杂。HDR 模式其实并不是什么拍摄技术，而是后期技术。</p>
+<p>我们在拍照的时候，对于初学者而言，往往很难去应付复杂的光线环境。例如逆光拍摄，夜景拍摄等等，很容易拍摄出过曝，或者太黑的照片。有没有什么傻瓜的方法了？有呀，答案就是小标题鸭 - HDR。</p>
+<p>上面这句话，有问题。HDR模式，通过多张照片整合，能达到自然光线所不能达到的雨露均沾的效果。</p>
+<blockquote>
+<p>HDR技术则通过拍摄多张不同曝光度的照片，从而让综合亮度层次远远超出原来的限制，这样过曝的照片可以弥补暗部的细节缺失，欠曝可以将高光的地方完美呈现。( <del>为什么别人总能表达得这么清晰，而我就像白水话一样，对不起迅哥呀</del> )</p>
+</blockquote>
+<p><img src="https://i.loli.net/2018/11/10/5be6390a6946d.png" alt="HDR和非HDR模式的对比"></p>
+<p>上面两张图片，是在华为 Honor P20 手机上拍摄的。分别是启用了 HDR 模式和关闭 HDR 模式上拍摄的。</p>
+<hr>
+<p>现在手机已经很强大了，不同于胶片时代，我们已经能很轻松地拍出一张曝光正确的照片了。前面提及的背景知识、小技巧，都只是辅助，拍照永远是你在那一块对光影的看法。</p>
+<p>末了、渐渐地抛出，相机的真正四要素。</p>
+<ul>
+<li><input disabled type="checkbox"> 合适的构图</li>
+<li><input disabled type="checkbox"> 特殊的光影</li>
+<li><input disabled type="checkbox"> 富有故事性</li>
+<li><input disabled type="checkbox"> 独特创造力</li>
+</ul>
+<p>我们来看看利用前面的知识可以做出什么样的效果。<br><img src="https://i.loli.net/2018/11/10/5be639634daec.png" alt="C7BDBE38-5185-4382-9E36-110EC3BABA78.png"><br><img src="https://i.loli.net/2018/11/10/5be639639e86a.png" alt="99614653-3892-44F5-A624-175401807715.png"><br><img src="https://i.loli.net/2018/11/10/5be63963b6af6.png" alt="150B419E-7C86-4B7D-B8B9-9C77A48D2F06.png"><br><img src="https://i.loli.net/2018/11/10/5be63963d6036.png" alt="A65C8A51-0FB5-4F4B-B182-0B48BC0C3EE7.png"><br><img src="https://i.loli.net/2018/11/10/5be6396496261.png" alt="1F09F3C4-8F04-4065-99B5-35CCF5533E73.png"></p>
+<p>祝大家，拍得愉快，拍得开心~</p>
+<p>撒花 ！！！</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://www.quora.com/How-does-a-mobile-camera-work" target="_blank" rel="noopener">How does a mobile camera work? - Quora</a></li>
+<li><a href="https://youtu.be/gZ_KP2NO_bk" target="_blank" rel="noopener">Behind the lens of a 41MP Nokia Lumia 1020 - YouTube</a> 一个手机拍摄成像的流程视频，当然需要翻墙(手动扇子脸)</li>
+<li><a href="https://www.zhihu.com/question/22430557" target="_blank" rel="noopener">景深的原理是什么？ - 知乎</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/35700847" target="_blank" rel="noopener">单反光圈、焦距与景深的关系 - 知乎</a></li>
+<li><a href="http://blog.xieyc.com/depth-of-field-and-hyperfocal-distance/" target="_blank" rel="noopener">相机对焦原理（附景深与超焦距） | 小谢的小站</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/29146281" target="_blank" rel="noopener">摄影入门之测光模式和应用 - 知乎</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Metering_mode" target="_blank" rel="noopener">Metering mode - Wikipedia</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/21650705" target="_blank" rel="noopener">玩转对焦，手机能当相机用！ - 知乎</a></li>
+<li><a href="https://107cine.com/m/mstream/90935/" target="_blank" rel="noopener">玩转18%灰</a></li>
+</ol>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2018年11月10日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#相机的基本原理"><span class="toc-number">1.</span> <span class="toc-text">相机的基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相机的三要素"><span class="toc-number">2.</span> <span class="toc-text">相机的三要素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#光圈"><span class="toc-number">2.1.</span> <span class="toc-text">光圈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快门"><span class="toc-number">2.2.</span> <span class="toc-text">快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#感光度"><span class="toc-number">2.3.</span> <span class="toc-text">感光度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何清晰成像"><span class="toc-number">3.</span> <span class="toc-text">如何清晰成像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测光"><span class="toc-number">4.</span> <span class="toc-text">测光</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#平均测光"><span class="toc-number">4.1.</span> <span class="toc-text">平均测光</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中央重点测光"><span class="toc-number">4.2.</span> <span class="toc-text">中央重点测光</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点测光、局部测光"><span class="toc-number">4.3.</span> <span class="toc-text">点测光、局部测光</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#曝光补偿"><span class="toc-number">5.</span> <span class="toc-text">曝光补偿</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#色温-白平衡"><span class="toc-number">6.</span> <span class="toc-text">色温(白平衡)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HDR-模式"><span class="toc-number">7.</span> <span class="toc-text">HDR 模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">8.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">9.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&text=光影的秘密"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&is_video=false&description=光影的秘密"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=光影的秘密&body=Check out this article: http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&title=光影的秘密"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/&name=光影的秘密&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

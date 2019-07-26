@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="android view onLayout 的执行过程">
+<meta name="keywords" content="onLayout, view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View 全解析(三) -- onLayout">
+<meta property="og:url" content="http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="android view onLayout 的执行过程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/android-position.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/android-distance.jpeg">
+<meta property="og:updated_time" content="2019-07-26T15:14:25.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View 全解析(三) -- onLayout">
+<meta name="twitter:description" content="android view onLayout 的执行过程">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/android-position.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android View 全解析(三) -- onLayout</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/10/18/2016-10-18-android-view-theory-2/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&text=Android View 全解析(三) -- onLayout"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&is_video=false&description=Android View 全解析(三) -- onLayout"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(三) -- onLayout&body=Check out this article: http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&name=Android View 全解析(三) -- onLayout&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Layout-坐标系"><span class="toc-number">1.</span> <span class="toc-text">Layout 坐标系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View-和位置相关的常用方法"><span class="toc-number">2.</span> <span class="toc-text">View 和位置相关的常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FrameLayout-onLayout-解析"><span class="toc-number">3.</span> <span class="toc-text">FrameLayout onLayout 解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文档信息"><span class="toc-number">3.1.</span> <span class="toc-text">文档信息</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android View 全解析(三) -- onLayout
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-10-25T08:52:50.000Z" itemprop="datePublished">2016-10-25</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/android/">android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/onLayout/">onLayout</a>, <a class="tag-link" href="/tags/view/">view</a>, <a class="tag-link" href="/tags/window/">window</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Layout-坐标系"><a href="#Layout-坐标系" class="headerlink" title="Layout 坐标系"></a>Layout 坐标系</h2><p>在<a href="http://www.woaitqs.cc/android/2016/10/18/android-view-theory-2.html">上一篇文章</a>中，主要介绍了 onMeasure 的执行过程，这篇文章接着介绍下一个主要节点，onLayout。通过这篇文章的学习，可以了解 onLayout 的工作过程，已经常用的方法。最后以 FrameLayout 的 onLayout 方法来说明一下怎么自定义 onLayout 方法。</p>
+<p>Layout 要完成的工作主要是将 View 放置到合适的位置上去，那么怎么来定义位置呢？在初中数学的时候，我们都学过笛卡尔坐标系，通过 (x,y) 的形式可以定义一个在二维空间的一个点。</p>
+<p>常用的手机屏幕也是二维系的，Android 系统也是通过同样的坐标系来进行定位的，不过与笛卡尔坐标系不同的时候，y 轴的方向是相反的。其实，这也很好理解，Android 手机是往上滑动，内容是从底部慢慢慢慢出现的，将左上角定位成原点，也很自然而然。下面这张图，说明了 Android 手机中的坐标系是怎样的。</p>
+<p><img src="/images/blog/android-position.png" alt="Android 手机坐标系"></p>
+<hr>
+<h2 id="View-和位置相关的常用方法"><a href="#View-和位置相关的常用方法" class="headerlink" title="View 和位置相关的常用方法"></a>View 和位置相关的常用方法</h2><p>开发过程中，我们常用到一些诸如 getTop 的方法，这一小节简单地介绍这些方法，说明他们真正的含义。这里需要补充说明的是，这些方法设计到的单位都是 <code>Pixel</code>，不是 dip 哦。</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getTop</td>
+<td align="center">view左上角与父view之间的距离</td>
+</tr>
+<tr>
+<td>getBottom</td>
+<td align="center">子View右下角距父View顶部的距离</td>
+</tr>
+<tr>
+<td>getLeft</td>
+<td align="center">子View左上角距父View左侧的距离</td>
+</tr>
+<tr>
+<td>getRight</td>
+<td align="center">子View右下角距父View左侧的距离</td>
+</tr>
+</tbody></table>
+<p>下面的图例也说明了这一点。</p>
+<p><img src="/images/blog/android-distance.jpeg" alt="top_bottom_left_right"></p>
+<p>那么我们偶尔用到的 scrollBy(x,y) 和 scrollTo(x,y) 中的 x 和 y 又是啥意思呢？这里的 (x,y) 是相对于父 View 而言的，还是屏幕的左上角呢？答案是前者，有兴趣的读者可以写一个小程序验证一下。scrollBy(x,y) 等价于 scrollTo(posX + x, posY + y)。</p>
+<p>最后一种情况是，我们处理触摸时间的时候，通常会用到 MotionEvent, event 中的 getX 和 getY 方法这样可以知道触摸点的X，Y坐标。这里的 X 和 Y 分别是相对于父 View 而言的，如果想要获得相对于屏幕左上角的坐标可以用 getRawX 和 getRawY 来代替。</p>
+<hr>
+<h2 id="FrameLayout-onLayout-解析"><a href="#FrameLayout-onLayout-解析" class="headerlink" title="FrameLayout onLayout 解析"></a>FrameLayout onLayout 解析</h2><p>前文中，介绍了自定义 onMeasure 方法时，一定要调用 setMeasuredDimension, 对于 onLayout 方法而言，一定要对 view 调用 layout 方法，这样才能将 view 放置到合适的位置上去。layout 方法分别有四个参数，依次是 view 相对于 父view 的左边距，上边距，右边距，和下边距，可以理解为 9 点钟方向开始的顺时针 12 小时，哈哈，很形象吧。这里需要主要的是，右边距不是相对于父 view 的右边界，而是 view 的右边界相对于父 view 的左边界而言的，理解这个可以参考上一个图中所描述的 getRight 和 getBottom。</p>
+<p>FrameLayout 的 onLayout 方法比较简单，这里直接通过注释的形式进行说明。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>&#123;</span><br><span class="line">    layoutChildren(left, top, right, bottom, <span class="keyword">false</span> <span class="comment">/* no force left gravity */</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">layoutChildren</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">boolean</span> forceLeftGravity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> count = getChildCount();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可使用的父 view 的左边界范围，这里的边界是综合考虑了 foreground 和 padding的</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> parentLeft = getPaddingLeftWithForeground();</span><br><span class="line">    <span class="comment">// 右边界。right 和 left 分别是指左右两边的 X 坐标</span></span><br><span class="line">    <span class="comment">// 两者相减，再减去右边的 padding 可以得到父 view 的右边界范围。</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> parentRight = right - left - getPaddingRightWithForeground();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 与上面类似，就不重复写了</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> parentTop = getPaddingTopWithForeground();</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> parentBottom = bottom - top - getPaddingBottomWithForeground();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历每一个 view，设置每一个 view 的位置。</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">        <span class="keyword">final</span> View child = getChildAt(i);</span><br><span class="line">        <span class="comment">// 只操作可见 view</span></span><br><span class="line">        <span class="keyword">if</span> (child.getVisibility() != GONE) &#123;</span><br><span class="line">            <span class="keyword">final</span> LayoutParams lp = (LayoutParams) child.getLayoutParams();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// width 和 height 分别是 Measure 过后的 宽和高</span></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> width = child.getMeasuredWidth();</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> height = child.getMeasuredHeight();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> childLeft;</span><br><span class="line">            <span class="keyword">int</span> childTop;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> gravity = lp.gravity;</span><br><span class="line">            <span class="keyword">if</span> (gravity == -<span class="number">1</span>) &#123;</span><br><span class="line">                gravity = DEFAULT_CHILD_GRAVITY;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> layoutDirection = getLayoutDirection();</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> absoluteGravity = Gravity.getAbsoluteGravity(gravity, layoutDirection);</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> verticalGravity = gravity &amp; Gravity.VERTICAL_GRAVITY_MASK;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">switch</span> (absoluteGravity &amp; Gravity.HORIZONTAL_GRAVITY_MASK) &#123;</span><br><span class="line">                <span class="keyword">case</span> Gravity.CENTER_HORIZONTAL:</span><br><span class="line">                    <span class="comment">// gravity 是水平居中的情况</span></span><br><span class="line">                    <span class="comment">// 左坐标的计算可以分为两部分</span></span><br><span class="line">                    <span class="comment">// 1. 可使用的父 view 的左边界范围 + 放置view的中间位置(父view可用范围 减去 view 宽度后的一半)</span></span><br><span class="line">                    <span class="comment">// 2. 移除右 margin 加上 左margin</span></span><br><span class="line">                    childLeft = parentLeft + (parentRight - parentLeft - width) / <span class="number">2</span> +</span><br><span class="line">                    lp.leftMargin - lp.rightMargin;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Gravity.RIGHT:</span><br><span class="line">                    <span class="comment">// 这里主要考虑的是强制从左排列，在开发者选项中可以进行设置。</span></span><br><span class="line">                    <span class="comment">// 这里就先不讨论这个。</span></span><br><span class="line">                    <span class="keyword">if</span> (!forceLeftGravity) &#123;</span><br><span class="line">                        childLeft = parentRight - width - lp.rightMargin;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                <span class="keyword">case</span> Gravity.LEFT:</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="comment">// 默认情况，加上左 margin 就行。</span></span><br><span class="line">                    childLeft = parentLeft + lp.leftMargin;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">switch</span> (verticalGravity) &#123;</span><br><span class="line">                <span class="keyword">case</span> Gravity.TOP:</span><br><span class="line">                    childTop = parentTop + lp.topMargin;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Gravity.CENTER_VERTICAL:</span><br><span class="line">                    <span class="comment">// 垂直居中的情况，与上面类似，也不重复了。</span></span><br><span class="line">                    childTop = parentTop + (parentBottom - parentTop - height) / <span class="number">2</span> +</span><br><span class="line">                    lp.topMargin - lp.bottomMargin;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Gravity.BOTTOM:</span><br><span class="line">                    childTop = parentBottom - height - lp.bottomMargin;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    childTop = parentTop + lp.topMargin;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 最重要的地方，将计算得出的四个位置作为参数，设置进去。</span></span><br><span class="line">            child.layout(childLeft, childTop, childLeft + width, childTop + height);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h3><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2016年10月26日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Layout-坐标系"><span class="toc-number">1.</span> <span class="toc-text">Layout 坐标系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View-和位置相关的常用方法"><span class="toc-number">2.</span> <span class="toc-text">View 和位置相关的常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FrameLayout-onLayout-解析"><span class="toc-number">3.</span> <span class="toc-text">FrameLayout onLayout 解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文档信息"><span class="toc-number">3.1.</span> <span class="toc-text">文档信息</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&text=Android View 全解析(三) -- onLayout"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&is_video=false&description=Android View 全解析(三) -- onLayout"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(三) -- onLayout&body=Check out this article: http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&title=Android View 全解析(三) -- onLayout"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/10/25/2016-10-25-android-view-theory-3/&name=Android View 全解析(三) -- onLayout&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

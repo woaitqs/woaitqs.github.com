@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="android view 的窗口管理系统">
+<meta name="keywords" content="窗口管理, view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View 全解析(一) -- 窗口管理系统">
+<meta property="og:url" content="http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="android view 的窗口管理系统">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/vsync.png">
+<meta property="og:updated_time" content="2019-07-26T15:02:24.944Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View 全解析(一) -- 窗口管理系统">
+<meta name="twitter:description" content="android view 的窗口管理系统">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/vsync.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android View 全解析(一) -- 窗口管理系统</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/10/18/2016-10-18-android-view-theory-2/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/03/30/2016-03-30-in-love-with-android-memory/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&text=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&is_video=false&description=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(一) -- 窗口管理系统&body=Check out this article: http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&name=Android View 全解析(一) -- 窗口管理系统&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#窗口管理系统大家族"><span class="toc-number">1.</span> <span class="toc-text">窗口管理系统大家族</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加-DecorView-到-PhoneWindow"><span class="toc-number">2.</span> <span class="toc-text">添加 DecorView 到 PhoneWindow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View-什么时候开始绘制"><span class="toc-number">3.</span> <span class="toc-text">View 什么时候开始绘制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">4.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android View 全解析(一) -- 窗口管理系统
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-10-10T08:52:50.000Z" itemprop="datePublished">2016-10-10</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/android/">android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/view/">view</a>, <a class="tag-link" href="/tags/window/">window</a>, <a class="tag-link" href="/tags/窗口管理/">窗口管理</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="窗口管理系统大家族"><a href="#窗口管理系统大家族" class="headerlink" title="窗口管理系统大家族"></a>窗口管理系统大家族</h2><p>一直在写 Android Framework 层的东西，虽然很重要，但一直写这方面的内容，还是有些不够接地气。思前想后一番后，打算写写关于 View 这个在 Android 中平常得不能更平常的东西。由浅入深，仔细梳理，帮助我，也希望能帮助你，更好地再次认识 View。</p>
+<p>第一篇文章主要讲 Android 的窗口管理系统，依托于这套系统，我们才能将 View 显示到屏幕上。了解这套系统，有助于更好地理解 Android View 的来龙去脉。但这个系统复杂，涉及到的方面众多，在这里也只是简述，还望见谅。</p>
+<p>这个小节，主要说一下家族里面的成员，分别是 <code>view</code>,<code>window</code>,<code>windowmanager</code>,<code>viewRoot</code>。小节里面主要介绍它们是什么，以及互相之间的关系是什么。</p>
+<p>在谈及 View 之前，必须得说说 Window 这个东西，通常我们认为显示在界面上的是 View，这么说本身没有什么问题，但更准确的说法是 WindowManager 通过 ViewRoot 将 View 和 Window 协同整合在一起，最终将 View 展示在 Window 上面。正如 Window 这个名字，就是窗口的意思，我们所见的所有东西都要展示在 Window 上，熟知的 Dialog、Activity 以及 Toast 都是展示在 Window 上面的。</p>
+<p>Window 本身是一个抽象类，提供了对标准 UI 行为的一些支持，例如背景、标题栏和按键等等。我们使用的是它的子类，也是唯一的实现 PhoneWindow。</p>
+<p>Window的显示有多种类型，具体可以在 <a href="https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html" target="_blank" rel="noopener">这里</a>看到。普通开发的应用，就是类型为 TYPE_APPLICATION 的 Window。最近一些工具应用开始使用悬浮窗，特别是一些手机清理软件，悬浮窗通常采用的是 TYPE_SYSTEM_ALERT、TYPE_PHONE, 对于 API 在 19 以上的系统，使用的是 TYPE_TOAST。</p>
+<p>成功的男人背后都有一个伟大的女人，一个成功的 Window 背后就有一个伟大的 WindowMananger。WindowManager 本身是一个接口，提供了与 Window 交互的基础功能，分别是添加、更新和删除 View 的接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ViewManager</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addView</span><span class="params">(View view, ViewGroup.LayoutParams params)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateViewLayout</span><span class="params">(View view, ViewGroup.LayoutParams params)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeView</span><span class="params">(View view)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>WindowManager 的实现沿用了 C/S 结构，WindowManager 只作为一个代理，实际工作的是 WindowManagerService。WindowManangerService 以 Session 的形式来管理各个 Application 的窗口，系统启动了多少个含有 View 的应用，就有多少个对应的 Session。</p>
+<p>一个好汉三个帮，View 系统也不例外，WindowManager 与 View 之间不直接进行交互，而是依托于一个中间商，叫做 ViewRoot。ViewRoot 本身是一个 Handler，通过 ViewRoot 实现了两者间的消息传递。ViewRoot 将通知 View 进行相应的界面绘制，然后调用 WindowManager 提供的接口，将 View 添加或更新到 Window 上面。</p>
+<hr>
+<h2 id="添加-DecorView-到-PhoneWindow"><a href="#添加-DecorView-到-PhoneWindow" class="headerlink" title="添加 DecorView 到 PhoneWindow"></a>添加 DecorView 到 PhoneWindow</h2><p>我们以 Activity 的 setContentView 入手，看看窗口管理系统是如何介入这个过程的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    getWindow().setContentView(layoutResID);</span><br><span class="line">    initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里调用了 getWindow 方法，需要解释的是对于每个 Activity 而言都有一个对应的窗口，就是前文提及的 PhoneWindow，这个 PhoneWindow 有一个 View ，叫做 DecorView，这也是界面布局的根节点。随便找了一个 App 的界面，大家可以注意箭头标示的地方，那里就是 DecorView。</p>
+<p>setContentView 的实现在其子类 PhoneWindow 中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span></span><br><span class="line">    <span class="comment">// decor, when theme attributes and the like are crystalized. Do not check the feature</span></span><br><span class="line">    <span class="comment">// before this happens.</span></span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        mContentParent.removeAllViews();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        <span class="keyword">final</span> Scene newScene = Scene.getSceneForLayout(mContentParent, layoutResID,</span><br><span class="line">                getContext());</span><br><span class="line">        transitionTo(newScene);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParent.requestApplyInsets();</span><br><span class="line">    <span class="keyword">final</span> Callback cb = getCallback();</span><br><span class="line">    <span class="keyword">if</span> (cb != <span class="keyword">null</span> &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">        cb.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重点在于 installDecor 方法中，这里是给 Window 添加根 View，也就是 DecorView。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) &#123;</span><br><span class="line">        mDecor = generateDecor();</span><br><span class="line">        mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);</span><br><span class="line">        mDecor.setIsRootNamespace(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">if</span> (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != <span class="number">0</span>) &#123;</span><br><span class="line">            mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        mContentParent = generateLayout(mDecor);</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个方法中完成了 Transaction 动画的设置，标题栏的配置，decor 背景的设置等等初始化工作。代码相对比较繁琐，有兴趣的同学，可以看看源码中 PhoneWindow 的实现。</p>
+<p>在这之后，View 就可以显示了吗？大家可能也不会觉得是这么简单的，毕竟我们熟知的 onMeasure、onLayout 和 onDraw 都还没有调用呢？看起来，我们需要一个时机来触发 View 的操作。在下一小节，就来说一下什么时候触发这一过程。</p>
+<hr>
+<h2 id="View-什么时候开始绘制"><a href="#View-什么时候开始绘制" class="headerlink" title="View 什么时候开始绘制"></a>View 什么时候开始绘制</h2><p>Android 系统在 4.0 后为更好的用户体验，执行了一个「黄油计划」，而其中最重要的部分就是垂直同步机制(VSYNC)。让我们首先在大体上理解一下 VSYNC。</p>
+<blockquote>
+<p>VSync stands for Vertical Synchronization. The basic idea is that synchronizes your FPS with your monitor’s refresh rate. The purpose is to eliminate something called “tearing”. I will describe all these things here. Every CRT monitor has a refresh rate.</p>
+</blockquote>
+<p>这是从一篇论文里面引用过来的，VSYNC 就是一种同步机制，以某种固定的频率进行同步，当其他组件收到这个同步信号时，就执行相应的操作。设想一下，如果没有这个同步机制，各个模块又怎能知道在哪个时候去执行自己的工作了？ 这里可以初步地将 VSYNC 当做闹钟，每间隔固定时间，就响一次，其他组件听到闹铃后，就开始干活了。这个间隔的时间，与屏幕刷新频率有关，例如大多数 Android 设备的刷新频率是 60 FPS(Frame per second)，一秒钟刷新60次，因而间隔时间就是 1000 / 60 = 16.667 ms。这个时间，大家是不是很熟悉了？看过太多性能优化的文章，都说每一帧的绘制时间不要超过 16 ms，其背后的原因就是这个。绘制每一帧对应的 View，这个步骤发生在 UI 线程上，所以也不要在 UI 线程上进行耗时的操作，否则就可能在 16 ms内，无法完成界面更新操作了。</p>
+<p><img src="/images/blog/vsync.png" alt="VSYNC"></p>
+<p>为了将 VSYNC 机制在 Framework 落地下来，在 View 层引入了 <a href="https://developer.android.com/reference/android/view/Choreographer.html" target="_blank" rel="noopener">Choreographer</a>。这个类的主要责任就是协调动画、输入和绘制，使得用户体验上达到一致的效果。通常情况下，我们不用去理会这个 Choreographer，Android Framework 通过更高层级的抽象，帮我们完成了这一步骤，他们分别实现在 Animation，onDraw 等代码中。</p>
+<p>下面大体上，看看 Choreographer 的实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Choreographer&gt; sThreadInstance =</span><br><span class="line">        <span class="keyword">new</span> ThreadLocal&lt;Choreographer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Choreographer <span class="title">initialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Looper looper = Looper.myLooper();</span><br><span class="line">        <span class="keyword">if</span> (looper == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"The current thread must have a looper!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Choreographer(looper);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里采用了 ThreadLocal 这个关键字，使用这个关键字后，能够保证对于单个线程，只能获取到同一实例。而 Choreographer 在构建的时候，还要求这个线程必须有 Looper，Choreographer 需要利用 Looper 来进行相应的消息通知。再看看构造函数的实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Choreographer</span><span class="params">(Looper looper)</span> </span>&#123;</span><br><span class="line">    mLooper = looper;</span><br><span class="line">    mHandler = <span class="keyword">new</span> FrameHandler(looper);</span><br><span class="line">    mDisplayEventReceiver = USE_VSYNC ? <span class="keyword">new</span> FrameDisplayEventReceiver(looper) : <span class="keyword">null</span>;</span><br><span class="line">    mLastFrameTimeNanos = Long.MIN_VALUE;</span><br><span class="line"></span><br><span class="line">    mFrameIntervalNanos = (<span class="keyword">long</span>)(<span class="number">1000000000</span> / getRefreshRate());</span><br><span class="line"></span><br><span class="line">    mCallbackQueues = <span class="keyword">new</span> CallbackQueue[CALLBACK_LAST + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= CALLBACK_LAST; i++) &#123;</span><br><span class="line">        mCallbackQueues[i] = <span class="keyword">new</span> CallbackQueue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新建了一个 Handler 用来做消息通信，其后建立了一个 CallbackQueue，这里的 CallbackQueue 主要有四种形式，当收到 VSYNC 信号后，依次执行其中的 Callback。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Trace.traceBegin(Trace.TRACE_TAG_VIEW, <span class="string">"Choreographer#doFrame"</span>);</span><br><span class="line"></span><br><span class="line">    mFrameInfo.markInputHandlingStart();</span><br><span class="line">    doCallbacks(Choreographer.CALLBACK_INPUT, frameTimeNanos);</span><br><span class="line"></span><br><span class="line">    mFrameInfo.markAnimationsStart();</span><br><span class="line">    doCallbacks(Choreographer.CALLBACK_ANIMATION, frameTimeNanos);</span><br><span class="line"></span><br><span class="line">    mFrameInfo.markPerformTraversalsStart();</span><br><span class="line">    doCallbacks(Choreographer.CALLBACK_TRAVERSAL, frameTimeNanos);</span><br><span class="line"></span><br><span class="line">    doCallbacks(Choreographer.CALLBACK_COMMIT, frameTimeNanos);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    Trace.traceEnd(Trace.TRACE_TAG_VIEW);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 CALLBACK_TRAVERSAL 就是与 View 绘制相关的部分。在 ViewRootImpl 代码中，也可以证实到这一点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">scheduleTraversals</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!mTraversalScheduled) &#123;</span><br><span class="line">        mTraversalScheduled = <span class="keyword">true</span>;</span><br><span class="line">        mTraversalBarrier = mHandler.getLooper().getQueue().postSyncBarrier();</span><br><span class="line">        mChoreographer.postCallback(</span><br><span class="line">                Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">if</span> (!mUnbufferedInputDispatch) &#123;</span><br><span class="line">            scheduleConsumeBatchedInput();</span><br><span class="line">        &#125;</span><br><span class="line">        notifyRendererOfFramePending();</span><br><span class="line">        pokeDrawLockIfNeeded();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 mTraversalRunnable 实现非常简单。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">TraversalRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        doTraversal();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而从 doTraversal 开始，View 就开始真正进行绘制了。在 Choreographer 的英明领导下，View 开始准备开工干活了。</p>
+<p>这里和前面的知识进行下串联，再进行下总结。</p>
+<blockquote>
+<p>当 Choreographer 接收到 VSYNC 信号后，ViewRootImpl 调用 scheduleTraversals 方法，通知 View 进行相应的渲染，其后 ViewRootImpl 将 View 添加或更新到 Window 上去。</p>
+</blockquote>
+<p>在 doTraversal 方法中，会调用到 performTraversals 方法，这是一个巨长的方法，在 API-23 版本中，代码行数达到了800行。我们绝大多数的类，都没有达到这个数量级 ：）。在这个方法里，就会执行到我们熟悉的 View 三部曲，Measure、Layout 和 Draw。</p>
+<p>在后续的文章中，再来详细说明 View 中的 Measure、Layout 和 Draw 是如何实现的。再会 ：）</p>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2016年10月10日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#窗口管理系统大家族"><span class="toc-number">1.</span> <span class="toc-text">窗口管理系统大家族</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加-DecorView-到-PhoneWindow"><span class="toc-number">2.</span> <span class="toc-text">添加 DecorView 到 PhoneWindow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View-什么时候开始绘制"><span class="toc-number">3.</span> <span class="toc-text">View 什么时候开始绘制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">4.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&text=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&is_video=false&description=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(一) -- 窗口管理系统&body=Check out this article: http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&title=Android View 全解析(一) -- 窗口管理系统"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/10/10/2016-10-10-android-view-theory-1/&name=Android View 全解析(一) -- 窗口管理系统&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

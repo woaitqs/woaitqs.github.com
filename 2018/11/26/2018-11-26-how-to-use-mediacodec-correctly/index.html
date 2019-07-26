@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="这篇文章将重点介绍了，硬编硬解过程中遇到的坑，也给读者朋友架构方案时提供一点参考">
+<meta name="keywords" content="android,Tutorial,camera,ugc,mediacodec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android MediaCodec 退坑指南">
+<meta property="og:url" content="http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="这篇文章将重点介绍了，硬编硬解过程中遇到的坑，也给读者朋友架构方案时提供一点参考">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbe93ff158d.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbe99fd9ed8.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbe9ec9ca38.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbea1912ab7.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbea4d48356.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbea729c0c3.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbeaab2d234.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbeaab37eb9.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbeae8d9794.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbeae7b3af7.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/26/5bfbeb2176c86.png">
+<meta property="og:updated_time" content="2019-07-26T14:16:40.037Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android MediaCodec 退坑指南">
+<meta name="twitter:description" content="这篇文章将重点介绍了，硬编硬解过程中遇到的坑，也给读者朋友架构方案时提供一点参考">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/26/5bfbe93ff158d.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android MediaCodec 退坑指南</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&text=Android MediaCodec 退坑指南"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&is_video=false&description=Android MediaCodec 退坑指南"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android MediaCodec 退坑指南&body=Check out this article: http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&name=Android MediaCodec 退坑指南&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MediaCodec-Introduction"><span class="toc-number">1.</span> <span class="toc-text">MediaCodec Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工作流程"><span class="toc-number">1.1.</span> <span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#支持的数据类型"><span class="toc-number">1.2.</span> <span class="toc-text">支持的数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态机"><span class="toc-number">1.3.</span> <span class="toc-text">状态机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MediaCodec-Usage-Tips"><span class="toc-number">2.</span> <span class="toc-text">MediaCodec Usage Tips</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-Instance"><span class="toc-number">2.1.</span> <span class="toc-text">Create Instance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Audio-Codec"><span class="toc-number">2.1.1.</span> <span class="toc-text">Audio Codec</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Video-Codec"><span class="toc-number">2.1.2.</span> <span class="toc-text">Video Codec</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration"><span class="toc-number">2.2.</span> <span class="toc-text">Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-Tips"><span class="toc-number">3.</span> <span class="toc-text">Other Tips</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">5.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android MediaCodec 退坑指南
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-11-26T12:48:09.000Z" itemprop="datePublished">2018-11-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/android/">android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Tutorial/">Tutorial</a>, <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/camera/">camera</a>, <a class="tag-link" href="/tags/mediacodec/">mediacodec</a>, <a class="tag-link" href="/tags/ugc/">ugc</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="MediaCodec-Introduction"><a href="#MediaCodec-Introduction" class="headerlink" title="MediaCodec Introduction"></a>MediaCodec Introduction</h2><p>MediaCodec 是 Android 音视频开发中不可能绕过的环节，但它真的不太好用，小水坑太多。今天我们就趟趟小水坑，走进科学，oh，不，走进 MediaCodec。</p>
+<p>MediaCodec 是 Android 多媒体支持框架中的一员，其他还包括 MediaExtractor、MediaSync、MediaMuxer、MediaDrm 等等，负责编解码相关的工作。接下来我们简单地介绍下 MediaCodec 是如何工作的。</p>
+<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>In broad terms，编解码器处理输入数据并产生输出数据，MediaCodec 使用输入输出缓存，异步处理数据。简要地说，一般的处理步骤如下</p>
+<ol>
+<li>请求一个空的输入 input buffer</li>
+<li>填入数据、并将其交给 MediaCodec</li>
+<li>MediaCodec 处理数据后，将处理后的数据放在一个空的 output buffer</li>
+<li>获取填充数据了的 output buffer，得到其中的数据，然后将其返还给 MediaCodec。</li>
+</ol>
+<p>下图是对步骤的阐释</p>
+<p><img src="https://i.loli.net/2018/11/26/5bfbe93ff158d.png" alt="工作流程"></p>
+<h3 id="支持的数据类型"><a href="#支持的数据类型" class="headerlink" title="支持的数据类型"></a>支持的数据类型</h3><p>我们的大脑不是万能的，MediaCodec 也不是什么数据都能支持的。一般在有限的范围内运转的系统，稳定且可靠，嘿嘿嘿。MediaCodec 支持三种数据格式，下面分别介绍：</p>
+<ol>
+<li><p>Compressed Data<br>既然是编解码器，那么势必会处理对应视频、音频格式的压缩数据，也就是 Encode 的输出数据、Decoder的输入数据。我们将这一类数据，统称为压缩数据。压缩数据格式，取决于 <a href="https://developer.android.com/reference/android/media/MediaFormat#KEY_MIME" target="_blank" rel="noopener">MediaFormat  |  Android Developers</a>。对于视频数据而言，通常是一帧数据；音频数据，一般是单个处理单元(包括多少微秒的数据)。一般情况下，除非指定为 <code>BUFFER_FLAG_PARTIAL_FRAME</code>，否则不会出现半个帧的情况。</p>
+</li>
+<li><p>Raw Audio Buffers<br>编解码器，需要编码对应的音频数据，那么就肯定会处理音频格式数据，也就是 PCM 数据。对于音频编码格式，只有 ENCODING_PCM_16BIT  确认被各 System \ Rom 支持哦。</p>
+</li>
+</ol>
+<p>这里简要滴摘录下 Wiki 上关于 PCM 数据的定义。</p>
+<p><img src="https://i.loli.net/2018/11/26/5bfbe99fd9ed8.png" alt="How PCM Work?"></p>
+<blockquote>
+<p>PCM就是把一个时间连续，取值连续的模拟信号变换成时间离散，取值离散的数字信号后在信道中传输。简而言之PCM就是对模拟信号先抽样，再对样值幅度量化，编码的过程。例如听到的声音就是模拟信号，然后对声音采样，量化，编码产生数字信号。相对自然界声音信号，任何音频编码都是有损的，在计算机应用中，能达到高保真的就是PCM编码，因此PCM约定成俗成了无损编码，对于声音而言，我们通常采用PCM编码。</p>
+</blockquote>
+<ol start="3">
+<li>Raw Video Buffers<br> a.  Native raw video format. 也就是MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface，注意这种格式，并不是所有 Android 手机都支持的哦。<br> b. YUV buffers.  可以用在 Surface 格式，或者 ByteBuffer 格式中。Google 表示在 API 22 以后，所有机型都保证支持 YUV 4:2:0 格式。<br> c. Other formats. 这就看厂商心情了，可以通过 MediaCodecInfo.CodecCapabilities 来进行查询。</li>
+</ol>
+<h3 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h3><p><img src="https://i.loli.net/2018/11/26/5bfbe9ec9ca38.png" alt="MediaCodec 状态机"></p>
+<p>MediaCodec 大体上分为三种状态、Stopped、Executing和 Released。状态机工作图如上，其后就是很具体的调用细节了。</p>
+<p>具体的状态切换就不翻译了，大家可以通过上面的图，结合英文看一看。</p>
+<p>When you create a codec using one of the factory methods, the codec is in the Uninitialized state. First, you need to configure it via configure(…), which brings it to the Configured state, then call start() to move it to the Executing state. In this state you can process data through the buffer queue manipulation described above.</p>
+<p>The Executing state has three sub-states: Flushed, Running and End-of-Stream. Immediately after start() the codec is in the Flushed sub-state, where it holds all the buffers. As soon as the first input buffer is dequeued, the codec moves to the Running sub-state, where it spends most of its life. When you queue an input buffer with the end-of-stream marker, the codec transitions to the End-of-Stream sub-state. In this state the codec no longer accepts further input buffers, but still generates output buffers until the end-of-stream is reached on the output. You can move back to the Flushed sub-state at any time while in the Executing state using flush().</p>
+<p>Call stop() to return the codec to the Uninitialized state, whereupon it may be configured again. When you are done using a codec, you must release it by calling release().</p>
+<p>On rare occasions the codec may encounter an error and move to the Error state. This is communicated using an invalid return value from a queuing operation, or sometimes via an exception. Call reset() to make the codec usable again. You can call it from any state to move the codec back to the Uninitialized state. Otherwise, call release() to move to the terminal Released state.</p>
+<hr>
+<h2 id="MediaCodec-Usage-Tips"><a href="#MediaCodec-Usage-Tips" class="headerlink" title="MediaCodec Usage Tips"></a>MediaCodec Usage Tips</h2><p>接下来讲讲，如何用正确的姿势 <del>（知识）</del>来使用 MediaCodec，毕竟这家伙在不同手机、不同系统上面都表现不同。对它的正确使用，不太考验技术，更考验经验和细心。</p>
+<h3 id="Create-Instance"><a href="#Create-Instance" class="headerlink" title="Create Instance"></a>Create Instance</h3><p>首先是如何创建 MediaCodec，在创建 MediaCodec 时，需要弄清楚自己是想创建 Encoder 还是 Decoder。</p>
+<p>在知晓 <a href="http://www.iana.org/assignments/media-types/media-types.xhtml" target="_blank" rel="noopener">Media Types</a> 的情况下，可通过 createDecoderByType, createEncoderByType, createByCodecName 方法来获取实例。</p>
+<p>问题在于如何确定手机是否支持该 MimeType 呢？在 API 21 上，可以使用 MediaCodecList.findDecoderForFormat、MediaCodecList.findEncoderForFormat 这两个方法来进行获取，如果有满足需求的Codec，会返回对应 MimeType。这里需要说明的是，需要在 LOLLIPOP 版本上，::<strong>清除掉 Format 中关于 KEY_FRAME_RATE 的设置</strong>::，无疑这是一个小坑。</p>
+<p>Android 底层的多媒体框架采用了 OpenMax 标准，但具体的硬件编解码功能，则是有各个产商负责的，这就导致不同手机可能差异很多，也是 Android 多媒体框架兼容性问题大的根源。那么我们如何来处理哪怕仅仅是创建就会碰到的兼容性问题呢？</p>
+<blockquote>
+<p>以下，包括接下来章节的内容，大部分都是通过官方的 <a href="https://source.android.com/compatibility/android-cdd.pdf" target="_blank" rel="noopener">Compatibility Definition Document</a> 和 <a href="https://developer.android.com/guide/topics/media/media-formats" target="_blank" rel="noopener">Supported media formats  |  Android Developers</a> 来作为参考的，后面就不重复解释了。</p>
+</blockquote>
+<h4 id="Audio-Codec"><a href="#Audio-Codec" class="headerlink" title="Audio Codec"></a>Audio Codec</h4><p><del>遇事不决，看下面的图</del><br><img src="https://i.loli.net/2018/11/26/5bfbea1912ab7.png" alt="MediaCodec Support Details"></p>
+<p>从上图可以看到，对于大部分音频解码而言，都是支持的。在实际开发中，当解码一个音频的时候，不用做什么特殊处理，处理好可能的 Crash，正常解码就行。反倒是，在音频编码的时候需要注意。对于有录音Mic权限的手机而言，官方保证支持 PCM/WAVE 可以用于编码，但我们对这个的使用较少。另外可以看到我们熟悉的 MP3 格式，并不在支持之列哟。我们使用的是另一种几乎所有设备都支持的编码格式，m4a，其 MimeType 就是 “::audio/mp4a-latm::”。</p>
+<blockquote>
+<p>m4a 听上去很奇怪，其实就是 MPEG-4 Audio 的简写。苹果公司为了区分包含视频、音频的MP4文件与只有音频的MP4文件，对后者进行了单独命名::.m4a::，这种格式对现今绝大部分移动设备都支持。<br>M4A is a file extension for an audio file encoded with advanced audio coding (AAC) which is a lossy compression. M4A was generally intended as the successor to MP3, which had not been originally designed for audio only but was layer III in an MPEG 1 or 2 video files. M4A stands for MPEG 4 Audio.</p>
+</blockquote>
+<h4 id="Video-Codec"><a href="#Video-Codec" class="headerlink" title="Video Codec"></a>Video Codec</h4><p><del>同样遇事不决，看下面的图</del><br><img src="https://i.loli.net/2018/11/26/5bfbea4d48356.png" alt="Video Support Details"></p>
+<p>VP8/9 适用性没有 H.264 来的广，就略过不谈了；263 在 7.0 以上才可以用而且没有H.264来的广；265相关的，Android 不太支持。最后也就剩下 H.264 AVC 啦。关于 H.264 AVC Main Profile (MP) 与 H.264 AVC Main Profile (HP) 了，得在更高阶的 Android 系统(7.0 +) 才开始支持，而且会有一定的兼容性问题，这个在后面会专门提及。综合起来呢，要先做到最全的兼容性，让几乎在所有机型上都能运作，选用 H.264 BaseLine 作为编码器，是一个不错的选择。</p>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><p>在创建好 MediaCodec 过后，需要对其进行配置，这样 MediaCodec 的状态就可以由 uninitiated 变成 configured。</p>
+<p><img src="https://i.loli.net/2018/11/26/5bfbea729c0c3.png" alt="configure"></p>
+<p>这里最重要的参数是 MediaFormat，要敲黑板啦！</p>
+<ol>
+<li>某些 MediaFormat 没有设置的话，会导致 MediaCodec 抛出 IllegalStateException 哦！<strong>all keys not marked optional are mandatory !!</strong></li>
+<li>参数设置不对，也可能会抛出异常哦。比如设置一个超出手机能力范围外的分辨率。</li>
+</ol>
+<p>Video 所必须的 Format Setting。<br><img src="https://i.loli.net/2018/11/26/5bfbeaab2d234.png" alt="Video Format Setting"></p>
+<p>Audio 所必须的 Format Setting。<br><img src="https://i.loli.net/2018/11/26/5bfbeaab37eb9.png" alt="Audio Format Setting"></p>
+<p>下面说几个需要特别注意的几个设置项。</p>
+<p><code>KEY_WIDTH 与 KEY_HEIGHT</code></p>
+<p>在编码的时候，请务必保证两者是16的整数倍。</p>
+<p><code>KEY_BIT_RATE &amp; KEY_FRAME_RATE</code></p>
+<p>BIT_RATE 没有什么太大的坑，注意下单位就好 bits/seconds. 下面的图展示了，官方要求设备对于不同分辨率下需要支持的最低分辨率。</p>
+<p>FRAME_RATE 也同样，几乎都被要求支持至少 30 FPS。(<del>但实际能否达到 30 FPS 的效果，就很难说了，此外 FPS 的设置还会和 Camera 预览的亮度有一定关系哦</del>，结合<a href="http://www.woaitqs.cc/2018/09/01/how-to-take-a-beautiful-and-right-picture/">光影的秘密 | Coding And Living | Qisen Tang - Android Developer</a> 体会一下)</p>
+<p><img src="https://i.loli.net/2018/11/26/5bfbeae8d9794.png" alt="编码的最小支持"></p>
+<p><img src="https://i.loli.net/2018/11/26/5bfbeae7b3af7.png" alt="解码的最小支持"></p>
+<p><code>KEY_COLOR_FORMAT</code></p>
+<p>CDD 文档中要求，::If device implementations include a video decoder or encoder，Video encoders and decoders MUST support YUV420 flexible color format(COLOR_FormatYUV420Flexible)::。COLOR_FormatYUV420Flexible 是在 API 21 才开始引入的，而且是一种<code>魔法</code>格式，可以代表很多格式。</p>
+<blockquote>
+<p>Chroma planes are subsampled by 2 both horizontally and vertically. Use this format with Image. This format corresponds to ImageFormat.YUV_420_888, and can represent the COLOR_FormatYUV411Planar, COLOR_FormatYUV411PackedPlanar, COLOR_FormatYUV420Planar, COLOR_FormatYUV420PackedPlanar, COLOR_FormatYUV420SemiPlanar and COLOR_FormatYUV420PackedSemiPlanar formats.<br>虽然这种格式被21版本后所有手机都支持，但使用的时候需要结合 <a href="https://developer.android.com/reference/android/media/Image" target="_blank" rel="noopener">Image  |  Android Developers</a> 来使用，getOutputImage / getInputImage。</p>
+</blockquote>
+<p>在更低的版本时，需要设置具体的 Color_Format，基本上大部分设备都支持 COLOR_FormatYUV420SemiPlanar 或者 COLOR_FormatYUV420Planar。我们只需要处理这两种 Color_Format 就可以了。</p>
+<p>这里还有一个坑，是在某些设备上 ColorFormat 所表示的格式可能是反的，比如NV12 与 NV21。建议尽可能地使用前面章节提到的Surface input API 来规避这些问题。</p>
+<p><code>KEY_I_FRAME_INTERVAL</code></p>
+<p>通常的方案是设置为 1s，对于图片电影等等特殊情况，这里可以设置为 0，表示希望每一帧都是 KeyFrame。</p>
+<p>但要想达到精确的帧率控制不太现实，尽量使用 Surface，尽量在流程中不占用过多资源，没有明显卡顿耗时，这样得出的帧率相对更好一些。</p>
+<p><code>KEY_PROFILE &amp; KEY_LEVEL</code></p>
+<p>这里设置编码级别，注意这里 Profile 必须和 level 配对，下面的代码是一个简单的示例。</p>
+<p><img src="https://i.loli.net/2018/11/26/5bfbeb2176c86.png" alt="profile"></p>
+<p>这里 Profile 级别的设置是一个深坑。</p>
+<ol>
+<li>深坑 NO.1 -&gt; 在 Android 7.0 以前，不管你怎么设置 Profile 级别，最后都会使用 BaseLine，因为这在源码里面写死了。。。</li>
+<li>深坑 NO.2 -&gt; Main 或者 High Profile 能够带来更高的压缩比和其他好处，但并不意味着它的兼容性就很好。在某杂粮手机，Oppo手机的部分机型中，使用 High Profile 会导致 pts 和 dts 时间不一致，从而在播放的时候会画面来回跳动。（<del>至今不知道怎么爬出这个坑，还是老实用回 BaseLine 了</del>）</li>
+</ol>
+<p>尽管如此，还是建议大家尽量使用 High/Main 这样的 Profile，新方案新技术，只有使用才能发挥价值。</p>
+<p>额外地说一下，我们开发录音功能时，使用 AudioRecorder，并将相应的数据送给编码器。这里在配置 AudioRecorder 时，最好将 PCM 的格式设置为 ::ENCODING_PCM_16BIT::，采样率设置为 ::44100Hz:: (44100 is currently the only rate that is guaranteed to work on all devices)，声道设置为::单声道:: ({@link AudioFormat#CHANNEL_IN_MONO} is guaranteed to work on all devices)。<del>用 Android 多媒体框架就应该求生欲极强</del>。</p>
+<p><code>KEY_IS_ADTS</code></p>
+<blockquote>
+<p>A key mapping to a value of 1 if the content is AAC audio and audio frames are prefixed with an ADTS header. The associated value is an integer (0 or 1). This key is only supported when <em>decoding</em> content, it cannot be used to configure an encoder to emit ADTS output.</p>
+</blockquote>
+<p>这个设置项只在解码音频的时候才有用，单独拎出来还是因为其有坑。通常情况下，我们不需要去理会 ADTS，直接使用回调中的 Format 就可以了。但在魅族某些机型上，Format 可能会有错误，对于这种情况时，还是手动设置 KEY_IS_ADTS 为 1 比较好。</p>
+<h2 id="Other-Tips"><a href="#Other-Tips" class="headerlink" title="Other Tips"></a>Other Tips</h2><p>真正在使用 MediaCodec 的时候，还会遇到一些小坑，接下来简单地介绍下。（<del>具体怎么用 MediaCodec ，网上很多资料就不讲啦</del>）</p>
+<ol>
+<li>保证 output 数据与 muxer 数据，在同一个线程上，否则可能出现花屏等现象。</li>
+<li>createInputSurface() 需要在 configure 之后，与 start 之前，否贼可能创建失败。</li>
+<li>处理数据时，需要处理 position 与 offset。</li>
+</ol>
+<p>还有一些其他 Tips，诸君一起来更新呀~</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://www.bigflake.com/mediacodec/" target="_blank" rel="noopener">Android MediaCodec stuff</a></li>
+<li><a href="https://source.android.com/compatibility/android-cdd.pdf" target="_blank" rel="noopener">Android Compatibility Definition Document</a> </li>
+<li><a href="https://developer.android.com/reference/android/media/MediaCodec" target="_blank" rel="noopener">MediaCodec  |  Android Developers</a></li>
+<li><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts" target="_blank" rel="noopener">tests/tests/media/src/android/media/cts - platform/cts - Git at Google</a></li>
+<li><a href="https://github.com/OnlyInAmerica/HWEncoderExperiments" target="_blank" rel="noopener">GitHub - OnlyInAmerica/HWEncoderExperiments: Deprecated ( See https://github.com/Kickflip/kickflip-android-sdk for my current work). Experiments with Android 4.3’s MediaCodec and MediaMuxer</a></li>
+<li><a href="https://github.com/videolan/vlc" target="_blank" rel="noopener">GitHub - videolan/vlc: VLC media player - All pull requests are ignored, please follow https://wiki.videolan.org/Sending_Patches_VLC/</a></li>
+<li><a href="https://android.googlesource.com/platform/cts/+/jb-mr2-release/tests/tests/media/src/android/media/cts/" target="_blank" rel="noopener">tests/tests/media/src/android/media/cts - platform/cts - Git at Google</a></li>
+</ol>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2018年11月26日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MediaCodec-Introduction"><span class="toc-number">1.</span> <span class="toc-text">MediaCodec Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工作流程"><span class="toc-number">1.1.</span> <span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#支持的数据类型"><span class="toc-number">1.2.</span> <span class="toc-text">支持的数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态机"><span class="toc-number">1.3.</span> <span class="toc-text">状态机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MediaCodec-Usage-Tips"><span class="toc-number">2.</span> <span class="toc-text">MediaCodec Usage Tips</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-Instance"><span class="toc-number">2.1.</span> <span class="toc-text">Create Instance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Audio-Codec"><span class="toc-number">2.1.1.</span> <span class="toc-text">Audio Codec</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Video-Codec"><span class="toc-number">2.1.2.</span> <span class="toc-text">Video Codec</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration"><span class="toc-number">2.2.</span> <span class="toc-text">Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-Tips"><span class="toc-number">3.</span> <span class="toc-text">Other Tips</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">5.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&text=Android MediaCodec 退坑指南"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&is_video=false&description=Android MediaCodec 退坑指南"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android MediaCodec 退坑指南&body=Check out this article: http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&title=Android MediaCodec 退坑指南"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/&name=Android MediaCodec 退坑指南&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

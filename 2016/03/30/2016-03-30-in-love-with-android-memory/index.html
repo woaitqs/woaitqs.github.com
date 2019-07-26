@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="定位内存泄露问题，内存抖动问题，ArrayMap优化原理，Bitmap优化原理">
+<meta name="keywords" content="Memory, 内存优化, 定位泄露, ArrayMap, Bitmap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="和Android Memory谈一场不分手的恋爱">
+<meta property="og:url" content="http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="定位内存泄露问题，内存抖动问题，ArrayMap优化原理，Bitmap优化原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/gc-root.jpg">
+<meta property="og:image" content="http://hukai.me/images/gc_overtime.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kamidox/blogs/master/images/memory_churn.gif">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/04/01/56fe26ccc38ea.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/04/01/56fe26cccacd4.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/04/01/56fe26ccd17d5.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/03/31/56fdeba581676.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/04/01/56fe7a65a5289.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/04/01/56fe7a65f0c28.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2016/02/27/56d15d70346dc.png">
+<meta property="og:image" content="https://corner.squareup.com/images/leakcanary/oom_rate.png">
+<meta property="og:image" content="http://img.ptcms.csdn.net/article/201508/12/55cafcd911daf.jpg">
+<meta property="og:updated_time" content="2019-07-26T15:02:20.157Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="和Android Memory谈一场不分手的恋爱">
+<meta name="twitter:description" content="定位内存泄露问题，内存抖动问题，ArrayMap优化原理，Bitmap优化原理">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/gc-root.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>和Android Memory谈一场不分手的恋爱</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/10/10/2016-10-10-android-view-theory-1/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/04/20/2015-04-20-read-source-code-about-volley/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&text=和Android Memory谈一场不分手的恋爱"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&is_video=false&description=和Android Memory谈一场不分手的恋爱"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=和Android Memory谈一场不分手的恋爱&body=Check out this article: http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&name=和Android Memory谈一场不分手的恋爱&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、待嫁闺中"><span class="toc-number">1.</span> <span class="toc-text">一、待嫁闺中</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、举案齐眉"><span class="toc-number">2.</span> <span class="toc-text">二、举案齐眉</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#堆的分区"><span class="toc-number">2.1.</span> <span class="toc-text">堆的分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何知道对象不再使用？"><span class="toc-number">2.2.</span> <span class="toc-text">如何知道对象不再使用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GC的时机"><span class="toc-number">2.3.</span> <span class="toc-text">GC的时机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、面有难色"><span class="toc-number">3.</span> <span class="toc-text">三、面有难色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、心存芥蒂"><span class="toc-number">4.</span> <span class="toc-text">四、心存芥蒂</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#泄漏有哪些危害"><span class="toc-number">4.1.</span> <span class="toc-text">泄漏有哪些危害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#泄漏示例"><span class="toc-number">4.2.</span> <span class="toc-text">泄漏示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定位泄漏的方法"><span class="toc-number">4.3.</span> <span class="toc-text">定位泄漏的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见内存泄漏CASE与修复方法"><span class="toc-number">4.4.</span> <span class="toc-text">常见内存泄漏CASE与修复方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#泄漏CASE"><span class="toc-number">4.4.1.</span> <span class="toc-text">泄漏CASE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修复方法"><span class="toc-number">4.4.2.</span> <span class="toc-text">修复方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、如胶似漆"><span class="toc-number">5.</span> <span class="toc-text">五、如胶似漆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#善用ArrayMap和SparseArray"><span class="toc-number">5.1.</span> <span class="toc-text">善用ArrayMap和SparseArray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不要滥用Enum"><span class="toc-number">5.2.</span> <span class="toc-text">不要滥用Enum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bitmap-并不可怕"><span class="toc-number">5.3.</span> <span class="toc-text">Bitmap 并不可怕</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#善用Service资源"><span class="toc-number">5.4.</span> <span class="toc-text">善用Service资源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">7.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        和Android Memory谈一场不分手的恋爱
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-03-30T08:52:50.000Z" itemprop="datePublished">2016-03-30</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/android/">android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/memory/">memory</a>, <a class="tag-link" href="/tags/performance/">performance</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="一、待嫁闺中"><a href="#一、待嫁闺中" class="headerlink" title="一、待嫁闺中"></a>一、待嫁闺中</h2><p>爱情大多数时候都是美好而甜蜜的，但也时常让我们烦恼，内存也是这样的，自动垃圾回收使得我们不用管内存的分配和释放，但稍微不注意，可能就掉进坑里面了。这边文章将主要围绕 Android Memory的各个方面进行展开，让我们知道如何与 Memory 谈恋爱，并尽可能地甜蜜。</p>
+<p>内存是一个有着沉鱼落雁面容，和体贴善良的女子，她对你含情脉脉的眼神，让你心动流连(妈蛋又跑题了)。Android会给每个应用程序分配适当大小的线程，这样想象如果不加以限制，势必会影响到其他程序和系统本身的稳定性。内存主要是分为两部分，堆和栈(实际上还有方法区，常量池等)。具体可参看<a href="https://book.douban.com/subject/24722612/" target="_blank" rel="noopener">《深入理解java虚拟机》</a></p>
+<p>栈一般与线程相关，JVM(Davlik/Art)在创建每一个线程的时候，会分配一定的栈空间给线程，栈中存储这基本类型数据，以及对象引用等，这些部分主要用于解决程序的运行问题，这就好比内存妹子的灵魂。</p>
+<p>相对而言，堆则用来解决程序的数据存储问题，这就是内存的肉身。如果想要知道妹子有多重，告诉你一个秘诀, 通过<code>getMemoryClass</code>方法可以得知。堆是程序主要进行分配和释放的地方，因而这一块需要良好的管理。下面介绍Android如何进行垃圾回收。</p>
+<hr>
+<h2 id="二、举案齐眉"><a href="#二、举案齐眉" class="headerlink" title="二、举案齐眉"></a>二、举案齐眉</h2><p>爱情是一门付出与回报的行为艺术，两者总是相辅相成的。而Android内存模型，通过自动垃圾回收的方式，帮我们完成了这一过程。我们使用Android内存模块来获取内存，然后内存回收模块回收掉不再使用的内存。</p>
+<h3 id="堆的分区"><a href="#堆的分区" class="headerlink" title="堆的分区"></a>堆的分区</h3><p>年轻代：新创建的对象都存放在这里。因为大多数对象很快变得不可达，所以大多数对象在年轻代中创建，然后消失。当对象从这块内存区域消失时，我们说发生了一次“minor GC”。<br>年老代：经过几次收集，寿命不断延长，一段时间后依然存活的对象。<br>永久代：主要存放加载的Class类级对象如class本身，method，field。</p>
+<h3 id="如何知道对象不再使用？"><a href="#如何知道对象不再使用？" class="headerlink" title="如何知道对象不再使用？"></a>如何知道对象不再使用？</h3><p>早期的垃圾回收采用引用计数(reference counting)的机制。每个对象包含一个计数器。当有新的指向该对象的引用时，计数器加1。当引用移除时，计数器减1。当计数器为0时，认为该对象可以进行垃圾回收。但这样存在的问题，在于循环引用上面，如果A引用B，B引用A，即便两者都不再使用，也无法释放内存。</p>
+<p>为了解决对象循环引用这个问题，后续采用了更为准确的对象遍历方式。如下图所示，垃圾回收器会建立有向图的方式进行内存管理，通过GC Roots来往下遍历，当发现有对象出于不可达状态的时候，就会对其标记为不可达，以便于后续的GC回收。</p>
+<p><img src="/images/blog/gc-root.jpg" alt="GC遍历"></p>
+<h3 id="GC的时机"><a href="#GC的时机" class="headerlink" title="GC的时机"></a>GC的时机</h3><ol>
+<li>调用函数dvmHeapSourceAlloc在Java堆上分配指定大小的内存。如果分配成功，那么就将分配得到的地址直接返回给调用者了。函数dvmHeapSourceAlloc在不改变Java堆当前大小的前提下进行内存分配，这是属于轻量级的内存分配动作。</li>
+<li>如果上一步内存分配失败，这时候就需要执行一次GC了。不过如果GC线程已经在运行中，即gDvm.gcHeap-&gt;gcRunning的值等于True，那么就直接调用函数dvmWaitForConcurrentGcToComplete等到GC执行完成就是了。否则的话，就需要调用函数gcForMalloc来执行一次GC了，参数False表示不要回收软引用对象引用的对象。</li>
+<li>GC执行完毕后，再次调用函数dvmHeapSourceAlloc尝试轻量级的内存分配操作。如果分配成功，那么就将分配得到的地址直接返回给调用者了。</li>
+<li>如果上一步内存分配失败，这时候就得考虑先将Java堆的当前大小设置为Dalvik虚拟机启动时指定的Java堆最大值，再进行内存分配了。这是通过调用函数dvmHeapSourceAllocAndGrow来实现的。</li>
+<li>如果调用函数dvmHeapSourceAllocAndGrow分配内存成功，则直接将分配得到的地址直接返回给调用者了。</li>
+<li>如果上一步内存分配还是失败，这时候就得出狠招了。再次调用函数gcForMalloc来执行GC。参数true表示要回收软引用对象引用的对象。</li>
+<li>GC执行完毕，再次调用函数dvmHeapSourceAllocAndGrow进行内存分配。这是最后一次努力了，成功与事都到此为止。</li>
+</ol>
+<p>总结的说，GC发生一般发生在两种情况下。第一种情况是没有足够内存分配请求的分存时，会调用Heap类的成员函数CollectGarbageInternal触发一个原因为kGcCauseForAlloc的GC。第二种情况下分配出请求的内存之后，堆剩下的内存超过一定的阀值，就会调用Heap类的成员函数RequestConcurrentGC请求执行一个并行GC</p>
+<hr>
+<h2 id="三、面有难色"><a href="#三、面有难色" class="headerlink" title="三、面有难色"></a>三、面有难色</h2><p>感情总不会是一帆风顺，友谊的小船也常常说翻就翻。这不内存妹子就发起了小脾气，心情有些抖动，这是一种我们称之为「内存抖动」的现象。</p>
+<p>在极短的时间内，分配大量的内存，然后又释放它，这种现象就会造成内存抖动。典型的情况是，在View控件的onDraw方法里分配大量内存，又释放大量内存，这种做法极易引起内存抖动，从而导致性能下降。因为onDraw里的大量内存分配和释放会给系统堆空间造成压力，触发GC工作去释放更多可用内存，而GC工作起来时，又会吃掉宝贵的帧时间 (帧时间是 16ms)，最终导致性能问题。</p>
+<p><img src="http://hukai.me/images/gc_overtime.png" alt="绘制超时"></p>
+<p><img src="https://raw.githubusercontent.com/kamidox/blogs/master/images/memory_churn.gif" alt="内存抖动示例"></p>
+<p style="color:red">这个地方还需要完善</p>
+
+<hr>
+<h2 id="四、心存芥蒂"><a href="#四、心存芥蒂" class="headerlink" title="四、心存芥蒂"></a>四、心存芥蒂</h2><p>爱情并不是在任何时候都那么美丽，也时常闹矛盾。内存是个敏感的姑娘，你对她不精心的小伤害，也往往让她对你心存芥蒂，久而久之可能最后分崩离析。在进行的开发的过程中，要注意哪些忽略她感受的小细节，这些细节让她对你的安全感下降很多。我们称这种现象为「内存泄露」。</p>
+<p>Android内存泄漏指的是进程中某些对象（垃圾对象）已经没有使用价值了，但是它们却可以直接或间接地引用到 gc roots 导致无法被GC回收。无用的对象占据着内存空间，使得实际可使用内存变小，形象地说法就是内存泄漏了。</p>
+<h3 id="泄漏有哪些危害"><a href="#泄漏有哪些危害" class="headerlink" title="泄漏有哪些危害"></a>泄漏有哪些危害</h3><p>运行性能的问题: Android在运行的时候，如果内存泄露导致其他组件可用的内存变少，一方面会使得GC的频率加剧，在发生GC的时候，所有进程都必须进行等待，GC的频率越多，从而用户越容易感知到卡顿。另一方面，内存变少，将可能使得系统会额外分配给你一些内存，而影响整个系统的运行状况。</p>
+<p>运行崩溃问题: 一旦内存不足以分配某些内存，那么将会导致崩溃，这对于体验而言是致命的。我们在进行内存分析的时候，可以发现总有一些机型会出现OutOfMemory的崩溃栈，大抵都和内存泄露有关。</p>
+<h3 id="泄漏示例"><a href="#泄漏示例" class="headerlink" title="泄漏示例"></a>泄漏示例</h3><p>来看看下面这个例子，DataContainer 负责抓取和更新数据，我们可以通过 <code>register(DataListener listener)</code>方法来对数据更新进行关注。<code>MainActivity</code>就关注了DataListener，因而当数据发生回调的时候，<code>MainActivity</code>就能立刻做出相应。</p>
+<p>其实这里发生了比较严重的泄漏情况，在启动<code>MainActivity</code>的时候，<code>MainActivity</code> 就会将 <code>DataListener</code> 注入到<code>DataContainer</code>里，而在<code>MainActivity</code>退出的时候，即使<code>MainActivity</code>不再使用，但是由于其被<code>DataContainer</code>所引用，导致<code>MainActivity</code>无法被回收，将会一直占据着内存，影响程序的运行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataContainer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> List&lt;DataListener&gt; dataListeners;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> DataContainer instance;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> &#123;</span><br><span class="line">    instance = <span class="keyword">new</span> DataContainer();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">DataContainer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    dataListeners = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DataContainer <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 监听数据变化.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(DataListener listener)</span> </span>&#123;</span><br><span class="line">    dataListeners.add(listener);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DataListener</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onDataChanged</span><span class="params">()</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> <span class="keyword">implements</span> <span class="title">DataContainer</span>.<span class="title">DataListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">    LeakContainer.getInstance().register(MainActivity.<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDataChanged</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Toast.show</span><br><span class="line">    <span class="comment">// do nothings.</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="定位泄漏的方法"><a href="#定位泄漏的方法" class="headerlink" title="定位泄漏的方法"></a>定位泄漏的方法</h3><p>女生的小情绪，往往难以琢磨，如果我们忽略这些小脾气，往往又会得到惩罚。因而我们需要寻找一种方法来定位可能的对于内存妹纸的伤害。我们将分别从两个方面，来帮助我们分析和定位。一是宏观方法，通过一些很简单的方法来判断是否存在泄露，另一方面是通过精确定位的方式来提出具体的解决方案。</p>
+<ol>
+<li>Android Studio Memory Monitor</li>
+</ol>
+<p>Android Studio 提供了非常方便的工具，便于我们定位问题。Android Monitors模块中含有 Memory Tab，这个Tab以流线的方式，展示了每一时刻内，已分配的内存和还空闲的内存。</p>
+<p>图中浅蓝颜色的部分表示已经分配的内存，而灰色部分表明空闲的内存。<br><img src="https://ooo.0o0.ooo/2016/04/01/56fe26ccc38ea.png" alt="gettingstarted_image003.png"><br>总选中Devices和相应的包名后，就能看到动态内存分配的情况。<br><img src="https://ooo.0o0.ooo/2016/04/01/56fe26cccacd4.png" alt="gettingstarted_image002.png"><br>如下图所示，当已分配的内存剧烈下降的时候，就标明发生了GC事件，GC发生的时刻和频率是我们关注的重点。<br><img src="https://ooo.0o0.ooo/2016/04/01/56fe26ccd17d5.png" alt="gettingstarted_image005.png"><br>我们回到刚才的那个例子 #泄漏示例# ，下图是点击<code>MainActivity</code>然后按返回键退出，再进入再退出，重复几次后，内存Monitor显示的结果。从这个例子中，我们可以看到，尽管进过了几次 <code>GC</code>,但是内存用量却一直在增大，说明有些对象被某些静态或者其他GC Roots的对象引用着，导致其不能被释放。因而可以说明，其存在比较严重的内存泄漏问题。<br><img src="https://ooo.0o0.ooo/2016/03/31/56fdeba581676.png" alt="内存泄露"></p>
+<ol start="2">
+<li>Android Devices Monitor</li>
+</ol>
+<p>Android Devices Monitor提供了比较方便辅助的定位方法，在 <code>Heap</code> Tab下面，显示着<code>% Used</code>的使用量，如果这个值在<code>GC</code>后没有明显下降，那么就意味着发生了内存泄漏，具体的操作步骤如下。</p>
+<ol>
+<li>选择DDMS视图，并打开Devices视图和Heap视图</li>
+<li>点击选择要监控的进程，比如：上图中我选择的是system_process</li>
+<li>选中Devices视图界面上的<code>update heap</code>图标</li>
+<li>点击Heap视图中的<code>Cause GC</code> 按钮（相当于向虚拟机发送了一次GC请求的操作）</li>
+</ol>
+<p>第一次点击<code>Cause GC</code>后的内存占比<br><img src="https://ooo.0o0.ooo/2016/04/01/56fe7a65a5289.png" alt="QQ20160401-1.png"><br>在多次退出和进入后的内存占比<br><img src="https://ooo.0o0.ooo/2016/04/01/56fe7a65f0c28.png" alt="QQ20160401-2.png"></p>
+<ol start="3">
+<li>精确定位方法</li>
+</ol>
+<p>我们在查看是否存在内存泄漏情况的时候，基于的基础单位往往是Activity，因而就可以想到一种思路，即通过在界面回退后，强制进行GC，然后判断是否还存在对该Activity的引用，这样就能得知是否存在泄漏。</p>
+<p><img src="https://ooo.0o0.ooo/2016/02/27/56d15d70346dc.png" alt="使用Monitor进行定位"></p>
+<p><a href="http://www.lightskystreet.com/2015/09/01/mat_usage/" target="_blank" rel="noopener">MAT 使用简介</a></p>
+<p>具体的的实施步骤如下：</p>
+<ol>
+<li><p>客户端中打开相应的Activity，并执行可能触发内存泄漏的操作.</p>
+</li>
+<li><p>退出Activity界面，并点击Initiate GC(左起第二个按钮)</p>
+</li>
+<li><p>点击Dump Java Heap，等待一会后，这个时候可以看到Dump 出来的日志。</p>
+</li>
+<li><p>由于Android Profile文件不被 MAT 支持，因为我们需要执行转换操作。 ./hprof-conv path/file.hprof exitPath/heap-converted.hprof</p>
+</li>
+<li><p>在 MAT 中打开文件，并选择Leak Suspects Report,等待最后的结果。</p>
+</li>
+<li><p><code>Select * From instanceof android.app.Activity</code> 通过Activity的类名来过滤信息，在右键菜单里面，分别点击Merge Paths to Shortest GC Root 和 exclude all phantom/weak/soft etc. references, 排除被弱引用持有的情况。</p>
+</li>
+<li><p>LeakCanary 自动定位</p>
+</li>
+</ol>
+<p>Square 开源了LeakCanary来用作对于内存泄露情况的自动检测。</p>
+<p>LeakCanary实现了引用观察者RefWatcher。RefWatcher.watch() 创建一个 KeyedWeakReference 到要被监控的对象。通过在Activity重要的生命周期中，在后台线程检查引用是否被清除，如果没有，调用GC。如果在GC后，引用还是未被清除，那么可能发生了内存泄露，这时候把heap内存dump到 APP 对应的文件系统中的 .hprof 文件中。在另外一个进程中的 HeapAnalyzerService 有一个 HeapAnalyzer 使用HAHA来解析这个文件。得益于唯一的 reference key, HeapAnalyzer 找到 KeyedWeakReference，定位内存泄露。HeapAnalyzer 计算 到 GC roots 的最短强引用路径，并确定是否是泄露。如果是的话，建立导致泄露的引用链。引用链传递到 APP 进程中的 DisplayLeakService， 并以通知的形式展示出来。</p>
+<p>可以看到，Square在使用LeakCanary并进行相应的修改后，效果还是相当不错的。<br><img src="https://corner.squareup.com/images/leakcanary/oom_rate.png" alt="内存泄漏比例"><br>由于官方开源的LeakCanary只能在Debug版上使用，在Release上通过NullObject方式实现了一个空实现，来避免性能问题。如果想通过小流量的方式来批量地发现用户内存泄露的情况，那么就需要对源码进行整改，刚好我做了这么一件事情，有兴趣的人可以拿去使用。<a href="https://github.com/woaitqs/leakcanary_without_notification" target="_blank" rel="noopener">移除UI展示等逻辑后可在Release上使用的LeakCanary</a>。有了用户相关的数据的泄露栈就能很好地处理各种泄露问题，使得应用良好稳定地运行。</p>
+<h3 id="常见内存泄漏CASE与修复方法"><a href="#常见内存泄漏CASE与修复方法" class="headerlink" title="常见内存泄漏CASE与修复方法"></a>常见内存泄漏CASE与修复方法</h3><h4 id="泄漏CASE"><a href="#泄漏CASE" class="headerlink" title="泄漏CASE"></a>泄漏CASE</h4><ol>
+<li>注册对象未反注册<br>在组件启动后，注册了某个对象的观察者，在组件回收的时候，忘记取消注册了。可以参考这样的例子，Activity声明的时候实现了对于下载进度接口的监听，而这个监听接口在实现的时候使用的是强引用，如果不进行主动反注册，Activity会因为被下载库持有引用，从而导致无法回收。</li>
+<li>长线执行的异步任务<br>组件内部有一个可能长时间执行的任务，通过内部类持有了对组件的引用。想象这样一个场景，界面上的某一个组件需要异步地去请求天气数据，在得到结果后显示在界面上。在网络回调的Callback中，持有了这个组件，从而在网络请求执行过程中，组件是无法进行回收的。</li>
+<li>Android SDK的泄露<br>这类泄露一般不严重，不用特殊处理。比如TextLine.sCached对象会持有一个拥有三个TextLine的对象池，但TextLine的回收方法recycle处理得有bug，在android-5.1.0_r1修复了一部分，修复连接。其他的泄露地方可从这里看出一部分，SDK泄露统计。</li>
+<li>类的静态变量持有大数据对象<br>静态变量长期维持到大数据对象的引用，阻止垃圾回收。</li>
+<li>资源对象未关闭象<br>资源性对象如Cursor、File、Socket，应该在使用后及时关闭。未在finally中关闭，会导致异常情况下资源对象未被释放的隐患。</li>
+<li>Handler 泄漏<br>Handler通过发送Message与主线程交互，Message发出之后是存储在MessageQueue中的，有些Message也不是马上就被处理的。在Message中存在一个target，是Handler的一个引用，如果Message在Queue中存在的时间越长，就会导致Handler无法被回收。如果Handler是非静态的，则会导致Activity或者Service不会被回收。handler在使用过后，在组件退出的时候没有处理这些handler。通过Handler post出去一个任务后，没有在最后调用removeCallbacks的接口，清除掉所有跟这个Runnable相关的message。</li>
+</ol>
+<h4 id="修复方法"><a href="#修复方法" class="headerlink" title="修复方法"></a>修复方法</h4><ol>
+<li>尽量避免在组件内部使用内部类，内部的一些逻辑类可以使用Static的声明，避免持有对组件的引用。</li>
+<li>如果一定要持有内部类的引用，可以通过WeakReference来进行封装，这样可以缓解掉一些泄漏情况。</li>
+<li>对于Handler使用较多的情况，可以考虑使用WeakHandler</li>
+<li>正确关闭资源，对于使用了BraodcastReceiver，ContentObserver，File，游标 Cursor，Stream，Bitmap等资源的使用，应该在Activity销毁时及时关闭或者注销。</li>
+<li>在 Java 的实现过程中，也要考虑其对象释放，最好的方法是在不使用某对象时，显式地将此对象赋值为 null，比如使用完Bitmap 后先调用 recycle()，再赋为null,清空对图片等资源有直接引用或者间接引用的数组（使用 array.clear() ; array = null）等，最好遵循谁创建谁释放的原则。</li>
+<li>对 Activity 等组件的引用应该控制在 Activity 的生命周期之内； 如果不能就考虑使用 getApplicationContext 或者 getApplication，以避免 Activity 被外部长生命周期的对象引用而泄露。</li>
+</ol>
+<hr>
+<h2 id="五、如胶似漆"><a href="#五、如胶似漆" class="headerlink" title="五、如胶似漆"></a>五、如胶似漆</h2><p>处理好爱情里面的小摩擦以后，现在我们来把和内存妹纸的恋爱进行到底，如何呵护好来之不易的感情。接下来的章节将围绕内存优化进行展开，这部分内容也对我们的开发很有帮助。</p>
+<h3 id="善用ArrayMap和SparseArray"><a href="#善用ArrayMap和SparseArray" class="headerlink" title="善用ArrayMap和SparseArray"></a>善用ArrayMap和SparseArray</h3><p>HashMap 在我们的程序中经常出现，作为高效率存储和检索的容器被频繁使用。如果了解<a href="http://woaitqs.github.io/program/2015/04/14/read-source-code-about-hashmap" target="_blank" rel="noopener">HashMap 实现原理</a>的话，就知道这是一种空间换时间的实现方式，在客户端开发中由于内存受限，原来以空间换时间的方式也变得不太适合。为了解决HashMap更占内存的弊端，Android提供了内存效率更高的ArrayMap。它内部使用两个数组进行工作，其中一个数组记录key hash过后的顺序列表，另外一个数组按key的顺序记录Key-Value值，如下图所示：<br><img src="http://img.ptcms.csdn.net/article/201508/12/55cafcd911daf.jpg" alt="ArrayMap 原理图"></p>
+<p>当你想获取某个value的时候，ArrayMap会计算输入key转换过后的hash值，然后对hash数组使用二分查找法寻找到对应的index，然后我们可以通过这个index在另外一个数组中直接访问到需要的键值对。如果在第二个数组键值对中的key和前面输入的查询key不一致，那么就认为是发生了碰撞冲突。为了解决这个问题，我们会以该key为中心点，分别上下展开，逐个去对比查找，直到找到匹配的值。并且 ArrayMap 会采用动态数组的方式，始终使得内存占用控制在合理的范围内。</p>
+<p>SparseArray 相对于ArrayMap做了进一步的细化，避免了对基础数据的装箱操作。系统提供了SparseBoolMap，SparseIntMap，SparseLongMap，LongSparseMap等容器。这些容器的使用场景也和ArrayMap一致，需要满足数量级在千以内，数据组织形式需要包含Map结构。</p>
+<h3 id="不要滥用Enum"><a href="#不要滥用Enum" class="headerlink" title="不要滥用Enum"></a>不要滥用Enum</h3><p>在Android最开始的文档中，写着尽量避免使用Enum，认为使用 Enum 带来了不少的性能问题。不过Enum 相对于 int 而言，确实提供了不少的代码可读性，而且在后续的优化中Enum带来的影响也降低了不少。比如当我们发现有人在使用Enum.oridinal()这样的方法时，大概就可以说明Enum被滥用了。</p>
+<p>Android Support提供了更好的方式，在语义限制和性能之间达到一个平衡，这就是<a href="http://developer.android.com/reference/android/support/annotation/StringDef.html" target="_blank" rel="noopener">Android Animation</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(SOURCE)</span><br><span class="line">  <span class="meta">@StringDef</span>(&#123;</span><br><span class="line">     POWER_SERVICE,</span><br><span class="line">     WINDOW_SERVICE,</span><br><span class="line">     LAYOUT_INFLATER_SERVICE</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">public</span> <span class="meta">@interface</span> ServiceName &#123;&#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String POWER_SERVICE = <span class="string">"power"</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String WINDOW_SERVICE = <span class="string">"window"</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String LAYOUT_INFLATER_SERVICE = <span class="string">"layout_inflater"</span>;</span><br><span class="line">  ...</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Object <span class="title">getSystemService</span><span class="params">(@ServiceName String name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Bitmap-并不可怕"><a href="#Bitmap-并不可怕" class="headerlink" title="Bitmap 并不可怕"></a>Bitmap 并不可怕</h3><p>这一章节会介绍一些处理与加载Bitmap对象的常用方法，这些技术能够使得程序的UI不会被阻塞，并且可以避免程序超出内存限制。如果我们不注意这些，Bitmaps会迅速的消耗掉可用内存从而导致程序崩溃，出现下面的异常:java.lang.OutofMemoryError: bitmap size exceeds VM budget.</p>
+<p>在Android应用中加载Bitmaps的操作是需要特别小心处理的，有下面几个方面的原因:</p>
+<ol>
+<li>移动设备的系统资源有限。Android设备对于单个程序至少需要16MB的内存。Android Compatibility Definition Document (CDD), Section 3.7. Virtual Machine Compatibility 中给出了对于不同大小与密度的屏幕的最低内存需求。 应用应该在这个最低内存限制下去优化程序的效率。当然，大多数设备的都有更高的限制需求。</li>
+<li>Bitmap会消耗很多内存，特别是对于类似照片等内容更加丰富的图片。 例如，Galaxy Nexus的照相机能够拍摄2592x1936 pixels (5 MB)的图片。 如果bitmap的图像配置是使用ARGB_8888 (从Android 2.3开始的默认配置) ，那么加载这张照片到内存大约需要19MB(2592<em>1936</em>4 bytes) 的空间，从而迅速消耗掉该应用的剩余内存空间。</li>
+<li>Android应用的UI通常会在一次操作中立即加载许多张bitmaps。 例如在ListView, GridView 与 ViewPager 等控件中通常会需要一次加载许多张bitmaps，而且需要预先加载一些没有在屏幕上显示的内容，为用户滑动的显示做准备。</li>
+</ol>
+<p><a href="http://hukai.me/android-training-course-in-chinese/graphics/displaying-bitmaps/load-bitmap.html" target="_blank" rel="noopener">高效加载大图</a></p>
+<h3 id="善用Service资源"><a href="#善用Service资源" class="headerlink" title="善用Service资源"></a>善用Service资源</h3><p>如果你的应用需要在后台使用service，除非它被触发并执行一个任务，否则其他时候service都应该是停止状态。另外需要注意当这个service完成任务之后因为停止service失败而引起的内存泄漏。</p>
+<p>当你启动一个service，系统会倾向为了保留这个service而一直保留service所在的进程。这使得进程的运行代价很高，因为系统没有办法把service所占用的RAM空间腾出来让给其他组件，另外service还不能被paged out。这减少了系统能够存放到LRU缓存当中的进程数量，它会影响app之间的切换效率。它甚至会导致系统内存使用不稳定，从而无法继续保持住所有目前正在运行的service。</p>
+<p>限制你的service的最好办法是使用IntentService， 它会在处理完交代给它的intent任务之后尽快结束自己。更多信息，请阅读Running in a Background Service.</p>
+<p>当一个Service已经不再需要的时候还继续保留它，这对Android应用的内存管理来说是最糟糕的错误之一。因此千万不要贪婪的使得一个Service持续保留。不仅仅是因为它会使得你的应用因为RAM空间的不足而性能糟糕，还会使得用户发现那些有着常驻后台行为的应用并且可能卸载它。</p>
+<hr>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="http://www.cnblogs.com/vamei/archive/2013/04/28/3048353.html" target="_blank" rel="noopener">http://www.cnblogs.com/vamei/archive/2013/04/28/3048353.html</a></li>
+<li><a href="http://daily.zhihu.com/story/7364069" target="_blank" rel="noopener">http://daily.zhihu.com/story/7364069</a></li>
+<li><a href="http://droidyue.com/blog/2014/11/02/note-for-google-io-memory-management-for-android-chinese-edition/" target="_blank" rel="noopener">http://droidyue.com/blog/2014/11/02/note-for-google-io-memory-management-for-android-chinese-edition/</a></li>
+</ol>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2016年03月30日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、待嫁闺中"><span class="toc-number">1.</span> <span class="toc-text">一、待嫁闺中</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、举案齐眉"><span class="toc-number">2.</span> <span class="toc-text">二、举案齐眉</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#堆的分区"><span class="toc-number">2.1.</span> <span class="toc-text">堆的分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何知道对象不再使用？"><span class="toc-number">2.2.</span> <span class="toc-text">如何知道对象不再使用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GC的时机"><span class="toc-number">2.3.</span> <span class="toc-text">GC的时机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、面有难色"><span class="toc-number">3.</span> <span class="toc-text">三、面有难色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、心存芥蒂"><span class="toc-number">4.</span> <span class="toc-text">四、心存芥蒂</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#泄漏有哪些危害"><span class="toc-number">4.1.</span> <span class="toc-text">泄漏有哪些危害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#泄漏示例"><span class="toc-number">4.2.</span> <span class="toc-text">泄漏示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定位泄漏的方法"><span class="toc-number">4.3.</span> <span class="toc-text">定位泄漏的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见内存泄漏CASE与修复方法"><span class="toc-number">4.4.</span> <span class="toc-text">常见内存泄漏CASE与修复方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#泄漏CASE"><span class="toc-number">4.4.1.</span> <span class="toc-text">泄漏CASE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修复方法"><span class="toc-number">4.4.2.</span> <span class="toc-text">修复方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、如胶似漆"><span class="toc-number">5.</span> <span class="toc-text">五、如胶似漆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#善用ArrayMap和SparseArray"><span class="toc-number">5.1.</span> <span class="toc-text">善用ArrayMap和SparseArray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不要滥用Enum"><span class="toc-number">5.2.</span> <span class="toc-text">不要滥用Enum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bitmap-并不可怕"><span class="toc-number">5.3.</span> <span class="toc-text">Bitmap 并不可怕</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#善用Service资源"><span class="toc-number">5.4.</span> <span class="toc-text">善用Service资源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">7.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&text=和Android Memory谈一场不分手的恋爱"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&is_video=false&description=和Android Memory谈一场不分手的恋爱"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=和Android Memory谈一场不分手的恋爱&body=Check out this article: http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&title=和Android Memory谈一场不分手的恋爱"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/03/30/2016-03-30-in-love-with-android-memory/&name=和Android Memory谈一场不分手的恋爱&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="android view onDraw 的执行过程">
+<meta name="keywords" content="onDraw, view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View 全解析(四) -- onDraw">
+<meta property="og:url" content="http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="android view onDraw 的执行过程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-26T15:18:35.425Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View 全解析(四) -- onDraw">
+<meta name="twitter:description" content="android view onDraw 的执行过程">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android View 全解析(四) -- onDraw</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/10/25/2016-10-25-android-view-theory-3/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&text=Android View 全解析(四) -- onDraw"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&is_video=false&description=Android View 全解析(四) -- onDraw"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(四) -- onDraw&body=Check out this article: http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&name=Android View 全解析(四) -- onDraw&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础操作"><span class="toc-number">1.</span> <span class="toc-text">基础操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#绘制操作"><span class="toc-number">2.</span> <span class="toc-text">绘制操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝塞尔曲线"><span class="toc-number">3.</span> <span class="toc-text">贝塞尔曲线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">5.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android View 全解析(四) -- onDraw
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-10-28T08:52:50.000Z" itemprop="datePublished">2016-10-28</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/android/">android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/onDraw/">onDraw</a>, <a class="tag-link" href="/tags/view/">view</a>, <a class="tag-link" href="/tags/window/">window</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><p>在前面介绍了 <a href="http://www.woaitqs.cc/android/2016/10/18/android-view-theory-2.html">onMeasure</a> 用于确定 view 大小，<a href="http://www.woaitqs.cc/android/2016/10/25/android-view-theory-3.html">onLayout</a> 用于确定 view 的位置后，最后我们看看三大事件中最后压轴出场的 onDraw，这确定了 view 长什么模样。</p>
+<p>onDraw 相对前面两者，涉及到的知识面非常的广。从 Canvas 提供的种类繁多的 API，到 Paint、Path 贝塞尔曲线等等高阶的工具，如果要细讲的话，估计这篇文章就得老长老长了。在这些工具的支持下，圆角按钮、复杂的下拉动画等等都手到擒来。关于这些工具的具体用法，在文末提供一些参考链接，有兴趣的同学可以去学习下。</p>
+<p>onDraw 方法中的参数为 canvas，这个类型为 <a href="https://developer.android.com/reference/android/graphics/Canvas.html" target="_blank" rel="noopener">Canvas</a> 的实例，就是我们主要操作的对象。中文意思为画布，也很形象哈，onDraw 就是在画布上将东西画上去。那么既然是把内容画上去，那么第一件事情就是要有一个画笔。Android 提供了这样的工具，也就是 <a href="https://developer.android.com/reference/android/graphics/Paint.html" target="_blank" rel="noopener">Paint</a> 类。</p>
+<p>Paint 提供了一些常用的 API，用于自定义画笔。</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>setColor</td>
+<td align="center">设置画笔的颜色</td>
+</tr>
+<tr>
+<td>setStrokeWidth</td>
+<td align="center">画笔的宽度</td>
+</tr>
+<tr>
+<td>setStyle</td>
+<td align="center">画笔的类型（实心、空心、描边）</td>
+</tr>
+<tr>
+<td>setShader</td>
+<td align="center">设置着色器 (渐变等效果)</td>
+</tr>
+</tbody></table>
+<p>接下来绘制一个正菱形。绘制菱形的话，可以直接画上去，但需要考虑角度等等复杂问题，有一个更讨巧的方法是先绘制一个正方形，然后以某个角为原点，旋转45度即可 ：）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Paint paint = <span class="keyword">new</span> Paint();</span><br><span class="line">paint.setColor(Color.RED);</span><br><span class="line">paint.setStyle(Paint.Style.FILL);</span><br><span class="line">paint.setStrokeWidth(<span class="number">10F</span>);</span><br><span class="line"><span class="comment">// 以上代码，最好在构造函数时就完成，不要在 onDraw 方法时调用</span></span><br><span class="line"><span class="comment">// 否则会引起内存抖动。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 绘制正方形</span></span><br><span class="line">canvas.drawRect(<span class="number">200</span>, <span class="number">200</span>, <span class="number">400</span>, <span class="number">400</span>, paint);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 绘制菱形，为了区分，修改下颜色</span></span><br><span class="line">paint.setColor(Color.BLUE);</span><br><span class="line"><span class="comment">// 将坐标原点移动到顶点上</span></span><br><span class="line">canvas.translate(<span class="number">200</span>, <span class="number">200</span>);</span><br><span class="line"><span class="comment">// 以坐标原点为中心，进行旋转</span></span><br><span class="line">canvas.rotate(<span class="number">45</span>);</span><br><span class="line"><span class="comment">// 绘制菱形</span></span><br><span class="line">canvas.drawRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">200</span>, <span class="number">200</span>, paint);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="绘制操作"><a href="#绘制操作" class="headerlink" title="绘制操作"></a>绘制操作</h2><p>首先我们绘制一个简单的背景图，这也是 Canvas 提供的基础功能，包含有重载的多个 drawBitmap 接口。如果没有什么特殊需求，可以调用 drawBitmap(Bitmap bitmap, Matrix matrix, Paint paint) 方法。简单的示例代码如下，这样图片就出现在画布的左上角了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Bitmap bgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.spring);</span><br><span class="line">canvas.drawBitmap(bgBitmap, <span class="keyword">new</span> Matrix(), <span class="keyword">new</span> Paint());</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们尝试再画一个三角形，学习如何绘制路径。绘制与路径相关的内容，需要用到 Path 这个工具。Path 有许多高阶的用法，例如贝塞尔曲线，在接下来的章节中将简单地进行叙述，这里先只绘制直线。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Paint paint = <span class="keyword">new</span> Paint();</span><br><span class="line">paint.setStrokeWidth(<span class="number">10F</span>);</span><br><span class="line">paint.setStyle(Paint.Style.STROKE);</span><br><span class="line">paint.setColor(Color.BLACK);</span><br><span class="line">paint.setStrokeJoin(Paint.Join.ROUND);</span><br><span class="line"></span><br><span class="line">Path path = <span class="keyword">new</span> Path();</span><br><span class="line">path.lineTo(<span class="number">0</span>, <span class="number">200</span>);</span><br><span class="line">path.lineTo(<span class="number">200</span>, <span class="number">200</span>);</span><br><span class="line">path.close();</span><br><span class="line"></span><br><span class="line">canvas.drawPath(path, paint);</span><br></pre></td></tr></table></figure>
+
+<p>path 关于直线的操作，主要是两个 moveTo 和 lineTo，moveTo 移动下一次绘制操作开始的起点，例如 moveTo(20,20)，那么下一次操作就从(20,20) 这里开始。而 lineTo 就更加直接一点，直接在设定的起点(默认为(0,0))开始，到指定的结束为止绘制一条直线。</p>
+<p>在一些参考博客中, 发现他们在 onDraw 中通过绘制不同的 Path 来达到动画的效果，再通过 handler postMessage 的方式来进行动画步骤时间的分配。但我不是很推荐这样的做法，这种情况下 onDraw 方法承担了太多的责任，动画的逻辑应该和这个区分开来。其实 Android 本身提供的动画机制以外，还有 AnimationDrawable 这个很方便的工具来通过 xml 来实现动画。</p>
+<p>代码实现主要是三个 XML 文件，其中这里使用了 Vector(矢量图)(有兴趣的同学可以看看这个<a href="https://developer.android.com/studio/write/vector-asset-studio.html" target="_blank" rel="noopener">链接</a>)。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">vector</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:width</span>=<span class="string">"18dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:height</span>=<span class="string">"9dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:viewportHeight</span>=<span class="string">"9"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:viewportWidth</span>=<span class="string">"18"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:name</span>=<span class="string">"bird"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:pathData</span>=<span class="string">"M2,4c3,-1 6,-1.5 7,2c1,-3.5 4,-3 7,-2"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:strokeColor</span>=<span class="string">"#20416b"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:strokeLineCap</span>=<span class="string">"round"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:strokeLineJoin</span>=<span class="string">"round"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:strokeMiterLimit</span>=<span class="string">"1.41421"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:strokeWidth</span>=<span class="string">"2"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">vector</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">objectAnimator</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:duration</span>=<span class="string">"500"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:interpolator</span>=<span class="string">"@android:anim/accelerate_interpolator"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:propertyName</span>=<span class="string">"pathData"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:repeatCount</span>=<span class="string">"infinite"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:repeatMode</span>=<span class="string">"reverse"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:valueFrom</span>=<span class="string">"M2,4c3,-1 6,-1.5 7,2c1,-3.5 4,-3 7,-2"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:valueTo</span>=<span class="string">"M4,7c3,-1 4,-4.5 5,-1c1,-3.5 2,0 5,1"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:valueType</span>=<span class="string">"pathType"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">animated-vector</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:drawable</span>=<span class="string">"@drawable/bird_up_and_down"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">target</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:name</span>=<span class="string">"bird"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:animation</span>=<span class="string">"@animator/fly"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">animated-vector</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="贝塞尔曲线"><a href="#贝塞尔曲线" class="headerlink" title="贝塞尔曲线"></a>贝塞尔曲线</h2><p>前面提到 Path 可以表达直线和曲线(实际上直线也是曲线的一种)，曲线千变万化，东绕西拐的，有没有一种方式可以去涵盖所有的平面曲线了？有的，答案就是<code>贝塞尔曲线</code>。</p>
+<blockquote>
+<p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau演算法开发，以稳定数值的方法求出贝兹曲线。<br>在计算机图形学中贝赛尔曲线的运用也很广泛，Photoshop中的钢笔效果，Flash5的贝塞尔曲线工具，在软件GUI开发中一般也会提供对应的方法来实现贝赛尔曲线。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WaveView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STEP = <span class="number">8</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COUNT = <span class="number">5</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> WAVE_LENGTH = <span class="number">200</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_OFFSET = <span class="number">200</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> offset = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">WaveView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">WaveView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">WaveView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">    <span class="keyword">final</span> ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();</span><br><span class="line">    executorService.scheduleAtFixedRate(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        getHandler().post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (offset &gt; MAX_OFFSET) &#123;</span><br><span class="line">              offset = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            offset += STEP;</span><br><span class="line">            invalidate();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, <span class="number">300</span>, <span class="number">200</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Paint paint = <span class="keyword">new</span> Paint();</span><br><span class="line">    paint.setStrokeWidth(<span class="number">5F</span>);</span><br><span class="line">    paint.setStyle(Paint.Style.STROKE);</span><br><span class="line">    paint.setColor(Color.BLUE);</span><br><span class="line">    paint.setStrokeJoin(Paint.Join.ROUND);</span><br><span class="line"></span><br><span class="line">    Path path = <span class="keyword">new</span> Path();</span><br><span class="line">    path.moveTo(offset, <span class="number">200</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; COUNT; i++) &#123;</span><br><span class="line">      <span class="keyword">int</span> randomHeight = <span class="keyword">new</span> Random().nextInt(<span class="number">50</span>) + <span class="number">50</span>;</span><br><span class="line">      path.cubicTo(</span><br><span class="line">          (i + <span class="number">1F</span> / <span class="number">3</span>) * WAVE_LENGTH + offset, <span class="number">200</span> - randomHeight,</span><br><span class="line">          (i + <span class="number">2F</span> / <span class="number">3</span>) * WAVE_LENGTH + offset, <span class="number">200</span> + randomHeight,</span><br><span class="line">          (i + <span class="number">1</span>) * WAVE_LENGTH + offset, <span class="number">200</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    canvas.drawPath(path, paint);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码也是非常的简单，首先通过 cubicTo 生成波浪，cubic 函数中的前两个函数分别是两个控制点，我们将两个控制点分别置于水平线上下两个地方，这样就能生成一条波浪线。其次在使得每次波浪都便宜固定值，形成涌动的效果。最后为了一个更好的效果，给波浪振动的高度上加上一个随机数。</p>
+<p>贝塞尔曲线能提供的功能原不只这些，更多姿势大家就自行解锁了哦 ：）</p>
+<hr>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="http://www.gcssloop.com/customview/CustomViewIndex" target="_blank" rel="noopener">http://www.gcssloop.com/customview/CustomViewIndex</a></li>
+<li><a href="https://developer.android.com/training/custom-views/custom-drawing.html" target="_blank" rel="noopener">https://developer.android.com/training/custom-views/custom-drawing.html</a></li>
+<li><a href="http://jeremie-martinez.com/2016/09/15/train-animations/" target="_blank" rel="noopener">http://jeremie-martinez.com/2016/09/15/train-animations/</a></li>
+<li><a href="https://developer.android.com/guide/topics/graphics/2d-graphics.html" target="_blank" rel="noopener">https://developer.android.com/guide/topics/graphics/2d-graphics.html</a></li>
+</ol>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2016年11月3日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础操作"><span class="toc-number">1.</span> <span class="toc-text">基础操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#绘制操作"><span class="toc-number">2.</span> <span class="toc-text">绘制操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贝塞尔曲线"><span class="toc-number">3.</span> <span class="toc-text">贝塞尔曲线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">5.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&text=Android View 全解析(四) -- onDraw"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&is_video=false&description=Android View 全解析(四) -- onDraw"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(四) -- onDraw&body=Check out this article: http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&title=Android View 全解析(四) -- onDraw"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/10/28/2016-10-28-android-view-theory-4/&name=Android View 全解析(四) -- onDraw&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
