@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="手把手教你自定义 View">
+<meta name="keywords" content="custom, view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View 全解析(五) -- 实践自定义 View">
+<meta property="og:url" content="http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="手把手教你自定义 View">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/1680722/20701135/42297c0a-b64c-11e6-8eea-ab706946af90.gif">
+<meta property="og:updated_time" content="2019-07-26T15:52:45.119Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View 全解析(五) -- 实践自定义 View">
+<meta name="twitter:description" content="手把手教你自定义 View">
+<meta name="twitter:image" content="https://cloud.githubusercontent.com/assets/1680722/20701135/42297c0a-b64c-11e6-8eea-ab706946af90.gif">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android View 全解析(五) -- 实践自定义 View</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/09/01/2018-11-10-how-to-take-a-beautiful-and-right-picture/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/10/28/2016-10-28-android-view-theory-4/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&text=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&is_video=false&description=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(五) -- 实践自定义 View&body=Check out this article: http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&name=Android View 全解析(五) -- 实践自定义 View&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#确定自定义的样式"><span class="toc-number">1.</span> <span class="toc-text">确定自定义的样式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化相应属性"><span class="toc-number">2.</span> <span class="toc-text">初始化相应属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载-onMeasure-方法"><span class="toc-number">3.</span> <span class="toc-text">重载 onMeasure 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载-onDraw-方法"><span class="toc-number">4.</span> <span class="toc-text">重载 onDraw 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View-的更新策略"><span class="toc-number">5.</span> <span class="toc-text">View 的更新策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">6.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android View 全解析(五) -- 实践自定义 View
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-11-28T08:52:50.000Z" itemprop="datePublished">2016-11-28</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/android/">android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/view/">view</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="确定自定义的样式"><a href="#确定自定义的样式" class="headerlink" title="确定自定义的样式"></a>确定自定义的样式</h2><p>在前面的<a href="http://www.woaitqs.cc/android/2016/10/10/android-view-theory-1.html">系列文章</a>之后,大家已经对 View 绘制中的各个过程熟悉了，这篇文章就根据前面所学的知识，来实际动手做一个自定义 View，这也是整个系列的完结篇了，会尽可能地涵盖自定义 View 中的各个方面，以及可能遇到的各种坑。在经过一番考量后，决定使用一个 PagerIndicator 作为例子进行讲解。在开始后面的文章之前，建议 Clone 下 <a href="https://github.com/woaitqs/FPageIndicator" target="_blank" rel="noopener">https://github.com/woaitqs/FPageIndicator</a>，对照着源码阅读，食用效果更佳。</p>
+<p>最后我们需要实现的效果如图所示：</p>
+<p><img src="https://cloud.githubusercontent.com/assets/1680722/20701135/42297c0a-b64c-11e6-8eea-ab706946af90.gif" alt="样式展示"></p>
+<p>一般情况下，我们需要自定义 View 的时候，都要考量有哪些地方需要自定义的，对于上图的情况，可以认为选中和未选中的颜色是可以自定义的，大圈和小圈的自定义也是可以自定义的，还有诸如间距等等这些也是可以的。为了使开发者在使用的时候，能够在 XML 文件中也能进行自定义，我们需要声明 <code>styleable</code> 文件，<a href="https://developer.android.com/training/custom-views/create-view.html" target="_blank" rel="noopener">官方教程</a> 有详细说明如何进行属性定义。</p>
+<p>对于上图的例子，可以写如下的<code>styleable</code> 文件。建议自定义的属性上，添加上同一的前缀，这样更容易区分开来。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">declare-styleable</span> <span class="attr">name</span>=<span class="string">"PageIndicator"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"pi_count"</span> <span class="attr">format</span>=<span class="string">"integer"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"pi_out_radius"</span> <span class="attr">format</span>=<span class="string">"dimension"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"pi_radius"</span> <span class="attr">format</span>=<span class="string">"dimension"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"pi_un_focus_color"</span> <span class="attr">format</span>=<span class="string">"color"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"pi_focus_color"</span> <span class="attr">format</span>=<span class="string">"color"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"pi_padding"</span> <span class="attr">format</span>=<span class="string">"dimension"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">declare-styleable</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>那么如何在自定义的 View 中，将这些设置进去的属性取出来呢？这时候我们要用到 TypedArray，通过这个能属性从 AttributeSet 取出来，同时也需要注意在用户没有设置自定义属性时的默认值。代码也相对很简单，如下所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initAttributes</span><span class="params">(AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (attrs == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.PageIndicator);</span><br><span class="line">  count = typedArray.getInteger(R.styleable.PageIndicator_pi_count, <span class="number">1</span>);</span><br><span class="line">  outRadius = typedArray.getDimension(R.styleable.PageIndicator_pi_out_radius,</span><br><span class="line">      dpToPx(DEFAULT_OUT_RADIUS_SIZE));</span><br><span class="line">  innerRadius = typedArray.getDimension(R.styleable.PageIndicator_pi_radius,</span><br><span class="line">      dpToPx(DEFAULT_INNER_RADIUS_SIZE));</span><br><span class="line">  unFocusColor = typedArray.getColor(R.styleable.PageIndicator_pi_un_focus_color,</span><br><span class="line">      Color.parseColor(DEFAULT_UN_FOCUS_COLOR));</span><br><span class="line">  focusColor = typedArray.getColor(R.styleable.PageIndicator_pi_focus_color,</span><br><span class="line">      Color.parseColor(DEFAULT_FOCUS_COLOR));</span><br><span class="line">  padding = typedArray.getDimension(R.styleable.PageIndicator_pi_padding, <span class="number">0F</span>);</span><br><span class="line">  typedArray.recycle();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="初始化相应属性"><a href="#初始化相应属性" class="headerlink" title="初始化相应属性"></a>初始化相应属性</h2><p>在构造函数或者 attachToWindow 的时候，就初始化自定义 View 中可能用到的各种变量，例如 Paint，而不是在使用时，再去构造。因为诸如 onMeasure、onDraw 方法可能会被多次调用，频繁地分配对象，可能会引起内存抖动。内存抖动会在短时间内触发多次 GC 操作，从而引起卡顿。我在这篇文章中，<a href="http://www.woaitqs.cc/android/2016/03/30/in-love-with-android-memory">http://www.woaitqs.cc/android/2016/03/30/in-love-with-android-memory</a> 说明了这种情况是如何发生的。</p>
+<p>对于本文的情况，初始化 Paint 就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initPaint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  innerUnFocusPaint.setStyle(Paint.Style.FILL);</span><br><span class="line">  innerUnFocusPaint.setColor(unFocusColor);</span><br><span class="line"></span><br><span class="line">  innerFocusPaint.setStyle(Paint.Style.FILL);</span><br><span class="line">  innerFocusPaint.setColor(focusColor);</span><br><span class="line"></span><br><span class="line">  outPaint.setStyle(Paint.Style.STROKE);</span><br><span class="line">  outPaint.setColor(focusColor);</span><br><span class="line">  outPaint.setStrokeWidth(<span class="number">2F</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="重载-onMeasure-方法"><a href="#重载-onMeasure-方法" class="headerlink" title="重载 onMeasure 方法"></a>重载 onMeasure 方法</h2><p>onMeasure 方法是让 view 自身测量自己的大小，这是关键步骤。分为两种情况，继承自 ViewGroup 的，还是继承自 View 。如果是 ViewGroup 的话，需要在合适的地方，让子 View 测量后，再得到自身的大小。而如果是 View，则只需管好自己的大小即可。</p>
+<p>MeasureSpec 是 onMeasure 方法中参数的类型，它通过位运算的方式，涵盖了模式和大小两个数据，通过 getMode 和 getSize 可以分别得到模式和大小。这是要特别针对模式进行说明，如果模式为 EXACTLY，说明 View 的大小是指定了的，那么就使用传入的指即可。如果是 AT_MOST, 那么就得先计算出预期的大小。预期的大小，是指在不考虑外界的情况下，View 所占据的大小，对于本文的例子，预期的大小就是几个圈的大小加上它们之间的间距。在计算之后，与指定的大小取两者最小的。如果是 UNSPECIFIED 的情况，那说明父类对你的大小没有预期，那就使用预期的大小即可。下面的代码是一个很清晰的说明。</p>
+<p>最后一定不要忘记，调用 setDimension 方法哦。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (widthMode == MeasureSpec.EXACTLY) &#123;</span><br><span class="line">  width = widthSize;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (widthMode == MeasureSpec.AT_MOST) &#123;</span><br><span class="line">  width = Math.min(desiredWidth, widthSize);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  width = desiredWidth;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多知识，参考 <a href="http://www.woaitqs.cc/2016/10/18/android-view-theory-2">http://www.woaitqs.cc/2016/10/18/android-view-theory-2</a>.</p>
+<hr>
+<h2 id="重载-onDraw-方法"><a href="#重载-onDraw-方法" class="headerlink" title="重载 onDraw 方法"></a>重载 onDraw 方法</h2><p>onDraw 方法就更为简单了，只是简单地对 Canvas 提供的 API 进行调用。在调用时，一定要对 Android 的坐标系非常清楚才行，知道哪里是 X 轴，哪里是 Y 轴，left，right，top 和 bottom 是相对于哪里的距离。</p>
+<p>只要计算好每个绘制 View 的坐标，再调用相应的 API 就能看到效果了！Cheers！下面的代码，就绘制了选中和未选中的几个点。再强调下，这里使用的 Paint 是提前初始化完成的哦。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">  canvas.drawCircle(</span><br><span class="line">      outRadius - innerRadius + padding * i + innerRadius * (<span class="number">1</span> + <span class="number">2</span> * i),</span><br><span class="line">      height / <span class="number">2</span>,</span><br><span class="line">      innerRadius,</span><br><span class="line">      i == selectedPos ? innerFocusPaint : innerUnFocusPaint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在自定义 onDraw 的时候，设计的宗旨是保持无状态性，也就是说，onDraw 是对每一个时刻状态的投诉，例如本例子，就应该是某个滑动时刻的投射。如果在 onDraw 中进行动画，或者起一些异步线程等等，会使得代码的可读性变差。</p>
+<hr>
+<h2 id="View-的更新策略"><a href="#View-的更新策略" class="headerlink" title="View 的更新策略"></a>View 的更新策略</h2><p>写完自定义 View 后，还得在用户更改属性后或者其他事件后，相应地让 View 更新下。</p>
+<blockquote>
+<p>requestLayout.<br>会触发 ViewRoot 的 performTraversal方法，从而重新执行 Measure、Layout，在特定情况下会触发 Draw 操作。</p>
+</blockquote>
+<blockquote>
+<p>invalidate.<br>会触发 Draw 操作，如果 View 的大小和位置没有发生改变，调用这个方法就足以更新页面了。</p>
+</blockquote>
+<p>在本文的例子里面，当用户滑动 ViewPager 时，View 的大小和位置不会发生改变，因而调用 invalidate 就足够了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrolled</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">float</span> positionOffset, <span class="keyword">int</span> positionOffsetPixels)</span> </span>&#123;</span><br><span class="line">  drawPosition = position;</span><br><span class="line">  drawPositionOffset = positionOffset;</span><br><span class="line">  invalidate();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，整个系列结束，有兴趣的同学，可以 Clone <a href="https://github.com/woaitqs/FPageIndicator" target="_blank" rel="noopener">https://github.com/woaitqs/FPageIndicator</a>这个项目来进行探讨 ：）。</p>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2016年11月28日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#确定自定义的样式"><span class="toc-number">1.</span> <span class="toc-text">确定自定义的样式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化相应属性"><span class="toc-number">2.</span> <span class="toc-text">初始化相应属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载-onMeasure-方法"><span class="toc-number">3.</span> <span class="toc-text">重载 onMeasure 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重载-onDraw-方法"><span class="toc-number">4.</span> <span class="toc-text">重载 onDraw 方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View-的更新策略"><span class="toc-number">5.</span> <span class="toc-text">View 的更新策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">6.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&text=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&is_video=false&description=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android View 全解析(五) -- 实践自定义 View&body=Check out this article: http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&title=Android View 全解析(五) -- 实践自定义 View"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2016/11/28/2016-11-28-android-view-theory-5/&name=Android View 全解析(五) -- 实践自定义 View&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
