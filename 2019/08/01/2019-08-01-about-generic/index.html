@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
+<meta name="keywords" content="program,generic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于泛型你应该知道的">
+<meta property="og:url" content="http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/c#-generic.png">
+<meta property="og:updated_time" content="2019-08-01T02:26:03.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于泛型你应该知道的">
+<meta name="twitter:description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/c#-generic.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>关于泛型你应该知道的</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/11/26/2018-11-26-how-to-use-mediacodec-correctly/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&text=关于泛型你应该知道的"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&is_video=false&description=关于泛型你应该知道的"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=关于泛型你应该知道的&body=Check out this article: http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&name=关于泛型你应该知道的&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型擦除"><span class="toc-number">2.</span> <span class="toc-text">泛型擦除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型通配"><span class="toc-number">3.</span> <span class="toc-text">泛型通配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">5.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        关于泛型你应该知道的
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-01T02:19:47.000Z" itemprop="datePublished">2019-08-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/program/">program</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/generic/">generic</a>, <a class="tag-link" href="/tags/program/">program</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>为什么会存在泛型？我们先从一个简要的例子出发。</p>
+<p>List Queue Stack等 M 种数据类型，Sort、Search、Find等 N 种操作，那我们需要实现 List X Sort、Stack X Find 等 M X N 种方法。类型与算法紧密地耦合在一起，这样显然不太合理，于是乎为了解决这种问题，在 1989 年的时候，Musser &amp; Stepanov 第一次提出了 Generic Programming(泛型编程) 的概念。</p>
+<blockquote>
+<p>Generic programming centers aroudn the idea of abstracting from concrete, efficient algorthms to obtain generic algorithms that can be combined with different data representations to produce a wide variety of useful software.</p>
+</blockquote>
+<p>个人认为泛型有两个最重要的特点:</p>
+<ol>
+<li>参数类型化。</li>
+<li>屏蔽掉数据细节，让算法更通用。Programmer 能够更关注算法本身，而不是在算法中处理各种数据细节。</li>
+</ol>
+<p>开发语言发展至今，泛型在几乎所有主流语言中都得到了不同程度的支持，无论是 C++、Kotlin、Java、C# 等等语言。但泛型的实现方式与语言的关系非常大，有相当多的细节不同。对于同样的内存区域，很难玩出花样，泛型是架构在语言之上的高级特性。</p>
+<p>下面咱们看看 Java/Kotlin 中，泛型有哪些需要实现的地方。</p>
+<h2 id="泛型擦除"><a href="#泛型擦除" class="headerlink" title="泛型擦除"></a>泛型擦除</h2><p>首先我们看看这样一段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person person = gson.fromJson(json, Person.class)</span><br></pre></td></tr></table></figure>
+
+<p>这里的问题在于，为什么还需要手动传入 <code>Person.class</code> 了？不是已经有前面 Person 的类型了吗？这里衍生出一个名词<code>类型擦除</code>。</p>
+<blockquote>
+<p>Java 实现的其实是伪泛型，即在编译的时候将类型类型移除掉，这就是类型擦除。</p>
+</blockquote>
+<p>我们来做这样一个测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> T data;  </span><br><span class="line">  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Box</span><span class="params">(T data)</span> </span>&#123;  </span><br><span class="line">	    <span class="keyword">this</span>.data = data;  </span><br><span class="line">	&#125;  </span><br><span class="line">	  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">getData</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">	    <span class="keyword">return</span> data;  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(<span class="keyword">new</span> Box&lt;String&gt;().getClass());</span><br><span class="line">System.out.println(<span class="keyword">new</span> Box&lt;Long&gt;().getClass());</span><br></pre></td></tr></table></figure>
+
+<p>输出的都是 <code>Box</code>，并没有泛型的信息，因为这些类型信息都在编译后被抹除掉了，实际编译生成的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">uc</span>.<span class="title">vmate</span>.<span class="title">demo</span>.<span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.uc.vmate.demo.Box(T);</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       1: invokespecial #1 // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">       <span class="number">4</span>: aload_0</span><br><span class="line">       <span class="number">5</span>: aload_1</span><br><span class="line">       6: putfield      #2 // Field data:Ljava/lang/Object;</span><br><span class="line">       <span class="number">9</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getData</span><span class="params">()</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       1: getfield      #2 // Field data:Ljava/lang/Object;</span><br><span class="line">       <span class="number">4</span>: areturn</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从中我们可以看到，并没有什么 T 类型，全部都变成了 Object。那么为什么 Java 要这么做呢？为什么要把已经带上的信息抹除掉？原因就是为了向后兼容，兼容以前的 JVM 版本，为了诸如 ArrayList 能够和 ArrayList<t> 共存这样的 Case。但这也导致了 Java 的泛型算半个畸形产物，是个<code>伪泛型</code>，或者你可以这么想想，泛型类内部不知道自己是什么类型。</t></p>
+<blockquote>
+<p>Java 泛型 ~= 编译器魔法</p>
+</blockquote>
+<p>简单的步骤如下:</p>
+<ol>
+<li><strong>检查</strong>  并获得泛型的<strong>实际类型</strong>, 然后存到class文件中</li>
+<li><strong>擦除</strong>原有类型 , 替换为<strong>限定</strong>类型（<code>T/E</code>等无限定类型, 用Object替换）</li>
+<li>最后, 调用相关函数将结果<strong>强制转换</strong>为目标类型</li>
+</ol>
+<p>而 C# 没有类型擦除，是真正的泛型。C# 的泛型，将泛型编译成元数据，通过 CLR 运行时，JIT 即时编译，将 IL 代码即时编译成相应类型的特化代码。</p>
+<p><img src="/images/blog/c#-generic.png" alt="C# Template"></p>
+<hr>
+<h2 id="泛型通配"><a href="#泛型通配" class="headerlink" title="泛型通配"></a>泛型通配</h2><p>我们再看看泛型通配的问题，首先我们设想这样一种场景。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Fruit&gt; fruitList = <span class="keyword">new</span> ArrayList&lt;Fruit&gt;();</span><br><span class="line">List&lt;Apple&gt; appleList = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// check this case.</span></span><br><span class="line">fruitList = appleList;</span><br><span class="line">appleList = fruitList;</span><br></pre></td></tr></table></figure>
+
+<p>上面最后两句会编译通过吗？当然不能编译通过。我们简单设想一下，如果 <code>appleList = fruitList</code> 如果这句话编译没有问题，那么 appleList 里面就能放入 pear，这显然不合理。同样 <code>fruitList = appleList</code> 如果成立的话，也能导致 appleList 里面放入 pear。由此我们可以看到，fruitList 与 appleList 是两个完全没有关系的类。</p>
+<p>但有另一个问题就冒出来了，看看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">static</span> <span class="title">dumpList</span><span class="params">(List&lt;Fruit&gt; list)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (Fruit fruit: list) &#123;</span><br><span class="line">		System.out.println(fruit)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但我们在实际使用的时候，并不能传入 List&lt; Apple &gt;，List&lt; Banner &gt;，因为两种不是同一个东西。</p>
+<p>这里我们先引入协变和逆变的概念。</p>
+<blockquote>
+<ul>
+<li>当A ≦ B时,如果有f(A) ≦ f(B),那么f叫做<strong>协变</strong>；</li>
+<li>当A ≦ B时,如果有f(B) ≦ f(A),那么f叫做<strong>逆变</strong>；</li>
+<li>如果上面两种关系都不成立则叫做<strong>不可变</strong>。</li>
+</ul>
+</blockquote>
+<p>如果把<strong>协变</strong>的概念，代入到上面的例子中来看看，如果是协变的，那么我们就能将 List&lt; Apple &gt; 传入进去。反过来如果是<strong>逆变</strong>的，那么我们就能将 List&lt; Food &gt; 传入其中。</p>
+<p>那么 Java 是用什么样的语法糖来表达 协变 和 逆变的了？</p>
+<p>? 是 java 中的通配符，用来表征任何类型，List&lt;?&gt; 就可以传入任何类型的 List了。如果是 <code>? extends</code> ，这就是协变，可以把子类类型的 List 传入。如果是 <code>? super</code>，这是逆变，可以传入父类类型的 List。</p>
+<p>在 Kotlin 中简化了协变和逆变的表达，分别用 out 和 in 来表达。</p>
+<p>p.s. java 的数组是天生协变的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不可变</span></span><br><span class="line">List&lt;Fruit&gt; fruits = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();<span class="comment">// 编译不通过</span></span><br><span class="line"><span class="comment">// 协变</span></span><br><span class="line">List&lt;? extends Fruit&gt; wildcardFruits = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</span><br><span class="line"><span class="comment">// 协变-&gt;方法的返回值，对返回类型是协变的:Fruit-&gt;Apple</span></span><br><span class="line">Fruit fruit = wildcardFruits.get(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// 不可变</span></span><br><span class="line">List&lt;Apple&gt; apples = <span class="keyword">new</span> ArrayList&lt;Fruit&gt;();<span class="comment">// 编译不通过</span></span><br><span class="line"><span class="comment">// 逆变</span></span><br><span class="line">List&lt;? <span class="keyword">super</span> Apple&gt; wildcardApples = <span class="keyword">new</span> ArrayList&lt;Fruit&gt;();</span><br><span class="line"><span class="comment">// 逆变-&gt;方法的参数，对输入类型是逆变的:Apple-&gt;Fruit</span></span><br><span class="line">wildcardApples.add(<span class="keyword">new</span> Apple());</span><br></pre></td></tr></table></figure>
+
+<p>咱们还需要考虑<code>返回值</code>和<code>参数</code>哦！这里直接抛出结论，Java 对返回值是支持<code>协变</code>的，否则你想想，在一个申明返回 Fruit 的函数里面，返回一个 Apple 是错误的话，那是多么可怕的事情。另一方面，对于参数的类型，Java 是通过方法重载来实现的。直接看看下面的例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;? extends Fruit&gt; get() &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">desc</span><span class="params">(Object item)</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">desc</span><span class="params">(String item)</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://www.imbajin.com/2018-09-28-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B9%8B%E6%B3%9B%E5%9E%8B/" target="_blank" rel="noopener">https://www.imbajin.com/2018-09-28-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B9%8B%E6%B3%9B%E5%9E%8B/</a></li>
+<li><a href="http://blog.zhaojie.me/2010/05/why-java-sucks-and-csharp-rocks-4-generics.html" target="_blank" rel="noopener">http://blog.zhaojie.me/2010/05/why-java-sucks-and-csharp-rocks-4-generics.html</a></li>
+<li><a href="https://yq.aliyun.com/articles/640124" target="_blank" rel="noopener">https://yq.aliyun.com/articles/640124</a></li>
+<li><a href="https://zhanjindong.com/2014/09/21/understand-covariance-and-contravariance-again" target="_blank" rel="noopener">https://zhanjindong.com/2014/09/21/understand-covariance-and-contravariance-again</a></li>
+</ol>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2019年08月01日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/feed.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型擦除"><span class="toc-number">2.</span> <span class="toc-text">泛型擦除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛型通配"><span class="toc-number">3.</span> <span class="toc-text">泛型通配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">5.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&text=关于泛型你应该知道的"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&is_video=false&description=关于泛型你应该知道的"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=关于泛型你应该知道的&body=Check out this article: http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&title=关于泛型你应该知道的"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/08/01/2019-08-01-about-generic/&name=关于泛型你应该知道的&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
