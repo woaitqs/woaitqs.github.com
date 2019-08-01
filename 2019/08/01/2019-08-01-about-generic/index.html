@@ -14,12 +14,12 @@
 <meta property="og:site_name" content="Droid&#39;s blogs">
 <meta property="og:description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://www.woaitqs.cc/images/blog/c#-generic.png">
-<meta property="og:updated_time" content="2019-08-01T02:26:03.263Z">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/csharp-generic.png">
+<meta property="og:updated_time" content="2019-08-01T02:27:26.401Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于泛型你应该知道的">
 <meta name="twitter:description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
-<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/c#-generic.png">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/csharp-generic.png">
     
     
         
@@ -188,7 +188,7 @@
 <li>最后, 调用相关函数将结果<strong>强制转换</strong>为目标类型</li>
 </ol>
 <p>而 C# 没有类型擦除，是真正的泛型。C# 的泛型，将泛型编译成元数据，通过 CLR 运行时，JIT 即时编译，将 IL 代码即时编译成相应类型的特化代码。</p>
-<p><img src="/images/blog/c#-generic.png" alt="C# Template"></p>
+<p><img src="/images/blog/csharp-generic.png" alt="C# Template"></p>
 <hr>
 <h2 id="泛型通配"><a href="#泛型通配" class="headerlink" title="泛型通配"></a>泛型通配</h2><p>我们再看看泛型通配的问题，首先我们设想这样一种场景。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Fruit&gt; fruitList = <span class="keyword">new</span> ArrayList&lt;Fruit&gt;();</span><br><span class="line">List&lt;Apple&gt; appleList = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// check this case.</span></span><br><span class="line">fruitList = appleList;</span><br><span class="line">appleList = fruitList;</span><br></pre></td></tr></table></figure>
