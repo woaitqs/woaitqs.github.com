@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
+<meta name="keywords" content="program,concurrency,volatile,synchronized">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 最佳并发实践之基础篇">
+<meta property="og:url" content="http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/jmm.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/java-atomic-op.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/visiblity.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/wujiandao.jpg">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/system-mutex.jpg">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/synchronized_block_code.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/synchronized-method-code.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/synchronized-usage.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/sync-round1.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/sync-round2.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/sync-round3.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/sync-round4.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/sync-round5.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/sync-optimize.png">
+<meta property="og:updated_time" content="2019-08-09T09:16:38.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 最佳并发实践之基础篇">
+<meta name="twitter:description" content="这篇文章将重点介绍了泛型相关的知识，泛型统配，协变和逆变灯光">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/jmm.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android 最佳并发实践之基础篇</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/08/01/2019-08-01-about-generic/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&text=Android 最佳并发实践之基础篇"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&is_video=false&description=Android 最佳并发实践之基础篇"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android 最佳并发实践之基础篇&body=Check out this article: http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&name=Android 最佳并发实践之基础篇&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步的三个问题"><span class="toc-number">2.</span> <span class="toc-text">同步的三个问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原子性"><span class="toc-number">2.1.</span> <span class="toc-text">原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可见性"><span class="toc-number">2.2.</span> <span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有序性"><span class="toc-number">2.3.</span> <span class="toc-text">有序性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全性总结"><span class="toc-number">2.4.</span> <span class="toc-text">安全性总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-number">3.</span> <span class="toc-text">volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">3.1.</span> <span class="toc-text">内存屏障</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可见性-1"><span class="toc-number">3.2.</span> <span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有序性-1"><span class="toc-number">3.3.</span> <span class="toc-text">有序性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">4.</span> <span class="toc-text">synchronized</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理说明"><span class="toc-number">4.1.</span> <span class="toc-text">原理说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用法"><span class="toc-number">4.2.</span> <span class="toc-text">用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">Round 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-2"><span class="toc-number">4.2.2.</span> <span class="toc-text">Round 2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-3"><span class="toc-number">4.2.3.</span> <span class="toc-text">Round 3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-4"><span class="toc-number">4.2.4.</span> <span class="toc-text">Round 4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-5"><span class="toc-number">4.2.5.</span> <span class="toc-text">Round 5</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-迭代改进"><span class="toc-number">5.</span> <span class="toc-text">synchronized 迭代改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可重入"><span class="toc-number">5.1.</span> <span class="toc-text">可重入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非公平性"><span class="toc-number">5.2.</span> <span class="toc-text">非公平性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#锁的优化"><span class="toc-number">5.3.</span> <span class="toc-text">锁的优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">7.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android 最佳并发实践之基础篇
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-09T08:54:39.000Z" itemprop="datePublished">2019-08-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/program/">program</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/concurrency/">concurrency</a>, <a class="tag-link" href="/tags/program/">program</a>, <a class="tag-link" href="/tags/synchronized/">synchronized</a>, <a class="tag-link" href="/tags/volatile/">volatile</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>虽然移动开发，对并发同步要求，没有服务端那么重，但我在很多项目代码中，都看到不合理的用法，或者没有达到设想的情况。这篇文章重点分析下，移动开发开发中应该了解的并发知识。</p>
+<hr>
+<h2 id="同步的三个问题"><a href="#同步的三个问题" class="headerlink" title="同步的三个问题"></a>同步的三个问题</h2><blockquote>
+<p>多个线程访问某个类时，不管运行时环境采用何种 <strong>调度方式</strong> 或者这些线程将如何交替执行，并且在主调代码中 <strong>不需要任何额外的同步或协同</strong>，这个类都能表现出<strong>正确的行为</strong>，那么这个类就是线程安全的。</p>
+</blockquote>
+<p>为了达成这种目的，我们需要在三个方面上进行考核。</p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>一段代码要么不执行，要么执行就不能被打断地执行到底，这样不可分割的特性，称之为原子性。这种特性非常关键，我们来举个例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果上述的赋值语句不是原子性的，而是分高低位进行赋值，那很有可能在<code>给高位赋值后且还没来得及给低位赋值</code>这个过程中，另一个线程进行取值，此时很可能得到一个错误的值。</p>
+<p>当在执行一个满足原子性的操作时，我们不用担心，会有多个线程同时访问导致错误的结果。</p>
+<h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h3><p>我们不仅希望防止某个线程在使用某个对象状态时另一个线程在同时修改这种状态，而且希望确保<em>当一个线程修改对象状态过后，其他线程能够看到发生的状态变化</em>，这也就是<code>可见性</code>。</p>
+<p>可见性是一种复杂的属性，往往会和我们的直接有所违背。设想，我们往某个变量写入了值，然后在其他线程读取该值时，理论上应该总能得到最新的值，然而事实上并不是这样。</p>
+<p>为了方便大家理解可见性这个概念，需要简要地介绍下 多处理器体系架构下的内存模型。</p>
+<blockquote>
+<p>在共享内存的多处理器体系架构中，每个处理器都拥有自己的缓存，并定期地与主内存进行协调。在不同的处理器架构中提供了不同级别的缓存一致性，其中一部分甚至只提供最小的保证，即允许不同的处理器在任意时刻从同一个存储位置上看到不同的值。操作系统、编译器以及运行时，需要弥合这种在硬件能力与线程安全需求之间的差异。</p>
+</blockquote>
+<p><img src="/images/blog/jmm.png" alt="java memory model"></p>
+<p>主内存：主内存被多个线程共享，对于一个共享变量而言，这里存放着其本身。<br>工作内存：出于性能的考虑，每个线程有自己的工作内存，是名副其实的副本。</p>
+<p>Java 内存模型规定了 8 种支持的原子操作，可以先粗略看看。</p>
+<p><img src="/images/blog/java-atomic-op.png" alt="jmm 原子操作"></p>
+<p>可以看到一个对象在主内存和工作内存中，并不能保证每个时刻值都一样，而是通过多个复合原子操作来保证一致性。</p>
+<p>于是就有多种可能性，例如<code>多级缓存</code>、<code>处理器本地缓存的值对其他处理器不可见</code>等等因素，导致不能立即看到正确的值。</p>
+<p>例如全局变量 var 值为 0，A 线程将全局变量 var 设置为3，B 线程打印这个值。即便 A 线程先开始，也不能保证 B 线程一定能打印出 3 。</p>
+<p>截止目前，大家还是对可见性缺乏具像的认识，我写了下面的一个例子，大家可以从 Console 的输出中看到并没有 <code>Work is done</code>的输出，也就说 stopFlag 即便已经修改了值，在 <code>thread</code>并没有看见！</p>
+<p><img src="/images/blog/visiblity.png" alt="visibility code"></p>
+<p>我们一定要注意可见性这个问题，否则会像陈永仁一样，陷入了<code>三年只有又三年</code>的无间地狱里面，等不到结束信号！</p>
+<p><img src="/images/blog/wujiandao.jpg" alt="无间道"></p>
+<p>P.S. 在后续的研究中发现，上述的测试代码有考虑不周的地方。在实际执行的时候，上述的代码会被 JIT 优化成类似于 <code>if(stopFlag){while(true){}}</code> 这样的形式！显然这违背我们写代码进行测试的初衷。大家如果有测试可见性更好的方法，欢迎指定迷津。</p>
+<h3 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h3><p>代码的实际执行顺序要与申明的顺序一致。这听上去是很理所当然的，然而实际在运行时并不一定符合我们的预期。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">① <span class="keyword">int</span> a = <span class="number">100</span>;</span><br><span class="line">② <span class="keyword">int</span> b = <span class="number">1</span>;</span><br><span class="line">③ a ++;</span><br><span class="line">④ b --;</span><br></pre></td></tr></table></figure>
+
+<p>我们看看上面这段代码，理想情况下执行的顺序应该是①②③④，但实际的执行顺序可能是②①③④。那有没有可能③④在①②之前执行呢，不可能！这里需要引入一个<strong>重排序</strong>的概念，来帮助我们分析上面的顺序问题。</p>
+<blockquote>
+<p>重排序是指编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段。</p>
+</blockquote>
+<p>重排序并不是随便排序的，而是有一定规则的，JMM（Java Memory Model）遵循 Happens-Before 准则。我们在实际开发中，只要按照 Happens-Before 来，代码就没什么问题。</p>
+<blockquote>
+<ol>
+<li>程序次序规则：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作；</li>
+<li>锁定规则：一个unLock操作先行发生于后面对同一个锁额lock操作；</li>
+<li>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作；</li>
+<li>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C；</li>
+<li>线程启动规则：Thread对象的start()方法先行发生于此线程的每个一个动作；</li>
+<li>线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生；</li>
+<li>线程终结规则：线程中所有的操作都先行发生于线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行；</li>
+<li>对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始；</li>
+</ol>
+</blockquote>
+<p>我们从 Double-Check 来看看上面这个问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这段代码中，就有可能出现由重排序导致的问题。<code>instance = new Singleton();</code> 这句话，实际执行的时候，有多个步骤。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">① // 分配空间</span><br><span class="line">② // 初始化</span><br><span class="line">③ // 给引用赋值</span><br></pre></td></tr></table></figure>
+
+<p>假如②与③进行了重排序，并且一个线程执行了③，还未执行②，而此时另一个线程执行到了第一个 <code>if (instance == null) {</code>，那么该线程就会返回一个未初始化完毕的对象，从而导致意想不到的问题。</p>
+<h3 id="安全性总结"><a href="#安全性总结" class="headerlink" title="安全性总结"></a>安全性总结</h3><p>光是想要在多线程环境下达到安全性的目的，就得考虑原子性、可见性和有序性。但这还没完，想要运行得好，还得等待性能、活性、死锁其他方面的问题，路漫漫其修远兮。</p>
+<p>注：活性失败，是指某个线程始终获取不到资源，活活饿死。</p>
+<hr>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>在了解可见性和有序性过后，就相对好理解 Volatile 这个关键字了。Volatile 是 Java 提供的轻量级同步机制，相较于 synchronized 需要进行系统调用而言轻便了不少。</p>
+<p>我们看看 volatile 是如何帮助我们的。</p>
+<h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h3><p>首先我们需要了解下内存屏障这个概念。</p>
+<blockquote>
+<p>内存屏障是硬件层的概念，分为 readBarrier 和 writeBarrier。一般有两个作用，一是屏蔽两边的指令重排序，另一个是强制把写缓冲区/高速缓存中的脏数据等写回主内存，让缓存中相应的数据失效。</p>
+</blockquote>
+<p>对于Load Barrier来说，在指令前插入Load Barrier，可以让高速缓存中的数据失效，强制从新从主内存加载数据；<br>对于Store Barrier来说，在指令后插入Store Barrier，能让写入缓存中的最新数据更新写入主内存，让其他线程可见。</p>
+<p>java的内存屏障通常所谓的四种即LoadLoad,StoreStore,LoadStore,StoreLoad实际上也是上述两种的组合，完成一系列的屏障和数据同步功能。</p>
+<ol>
+<li>LoadLoad屏障：对于这样的语句Load1; LoadLoad; Load2，在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。</li>
+<li>StoreStore屏障：对于这样的语句Store1; StoreStore; Store2，在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。</li>
+<li>LoadStore屏障：对于这样的语句Load1; LoadStore; Store2，在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。</li>
+<li>StoreLoad屏障：对于这样的语句Store1; StoreLoad; Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。</li>
+</ol>
+<p>对于每一个被 volatile 修饰的变量，JVM 会自动地做两件事情。<br>1.在每个volatile写操作前插入<strong>StoreStore</strong>屏障，在写操作后插入<strong>StoreLoad</strong>屏障。<br>2.在每个volatile读操作前插入<strong>LoadLoad</strong>屏障，在读操作后插入<strong>LoadStore</strong>屏障。</p>
+<p>由此，我们可以推断出，被 volatile 关键字修饰的变量有两个特点：<br>1）保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量值，这新值对其他线程来说是立即可见的。<br>2）禁止进行指令重排序。</p>
+<h3 id="可见性-1"><a href="#可见性-1" class="headerlink" title="可见性"></a>可见性</h3><p>我们来分析下第一个特点，volatile 是如何保证可见性的。回到前面可能一直会陷入死循环的代码，如果变量前加入 volatile，死循环就会结束。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> stopFlag = <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
+
+<p>volatile 会使得汇编代码中，多出一道 lock 前缀指令，相当于一个内存屏障（内存栅栏），它提供了三方面的保证：<br>1）它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；<br>2）它会强制将对缓存的修改操作立即写入主存；<br>3）如果是写操作，它会导致其他CPU中对应的缓存行无效。</p>
+<p>所以，当 main 函数的执行线程，将 stopFlag 置为 true 的时候，会让另一个线程缓存中的值失效，从而执行到判断代码时，会从主内存里更新，拿到最新的值结束循环。</p>
+<h3 id="有序性-1"><a href="#有序性-1" class="headerlink" title="有序性"></a>有序性</h3><p>另一个特点就是禁止重排序，以 volatile 修饰属性的读/写操作代码行为 <strong>分界线</strong>，读/写操作前面的代码不许排序到后面，后面同理不许排序到前面。</p>
+<p>稍微有点拗口，我们来看看实际的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">① x = <span class="number">1</span>;</span><br><span class="line">② y = <span class="number">2</span>;</span><br><span class="line">③ flag = <span class="keyword">true</span>; <span class="comment">// flag is volatile variable</span></span><br><span class="line">④ x = <span class="number">3</span>;</span><br><span class="line">⑤ y = <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+
+<p>根据前面提到的知识，①②顺序可能颠倒，④⑤顺序可能颠倒，但它们一定在 ③ 之前和之后，从而来保证有序性。再回到 double-check 的例子，volatile 保证了给 Instance 赋值时，初始化工作已经执行完毕，因而不会有问题。</p>
+<p>我们再来看看《Java 并发实践》中的经典例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">context = loadContext();</span><br><span class="line">contextReady = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">while</span> (!contextReady) &#123;</span><br><span class="line">	<span class="comment">// keep waiting.</span></span><br><span class="line">&#125;</span><br><span class="line">doSomethingWithContext(context);</span><br></pre></td></tr></table></figure>
+
+<p>如果这里发生了指令重拍，那么有这样的一种情况，会引发异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A 线程以这样一种顺序来执行</span></span><br><span class="line">contextReady = <span class="keyword">true</span>;</span><br><span class="line">context = loadContext();</span><br></pre></td></tr></table></figure>
+
+<p>另一个 B 线程在执行的时候，发现 contextReady 已经为 true，但此时 context 并未构建完毕，从而在 doSomethingWithContext 发生错误。</p>
+<p>如果 ContextReady 是 volatile 变量，由于前后的内存屏障，前面的代码不会发生重排序，因而代码是可以 work 的。</p>
+<p>P.S. 需要特别指出的是，volatile 并不能保证原子性，类似于 <code>i++</code> 这样的复合操作，使用 volatile 是不能保证线程安全的。</p>
+<hr>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>我们在写同步代码的时候，最常用到的关键字就是 <code>synchronized</code>。我们有必要了解清楚 synchronized ，导致是怎么帮我们完成同步的。</p>
+<h3 id="原理说明"><a href="#原理说明" class="headerlink" title="原理说明"></a>原理说明</h3><p>在学习操作系统的时候，是否还记得 <code>Mutex(互斥锁)</code>? </p>
+<blockquote>
+<p>用于保护临界区，确保同一时间只有一个线程访问数据。对共享资源的访问，先对互斥量进行加锁，如果互斥量已经上锁，调用线程会阻塞，直到互斥量被解锁。在完成了对共享资源的访问后，要对互斥量进行解锁。</p>
+</blockquote>
+<p><img src="/images/blog/system-mutex.jpg" alt="system mutex"></p>
+<p>1) 申请 mutex<br>2) 如果成功，则持有该 mutex<br>3) 如果失败，则进行spin自旋. spin的过程就是在线等待mutex, 不断发起mutex gets, 直到获得mutex或者达到spin_count限制为止<br>4) 依据工作模式的不同选择yiled还是sleep<br>5) 若达到sleep限制或者被主动唤醒或者完成yield, 则重复(1)~(4)步，直到获得为止。</p>
+<p>Java 所有的同步，都是和对象有关系，每个对象都对应于一个可称为互斥锁的标记，这个标记用来保证在任一时刻，只能有一个线程访问该对象。这也是为什么 wait 和 notify/notifyAll 是 Object 的属性方法。</p>
+<p>JVM 本身不具有同步能力，同步操作都是依赖于操作系统，这也就意味着是 <code>System Call</code>，需要在用户态和核心态之间切换，是重量级操作。synchronized 本身是 Java 提供的语法糖，封装了 Mutex 的相关调用（在后面会详细说明，synchronized 自身的优化）。</p>
+<p><img src="/images/blog/synchronized_block_code.png" alt="synchronized block code"></p>
+<p>还是以前面那段 Double-Check 作为例子，反编译 class 文件后，得到上面的代码。代码块同步是使用 monitorenter 和 monitorexit 指令实现的，monitorenter 指令是在编译后插入到同步代码块的开始位置，而 monitorexit 是插入到方法结束处和异常处。</p>
+<p>根据虚拟机规范的要求，在执行 monitorenter 指令时，首先要去尝试获取对象的锁，如果这个对象没被锁定，或者当前线程已经拥有了那个对象的锁，把锁的计数器加1；相应地，在执行 monitorexit 指令时会将锁计数器减1，当计数器被减到0时，锁就释放了。如果获取对象锁失败了，那当前线程就要阻塞等待，直到对象锁被另一个线程释放为止。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们变化下 Double-Check 的代码，直接在方法上申明 synchronized，class 文件会相应地变化。没有了 monitorenter/exit 相关的代码，而是多了一个 ACC_SYNCHRONIZED 的标记。这个标记与 monitorenter/exit 类似，当进入某个方法体时，调用指令将会检查方法的 ACC_SYNCHRONIZED 访问标志是否被设置，如果设置了，执行线程将先获取 monitor，获取成功之后才能执行方法体，方法执行完后再释放 monitor。</p>
+<p><img src="/images/blog/synchronized-method-code.png" alt="synchronized method code"></p>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p><img src="/images/blog/synchronized-usage.png" alt="synchronized usage"></p>
+<p>synchronized 的用法比较简单，无非是需要知道锁实例对象还是类对象的区别。</p>
+<p>接下来，问大家几个问题，大家可以在心里面想一下输出的结果是什么，如果大家心里对这个有谱，那就是完全掌握其用法了。</p>
+<h4 id="Round-1"><a href="#Round-1" class="headerlink" title="Round 1"></a>Round 1</h4><p><img src="/images/blog/sync-round1.png" alt="round 1"></p>
+<h4 id="Round-2"><a href="#Round-2" class="headerlink" title="Round 2"></a>Round 2</h4><p><img src="/images/blog/sync-round2.png" alt="round 2"></p>
+<h4 id="Round-3"><a href="#Round-3" class="headerlink" title="Round 3"></a>Round 3</h4><p><img src="/images/blog/sync-round3.png" alt="round 3"></p>
+<h4 id="Round-4"><a href="#Round-4" class="headerlink" title="Round 4"></a>Round 4</h4><p><img src="/images/blog/sync-round4.png" alt="round 4"></p>
+<h4 id="Round-5"><a href="#Round-5" class="headerlink" title="Round 5"></a>Round 5</h4><p><img src="/images/blog/sync-round5.png" alt="round 5"></p>
+<hr>
+<h2 id="synchronized-迭代改进"><a href="#synchronized-迭代改进" class="headerlink" title="synchronized 迭代改进"></a>synchronized 迭代改进</h2><p>我们首先需要了解 synchronized 的两个特性，::可重入::和::非公平性::。</p>
+<h3 id="可重入"><a href="#可重入" class="headerlink" title="可重入"></a>可重入</h3><p>还是从实际的代码入手，看看可重入是怎么回事。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">// do fetching job...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (value != get()) &#123;</span><br><span class="line">		<span class="comment">// do updating job...</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码有两个对外提供的同步方法，其中 update 会在内部调用 get 方法。可重入是指，一个线程在已经持有锁的情况下，再次获取锁时能够自动获得，不会因为没有锁没有释放掉进入等待状态。在每次获得锁的时候，标记数+1，每次释放锁的时候，标记数-1，当标记数为0的时候，锁才会被完全释放掉。</p>
+<p>可重入锁的好处显而易见，对开发友好，避免死锁。</p>
+<h3 id="非公平性"><a href="#非公平性" class="headerlink" title="非公平性"></a>非公平性</h3><p>公平性是指锁严格遵循 ::FIFO::，这样可以避免线程饿死的情况，但现在大部分锁都是非公平性的，这是为什么？</p>
+<p>这需要结合后面的知识来说明，但大家知道非公平性锁，会减少线程切换次数，且不需要维护线程顺序，小不少开销。</p>
+<h3 id="锁的优化"><a href="#锁的优化" class="headerlink" title="锁的优化"></a>锁的优化</h3><p>从前面的章节里面，能够了解锁的实现，需要调用操作系统的互斥量，那这就必须涉及到系统调用，内核切换，开销很大。这种方式也被称之为重量级锁。</p>
+<p>那有没有可能，减少这种开销了？Java 进行了一系列优化，咱们一步一步地看看。</p>
+<p>先放出一张图，大家感受一下（<del>坏笑</del>）<br><img src="/images/blog/sync-optimize.png" alt="sync optimize"></p>
+<p>我们首先来想这样一个问题，线程的竞争是否真的激烈？在绝大多数时间内，是否只有一个线程在实际运行？就算是两个线程，它们是不是交替进行的了？如果真的是同时运行，有竞争关系，那才有必要使用重量级锁🔒。</p>
+<p>于是乎，我们就有了一下几种锁<br>偏向锁：只有一个线程进入临界区；<br>轻量级锁：多个线程交替进入临界区；<br>重量级锁：多个线程同时进入临界区。</p>
+<p>前面提及到锁，都是基于对象的，那么我将对应的状态记录到对象里面去，后续根据对象的状态，使用不同的锁，那就能达到优化的目的了。</p>
+<p>事实上，java 就是这么优化锁的，object 里面的线程状态字段叫做::Mark Word::。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (lockObject) &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述同步代码块中存在一个临界区，假设当前存在 Thread1 和 Thread2 这两个用户线程，分三种情况来讨论。</p>
+<p>Case 1：只有 Thread1 会进入临界区；<br>Case 2： Thread1 和 Thread2 交替进入临界区；<br>Case 3： Thread1 和 Thread2 同时进入临界区。</p>
+<p>上述的情况一是偏向锁的适用场景，此时当 Thread1 进入临界区时，JVM会将lockObject的对象头Mark Word的锁标志位设为“01”，同时会用CAS操作把 Thread1 的线程ID记录到 MarkWord 中，此时进入偏向模式。所谓“偏向”，指的是这个锁会偏向于 Thread1 ，若接下来没有其他线程进入临界区，则 Thread1 再出入临界区无需再执行任何同步操作。也就是说，若只有 Thread1 会进入临界区，实际上只有 Thread1 初次进入临界区时需要执行CAS操作，以后再出入临界区都不会有同步操作带来的开销。</p>
+<p>然而情况一是一个比较理想的情况，更多时候 Thread2 也会尝试进入临界区。若 Thread2 尝试进入时 Thread1 已退出临界区，即此时lockObject处于未锁定状态，这时说明偏向锁上发生了竞争（对应情况二），此时会撤销偏向，Mark Word中不再存放偏向线程ID，而是存放hashCode和GC分代年龄，同时锁标识位变为“01”（表示未锁定），这时 Thread2 会获取lockObject的轻量级锁。因为此时 Thread1 和 Thread2 交替进入临界区，所以偏向锁无法满足需求，需要膨胀到轻量级锁。</p>
+<p>轻量级锁在实际执行过程中，是针对两个线程交替进行的，实则没有竞争。再说轻量级锁什么时候会膨胀到重量级锁。若一直是 Thread1 和 Thread2 交替进入临界区，那么没有问题，轻量锁hold住。一旦在轻量级锁上发生竞争，即出现“ Thread1 和 Thread2 同时进入临界区”的情况，轻量级锁就hold不住了。 </p>
+<p>就算轻量级锁失败，也不一定会真正在操作系统层面上进行挂起，还会有一项叫做自旋锁的优化方案。</p>
+<p>自旋锁基于这样一种假设，需要持有锁的时间可能非常的短，那为这点时间，进行系统调用，状态切换很不知道。那么可以让线程进入轮询状态，等待锁的释放，不让出 CPU 资源。如果得到锁，就顺利进入竞争区，否则在一定次数过后，还是不能获得锁，就在操作系统上进行操作。后续，Java 继续优化，自旋的策略，自旋的次数不再固定，其自旋的次数由前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定，这就解决了自旋锁带来的缺点。</p>
+<p>除了前面的锁优化策略，Java 还做了::锁消除::和::锁粗化::来优化。</p>
+<p>锁消除是指，<code>万恶的JIT</code>会在运行时，扫描上下文，去消除一些不可能存在竞争的锁。例如以下的代码，在实际运行时，并不存在 object 的锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">justDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Object object = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">synchronized</span>(object) &#123;</span><br><span class="line">        <span class="comment">// just a block</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>锁粗化是指扩大锁的范围，避免反复加锁和释放锁，例如下面的代码，在循环中进行加锁和释放锁，代价有点大。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">thinLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="comment">// do something</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在实际运行时，JIT 会对次进行优化，等价于下面的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">roughLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">            <span class="comment">// do something</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se12/html/index.html" target="_blank" rel="noopener">The Java® Language Specification</a></li>
+<li><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr133.pdf" target="_blank" rel="noopener">JavaTM Memory Model and Thread Specification</a></li>
+<li><a href="https://github.com/CL0610/Java-concurrency" target="_blank" rel="noopener">GitHub - CL0610/Java-concurrency: Java并发知识点总结</a></li>
+<li><a href="https://mp.weixin.qq.com/s/3HCWuE4EQNOKbX6G6oOYpQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/3HCWuE4EQNOKbX6G6oOYpQ</a></li>
+<li><a href="http://www.hollischuang.com/archives/2550" target="_blank" rel="noopener">再有人问你Java内存模型是什么，就把这篇文章发给他。-HollisChuang’s Blog</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/56191979" target="_blank" rel="noopener">漫画：什么是volatile关键字？ - 知乎</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/43526907" target="_blank" rel="noopener">volatile与内存屏障总结 - 知乎</a></li>
+<li><a href="https://www.jianshu.com/p/2ab5e3d7e510" target="_blank" rel="noopener">内存屏障 - 简书</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/75880892" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/75880892</a></li>
+</ol>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2019年08月09日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/atom.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+<div id="vcomments"></div>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'tSx4y2fALmeOAFOa4wOYoM5o-gzGzoHsz',
+        appKey: '4D5Me5KG9VqyKhxE8Qii7wbG'
+    })
+</script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步的三个问题"><span class="toc-number">2.</span> <span class="toc-text">同步的三个问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原子性"><span class="toc-number">2.1.</span> <span class="toc-text">原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可见性"><span class="toc-number">2.2.</span> <span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有序性"><span class="toc-number">2.3.</span> <span class="toc-text">有序性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全性总结"><span class="toc-number">2.4.</span> <span class="toc-text">安全性总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-number">3.</span> <span class="toc-text">volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内存屏障"><span class="toc-number">3.1.</span> <span class="toc-text">内存屏障</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可见性-1"><span class="toc-number">3.2.</span> <span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有序性-1"><span class="toc-number">3.3.</span> <span class="toc-text">有序性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">4.</span> <span class="toc-text">synchronized</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理说明"><span class="toc-number">4.1.</span> <span class="toc-text">原理说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用法"><span class="toc-number">4.2.</span> <span class="toc-text">用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">Round 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-2"><span class="toc-number">4.2.2.</span> <span class="toc-text">Round 2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-3"><span class="toc-number">4.2.3.</span> <span class="toc-text">Round 3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-4"><span class="toc-number">4.2.4.</span> <span class="toc-text">Round 4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Round-5"><span class="toc-number">4.2.5.</span> <span class="toc-text">Round 5</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-迭代改进"><span class="toc-number">5.</span> <span class="toc-text">synchronized 迭代改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可重入"><span class="toc-number">5.1.</span> <span class="toc-text">可重入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非公平性"><span class="toc-number">5.2.</span> <span class="toc-text">非公平性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#锁的优化"><span class="toc-number">5.3.</span> <span class="toc-text">锁的优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">7.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&text=Android 最佳并发实践之基础篇"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&is_video=false&description=Android 最佳并发实践之基础篇"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android 最佳并发实践之基础篇&body=Check out this article: http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&title=Android 最佳并发实践之基础篇"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/&name=Android 最佳并发实践之基础篇&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
