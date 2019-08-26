@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="这篇文章是最佳并发实践的第二篇，重点介绍JVM的线程原理">
+<meta name="keywords" content="program,concurrency,volatile,synchronized">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 最佳并发实践之线程篇">
+<meta property="og:url" content="http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="这篇文章是最佳并发实践的第二篇，重点介绍JVM的线程原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/thread-state.jpg">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/thread-runnable.png">
+<meta property="og:image" content="http://www.woaitqs.cc/images/blog/android-debugger-thread.png">
+<meta property="og:updated_time" content="2019-08-26T12:58:53.492Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 最佳并发实践之线程篇">
+<meta name="twitter:description" content="这篇文章是最佳并发实践的第二篇，重点介绍JVM的线程原理">
+<meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/thread-state.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Android 最佳并发实践之线程篇</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/08/09/2019-08-09-java-concurency-part-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&text=Android 最佳并发实践之线程篇"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&is_video=false&description=Android 最佳并发实践之线程篇"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android 最佳并发实践之线程篇&body=Check out this article: http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&name=Android 最佳并发实践之线程篇&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#New"><span class="toc-number">2.</span> <span class="toc-text">New</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable"><span class="toc-number">3.</span> <span class="toc-text">Runnable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blocked"><span class="toc-number">4.</span> <span class="toc-text">Blocked</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Blocked-enter-a-synchronized-block"><span class="toc-number">4.1.</span> <span class="toc-text">Blocked - enter a synchronized block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Blocked-reenter-a-synchronized-block-after-object-wait"><span class="toc-number">4.2.</span> <span class="toc-text">Blocked - reenter a synchronized block after object.wait</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Waiting"><span class="toc-number">5.</span> <span class="toc-text">Waiting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#no-timeout-wait"><span class="toc-number">5.1.</span> <span class="toc-text">no timeout wait</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#no-timeout-join"><span class="toc-number">5.2.</span> <span class="toc-text">no timeout join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LockSupport-park"><span class="toc-number">5.3.</span> <span class="toc-text">LockSupport.park</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timed-Waiting"><span class="toc-number">6.</span> <span class="toc-text">Timed_Waiting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Terminated"><span class="toc-number">7.</span> <span class="toc-text">Terminated</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Android-中查看线程状态"><span class="toc-number">8.</span> <span class="toc-text">Android 中查看线程状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number"></span> <span class="toc-text">文档信息</span></a>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Android 最佳并发实践之线程篇
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-26T12:32:07.000Z" itemprop="datePublished">2019-08-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/program/">program</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/concurrency/">concurrency</a>, <a class="tag-link" href="/tags/program/">program</a>, <a class="tag-link" href="/tags/synchronized/">synchronized</a>, <a class="tag-link" href="/tags/volatile/">volatile</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在<a href="https://woaitqs.cc/2019/08/09/2019-08-09-java-concurency-part-1/" target="_blank" rel="noopener">上一篇文章</a>中，我们简要地了解了下 Android 开发实践中需要了解的基础知识，知道怎样的代码是并发安全的。现在我们再来看看并发中的具体执行者 – 线程又是怎样的？有什么样的知识需要了解，它们是如何合作来进行同步的？</p>
+<p>线程作为 CPU 最小的执行单元，通常情况下的 Android 并发是指多线程环境下进行并发，那么我们首先了解下线程。CPU 负责调度线程资源，通过各种调度机制，雨露均沾，将每个线程都运转起来。但既然有调度机制，那每一个线程不可能一直在运行，这样线程就有了状态，通过对这些状态的分析，我们就能从另一个角度了解线程是如何运行的。</p>
+<p><img src="/images/blog/thread-state.jpg" alt="java thread state"></p>
+<p>上图就是 thread 可能处于的状态，看上去很复杂，但我们可以逐步突破，一个状态一个状态地分析。</p>
+<p>再进行详细的讲解之前，先说明一下本文所讲的线程状态都是基于<code>虚拟机</code>的，而非<code>操作系统</code>的。由于 Microsoft、Linux、Unix 等等，都有自己的线程模型，具体实现的时候都各自维护着不同的状态信息，Java 是一个跨平台的语言，因而得有虚拟机这一层来屏蔽不同操作系统之间的差异。本文所研究的正是，虚拟机这一层的线程状态，而非操作系统的线程状态！</p>
+<p>我们通过以下的代码<code>thread.getState()</code>，来判断当前线程所处于的状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dumpThread</span><span class="params">(Thread thread)</span> </span>&#123;</span><br><span class="line">  Log.d(<span class="string">"thread"</span>, </span><br><span class="line">		String.format(</span><br><span class="line">			<span class="string">"info:%s, state:%s"</span>, thread, thread.getState()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虚拟机定义了6种线程状态，咱们分别看看。</p>
+<ol>
+<li>NEW</li>
+<li>RUNNABLE</li>
+<li>BLOCKED</li>
+<li>WAITING</li>
+<li>TIMED_WAITING</li>
+<li>TERMINATED</li>
+</ol>
+<h3 id="New"><a href="#New" class="headerlink" title="New"></a>New</h3><p>这个状态最简单，但我们 new 出一个线程对象，并没有调用 start 方法时，它就处于 New 状态，例如下面的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Log.d(<span class="string">"Thread"</span>, <span class="string">"I'm running now."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="string">"ThreadStateDemo"</span>);</span><br><span class="line"></span><br><span class="line">dumpThread(thread);</span><br></pre></td></tr></table></figure>
+
+<p>此时对应的输出是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/thread: info:Thread[ThreadStateDemo,5,main], state:NEW</span><br></pre></td></tr></table></figure>
+
+<h3 id="Runnable"><a href="#Runnable" class="headerlink" title="Runnable"></a>Runnable</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">thread.start();</span><br><span class="line">dumpThread(thread);</span><br></pre></td></tr></table></figure>
+
+<p>此时的日志输出是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/thread: info:Thread[ThreadStateDemo,<span class="number">5</span>,main], state:RUNNABLE</span><br></pre></td></tr></table></figure>
+
+<p>在调用 start 方法过后，线程就会进入到 Runnable 状态。但此时并不会立刻执行，而是进入到 <code>Ready To Run</code>的子状态中，当获取到线程资源的时候，线程才会切换到 <code>Running</code>状态。而 CPU 在执行一段时间的线程过后，也会因为用完时间片，而再次切换回<code>Ready To Run</code>，周而复始地这么运转。</p>
+<p>RUNNABLE 的注释如下</p>
+<blockquote>
+<p>Thread state for a runnable thread. A thread in the runnable state is executing in the Java virtual machine but it may be waiting for other resources from the operating system such as processor.</p>
+</blockquote>
+<p>此时我们是无法通过前面的代码来区分出，线程是 Running 状态，还是 Ready To Run 状态。</p>
+<p>因为两个状态的切换，映射到了操作系统底层的线程上，把调度委托给了操作系统，我们在虚拟机层面看到的状态实质是对底层状态的映射及包装。JVM 本身没有做什么实质的调度，把底层的 <code>Ready To Run</code> 及 <code>Running</code> 状态映射上来也没多大意义，因此，统一成为 Runnable 状态是不错的选择。</p>
+<p>这里还需要特别注意的地方是 I/O 操作，通常情况下 I/O 操作的耗时程度是远大于一个时间分片的，因而正常情况下在执行 I/O 操作时，都会暂时挂起 CPU，等待 I/O 操作执行完毕过后的中断信号，而恢复运行。那么在这种情况下，对于虚拟机的线程状态而言，还是处于 Runnable 吗？答案是肯定的，从虚拟机的角度上看，该线程就是在执行 I/O 操作，才不会关心要怎样执行，要怎么处理中断，那都是操作系统的事情。</p>
+<p><img src="/images/blog/thread-runnable.png" alt="图片来自肖国栋的博客"></p>
+<h3 id="Blocked"><a href="#Blocked" class="headerlink" title="Blocked"></a>Blocked</h3><p><del>划重点，这是考试必考内容。</del><br>这部分的线程状态，就与同步有着巨大的关系了，我们来具体了解下 Blocked 状态是怎样的。</p>
+<blockquote>
+<p>Thread state for a thread blocked waiting for a monitor lock. A thread in the blocked state is waiting for a monitor lock to enter a synchronized block/method or reenter a synchronized block/method after calling {@link Object#wait() Object.wait}.</p>
+</blockquote>
+<p>从这段代码中，我们能够分析出两种情况。</p>
+<ol>
+<li>需要等待监视器锁去进入一个同步块时。</li>
+<li>在一个同步块中，执行 <code>Object.wait</code> 过后，再次等待进入同步块时。</li>
+</ol>
+<h4 id="Blocked-enter-a-synchronized-block"><a href="#Blocked-enter-a-synchronized-block" class="headerlink" title="Blocked - enter a synchronized block"></a>Blocked - enter a synchronized block</h4><p>咱们先看第一种情况，<code>需要等待监视器锁去进入一个同步块时</code>。根据第一篇文章中 synchronized 的原理，多个线程进入同一个代码块时，没有持有锁的线程就必须等待，这里说的就是这种情况。</p>
+<p>我们从具体的代码入手，分析下这种情况。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syncTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (MainActivity.<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">          e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  Thread threadA = <span class="keyword">new</span> Thread(runnable, <span class="string">"thread-A"</span>);</span><br><span class="line">  Thread threadB = <span class="keyword">new</span> Thread(runnable, <span class="string">"thread-B"</span>);</span><br><span class="line">  Thread threadC = <span class="keyword">new</span> Thread(runnable, <span class="string">"thread-C"</span>);</span><br><span class="line">  threadA.start();</span><br><span class="line">  threadB.start();</span><br><span class="line">  threadC.start();</span><br><span class="line">  dumpThread(threadA);</span><br><span class="line">  dumpThread(threadB);</span><br><span class="line">  dumpThread(threadC);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时会输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D/thread: info:Thread[thread-A,5,main], state:TIMED_WAITING</span><br><span class="line">D/thread: info:Thread[thread-B,5,main], state:BLOCKED</span><br><span class="line">D/thread: info:Thread[thread-C,5,main], state:BLOCKED</span><br></pre></td></tr></table></figure>
+
+<p>B 和 C 线程都因为没有抢到锁，而不得不等待，此时的用户状态正是 Blocked。</p>
+<p>这里引入一个概念，Entry Set，道上人也尊称为锁池。当多个线程竞争锁时，会抢占到资源的线程，会被加入到锁池中。当锁释放时，锁池中的任意一个线程会被唤醒，与其他活跃线程再次抢占锁。如果成功占用锁，就从锁池中移除，否则就老老实实呆着锁池中。</p>
+<h4 id="Blocked-reenter-a-synchronized-block-after-object-wait"><a href="#Blocked-reenter-a-synchronized-block-after-object-wait" class="headerlink" title="Blocked - reenter a synchronized block after object.wait"></a>Blocked - reenter a synchronized block after object.wait</h4><p>第二种情况，听上去非常拗口，一要再次进入同步块，二要调用 wait 方法。这里必须要了解两个额外的概念，wait 和 等待池。</p>
+<p>我们设想这样一种场景，大家都在排队使用咖啡机喝咖啡。最开始的时候，大家都依次占有咖啡机(🔐)，弄好咖啡过后再释放掉，队伍也严谨地往前步进；但此时，一个运气不好的小姐姐，在使用咖啡机的时候，发现咖啡机里面的牛奶🥛不够了，此时就要引申出<code>wait</code>这一哲学操作了。小姐姐此时只能暂时放弃咖啡机(🔐), 在一旁等待。工作人员添加牛奶🥛过后，调用 notify/notifyAll 过后，再进行排队弄咖啡。</p>
+<p>wait 的语义是暂时放弃锁，等待其他线程调用 notify/notifyAll。要注意到 wait 方法的调用一定是在同步块中，wait 是要放弃锁的，只能在持有锁过后才会释放掉。调用 wait 操作过后，线程会进入<code>等待池</code>中，其他线程调用 notify/notifyAll，通知任意一个或者全部等待池中的线程，去和锁池和其他活跃线程竞争锁。</p>
+<p>在 wait 过后，再去竞争线程资源时，此时的状态也是 Blocked。</p>
+<p>以上就是两种 Blocked 状态的情况，大家也多注意线程在 Blocked 上如何处理的，也对我们如何写同步代码提供帮助。</p>
+<h3 id="Waiting"><a href="#Waiting" class="headerlink" title="Waiting"></a>Waiting</h3><p>再来看看 Waiting 状态，从官方文档入手。</p>
+<blockquote>
+<p>Thread state for a waiting thread. A thread is in the waiting state due to calling one of the following methods:</p>
+<ol>
+<li>{@link Object#wait() Object.wait} with no timeout</li>
+<li>{@link Thread#join() Thread.join} with no timeout</li>
+<li>{@link LockSupport#park() LockSupport.park}</li>
+</ol>
+</blockquote>
+<h4 id="no-timeout-wait"><a href="#no-timeout-wait" class="headerlink" title="no timeout wait"></a>no timeout wait</h4><p>在上一个状态的讲解中，提到了 wait 的操作，当一个线程调用了 wait，并且在等待 notify/notifyAll 的过程中，该线程所处的状态就是 Waiting。如果读者是服务端相关的人员，可能会遇到这样一个面试题，就是用 wait/notify 来实现一个生产者-消费者模式。本文主要是将并发相关的知识，大家有兴趣具体去了解下。</p>
+<h4 id="no-timeout-join"><a href="#no-timeout-join" class="headerlink" title="no timeout join"></a>no timeout join</h4><p>join 就是等待另一个线程结束，如果查看源码的话，就会发现其可以当做隐式的 wait/notify。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(lock) &#123;</span><br><span class="line">    <span class="keyword">long</span> base = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">long</span> now = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (millis &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (millis == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (isAlive()) &#123;</span><br><span class="line">            lock.wait(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (isAlive()) &#123;</span><br><span class="line">            <span class="keyword">long</span> delay = millis - now;</span><br><span class="line">            <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            lock.wait(delay);</span><br><span class="line">            now = System.currentTimeMillis() - base;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="LockSupport-park"><a href="#LockSupport-park" class="headerlink" title="LockSupport.park"></a>LockSupport.park</h4><p>LookSupport 是 JDK 1.6 开始引入的同步工具，是线程的阻塞原语，用来阻塞线程和唤醒线程。我们可以利用 LookSupport 来实现自己的同步工具。</p>
+<h3 id="Timed-Waiting"><a href="#Timed-Waiting" class="headerlink" title="Timed_Waiting"></a>Timed_Waiting</h3><blockquote>
+<p>A thread that is waiting for another thread to perform an action for up to a specified waiting time is in this state.</p>
+</blockquote>
+<p>TIMED_WAITING 与 WAITING 主要区别在于时效上面，当我们 wait，join，sleep 操作带有时效时，就会进入 TIMED_WAITING 状态。</p>
+<p>需要重点指出的是 sleep、yield 不带有任何同步语义。什么意思呢，就是 sleep 之前持有锁，那sleep的时候还持有锁；如果不持有，sleep的时候依然不持有。与同步没有任何关系。</p>
+<p>Waiting、Timed-Waiting 与 Blocked 状态，对于 JVM 层面，区别主要在于是否为主动的。主动地等待，就是 Waiting、Timed-Waiting，被动等待锁就是 Blocked 状态。</p>
+<h3 id="Terminated"><a href="#Terminated" class="headerlink" title="Terminated"></a>Terminated</h3><p>这个就相对简单些了，但线程执行结束过后，就进入了 TERMINATED 状态。且无法再恢复到其他状态中去了。</p>
+<h3 id="Android-中查看线程状态"><a href="#Android-中查看线程状态" class="headerlink" title="Android 中查看线程状态"></a>Android 中查看线程状态</h3><p>学以致用，接下来介绍两种常见的方法来查看线程状态。当我们遇到同步问题时，可以通过对线程状态的分析，发现症结所在。</p>
+<ol>
+<li>Android Debugger</li>
+</ol>
+<p>在 Debugger 中点击 <code>Get thread dump</code> 的按钮，这样可以查看快照时的线程状态。</p>
+<p>点击每个线程，可有详细的信息，例如：<br>“main@7067” prio=5 tid=0x2 nid=NA runnable</p>
+<p>其中 prio 是指优先级、tid是线程id，nid是native线程id</p>
+<p><img src="/images/blog/android-debugger-thread.png" alt="android debugger thread"></p>
+<ol start="2">
+<li>anr dump</li>
+</ol>
+<p>还有一种技巧是利用 Android 的 ANR 机制，强制应用发生 ANR，这样再 dump 出 anr 日志，即可查看各线程状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell kill -3 [pid]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2019年08月26日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/atom.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+        <div id="vcomments"></div>
+        <script>
+            new Valine({
+                el: '#vcomments',
+                appId: 'TsNbG48vQyxT0tMC3xCbqg2B-MdYXbMMI',
+                appKey: 'HNiBRfYlHGyIbgI65aR1Umgo'
+            })
+        </script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#New"><span class="toc-number">2.</span> <span class="toc-text">New</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable"><span class="toc-number">3.</span> <span class="toc-text">Runnable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blocked"><span class="toc-number">4.</span> <span class="toc-text">Blocked</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Blocked-enter-a-synchronized-block"><span class="toc-number">4.1.</span> <span class="toc-text">Blocked - enter a synchronized block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Blocked-reenter-a-synchronized-block-after-object-wait"><span class="toc-number">4.2.</span> <span class="toc-text">Blocked - reenter a synchronized block after object.wait</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Waiting"><span class="toc-number">5.</span> <span class="toc-text">Waiting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#no-timeout-wait"><span class="toc-number">5.1.</span> <span class="toc-text">no timeout wait</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#no-timeout-join"><span class="toc-number">5.2.</span> <span class="toc-text">no timeout join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LockSupport-park"><span class="toc-number">5.3.</span> <span class="toc-text">LockSupport.park</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timed-Waiting"><span class="toc-number">6.</span> <span class="toc-text">Timed_Waiting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Terminated"><span class="toc-number">7.</span> <span class="toc-text">Terminated</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Android-中查看线程状态"><span class="toc-number">8.</span> <span class="toc-text">Android 中查看线程状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number"></span> <span class="toc-text">文档信息</span></a>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&text=Android 最佳并发实践之线程篇"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&is_video=false&description=Android 最佳并发实践之线程篇"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Android 最佳并发实践之线程篇&body=Check out this article: http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&title=Android 最佳并发实践之线程篇"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/08/26/2019-08-26-java-concurency-part-2/&name=Android 最佳并发实践之线程篇&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
