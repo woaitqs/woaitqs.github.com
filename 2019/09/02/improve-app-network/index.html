@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="简要地介绍了移动端优化网络的常见技术">
+<meta name="keywords" content="program,android,network,cdn,dns,http,tcp,https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈移动端网络优化">
+<meta property="og:url" content="http://www.woaitqs.cc/2019/09/02/improve-app-network/index.html">
+<meta property="og:site_name" content="Droid&#39;s blogs">
+<meta property="og:description" content="简要地介绍了移动端优化网络的常见技术">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-02T14:00:54.501Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈移动端网络优化">
+<meta name="twitter:description" content="简要地介绍了移动端优化网络的常见技术">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>浅谈移动端网络优化</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="Droid&#39;s blogs" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/08/26/2019-08-26-java-concurency-part-2/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/09/02/improve-app-network/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&text=浅谈移动端网络优化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&is_video=false&description=浅谈移动端网络优化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=浅谈移动端网络优化&body=Check out this article: http://www.woaitqs.cc/2019/09/02/improve-app-network/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&name=浅谈移动端网络优化&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#衡量"><span class="toc-number">2.</span> <span class="toc-text">衡量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解剖"><span class="toc-number">3.</span> <span class="toc-text">解剖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS"><span class="toc-number">3.1.</span> <span class="toc-text">DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#问题"><span class="toc-number">3.1.1.</span> <span class="toc-text">问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案"><span class="toc-number">3.2.</span> <span class="toc-text">方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-HTTP"><span class="toc-number">4.</span> <span class="toc-text">TCP ~ HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题-1"><span class="toc-number">4.1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案-1"><span class="toc-number">4.2.</span> <span class="toc-text">方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DATA"><span class="toc-number">5.</span> <span class="toc-text">DATA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">8.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        浅谈移动端网络优化
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Droid's blogs</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-02T13:56:56.000Z" itemprop="datePublished">2019-09-02</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/program/">program</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/cdn/">cdn</a>, <a class="tag-link" href="/tags/dns/">dns</a>, <a class="tag-link" href="/tags/http/">http</a>, <a class="tag-link" href="/tags/https/">https</a>, <a class="tag-link" href="/tags/network/">network</a>, <a class="tag-link" href="/tags/program/">program</a>, <a class="tag-link" href="/tags/tcp/">tcp</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>对于内容消费性的 APP，从进入某个页面到该页面新内容显示出来，这阶段消耗的时间，是一个 APP 的生死线。如果这个时间相较于竞品差距太大，这将是毁灭性的事情，极有可能在争取用户中的赛场上处于下风。这篇文章，就试图从一个移动开发者的角度出发，分析一下整个内容加载过程，如何在不出错的情况下来优化和监控加载时间。</p>
+<hr>
+<h2 id="衡量"><a href="#衡量" class="headerlink" title="衡量"></a>衡量</h2><p>我们做一件优化的事情时，首先不是着急忙慌地寻找优化点，立马动笔写代码、改架构，而是得知道如何衡量这件事情。这样，我们不仅能帮我们整理思路，也能将优化的成果让更多人认可。</p>
+<p>就「进入某个页面到该页面新内容显示」这个优化目标而言，我们先抛弃 Android、iOS、Web 的差异，缩减成「在移动设备上网络发起请求到接收数据」的时间，这样剔除掉组件加载、页面构建等等其他不确定因素。</p>
+<p>那么首先映入我们脑海的，肯定是响应速度，同样的请求要是只用更少的时间就能拿回数据，那一定很棒！233333。所以我们有了第一个考虑维度 — ::速度::。</p>
+<p>第二个需要考虑的点是::安全::，用户在请求数据时，往往会携带很多隐私信息(地区、设备、账号、等等)，如何保护这些信息不被窃取，也是另一个需要考虑的地方。</p>
+<p>第三个需要考虑的点是::稳定::，这里主要由两部分组成。一是服务端的宕机率，很多大型 APP 的宕机率都要求小于 0.1%; 二是复杂网络环境下的策略，这里简单地举个例子，用户在偏远地区使用我们的 APP，信号不稳定，此时还能否正常返回数据？</p>
+<p>这是三点，我考虑到的衡量内容加载的三个维度，这篇文章的后续内容也从这三个维度上，去思考如何优化内容加载。(<del>鄙人才疏学浅，肯定有考虑不周的地方，欢迎评论指出</del>)</p>
+<hr>
+<h2 id="解剖"><a href="#解剖" class="headerlink" title="解剖"></a>解剖</h2><p>我们知道如何衡量这件事情后，接下来就解剖「内容加载」，把其中发生的各个步骤拎出来，通过上述三个维度，来分析每个步骤。当然如果要详细地将每一个步骤说清楚，这就不是一篇文章的事情，因而在这里只能言简意赅地说说，最常见的路径下的各个步骤如下：</p>
+<ol>
+<li>DNS 查询 URL 对应 IP 地址。</li>
+<li>与服务器建立连接（通常情况下为 TCP/IP 协议）。</li>
+<li>根据应用层协议（HTTP/HTTPS）发送请求。</li>
+<li>服务器响应请求，返回序列化的数据（Json/Proto）。</li>
+<li>APP 反序列化数据，并予以呈现。</li>
+</ol>
+<p>更多更详细信息，可以参考<a href="https://github.com/alex/what-happens-when" target="_blank" rel="noopener">GitHub - alex/what-happens-when: An attempt to answer the age old interview question “What happens when you type google.com into your browser and press enter?”</a> ，详细地解答了「当你在浏览器中输入 google.com 并且按下回车之后发生了什么？」这个问题。</p>
+<p>那现在开始，分别从上一小节提到的三个维度出发，分析每一个步骤。</p>
+<hr>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p>加载内容时，我们往往是通过 URL(统一资源定位符)，诸如<code>www.google.com</code>这样的链接。但这样的 URL 是不能直接使用的，就好像知道一个人的别名，但不能送货给它。因此我们访问 Google 时，通过某种查询服务得知到对应的 IP 地址，然后通过这个 IP 地址，我们才能建立连接请求，获取内容信息。这个服务叫做 Domain Name System，也就是大家常说的 DNS。</p>
+<p>DNS 本身非常复杂，这里简要介绍流程。假设用户使用移动网络访问 APP 时，就会首先由网络服务商（移动网络就是电信、移动和联通等等运营商）分配一个本地域名服务器 LocalDNS，层层向上询问，最终通过权威域名服务器，返回一个 IP 地址。</p>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>本地域名服务器 LocalDNS 是一个经常被人诟病的服务，我们具体看看都有些什么问题。</p>
+<ol>
+<li>安全<br>首先 LocalDNS 为了自身效率考虑，会做一些缓存，也就是将一些数据记录在本地，但这样会导致时效性问题。设想服务端在 12:00 上线了一个很棒的活动，并更改了 IP 地址和对应的解析协议，但由于 LocalDNS 的缓存导致过了一定时间后新的 IP 才生效，用户就不能及时地体验这个活动。</li>
+</ol>
+<p>上面这条还不是最严重的情况，LocalDNS 特别是一些小运营商，经常被人喷的是 DNS 劫持。可能为了某种创收，LocalDNS 缓存了部分页面，篡改了一下并添加了广告后，当用户请求 DNS 服务时，直接返回这个添加了广告的页面💥，用户就会相当反感！</p>
+<ol start="2">
+<li>速度<br>不仅安全方面可能出现问题，速度也同样得不到保障。导致速度可能出现问题的本质原因是，本因作为参考的原始信息丢失，最终导致权威服务器没有返回一个最优 IP 地址，从而速度受到影响。下面罗列几种可能性：</li>
+</ol>
+<p>a. 小运营商直接将解析请求转给大运营商，权威 DNS 服务误以为这是大运营商的请求，从而没有返回服务器专门针对小运营商优化的 IP 地址。<br>b. NAT，更多信息参考<a href="https://zh.wikipedia.org/zh-hans/%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2" target="_blank" rel="noopener">网络地址转换 - 维基百科，自由的百科全书</a>。当内网的某台设备想要与互联网上的服务器进行通信时，IP 地址可能会被更换，一旦做了网络地址的转换，权威的 DNS 服务器，就没办法通过这个信息作出最优解。</p>
+<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>优化的出发点就是尽量减少 DNS 请求，例如将大部分请求都放在同一个域名下。另外也已经有比较成熟的方案，既然 LocalDNS 坑，那我不陪你玩了，自己搞一套！</p>
+<ol>
+<li>HttpDns<br>HttpDns 就是应运而生的一套解决方案。APP 不再通过 LocalDNS 解析域名，而是通过服务端实现的服务，自己来查询域名对应的 IP 地址，这里查询的时候，是直接通过 IP 地址进行查询的。这样就略掉了域名解析，速度上面会有优化，直连服务器的做法也规避了 DNS 劫持导致的安全性问题。</li>
+</ol>
+<p>当然 HttpDns 能做的事情还有很多，例如客户端可以有一定的缓存策略，通过缓存来进一步优化时间。又比如服务端可以通过客户端提供的地区、服务商等等信息，做一些策略优化。</p>
+<ol start="2">
+<li>CDN<br>我们查看快递的时候，经常会发现这样一种类型的 Case，例如我在南宁买了一个手机，那京东会首先查看南宁仓库有没有，没有继续就查询广西仓库（<del>不一定真实存在哈</del>），如果还没有就再查询京东物流总部。这样下来，快递的效率很高。某些服务提供商，就提供了这样的服务 — CDN(Content Delivery Network)，让对应的请求能够找到最优的<code>仓库</code>，降低网络拥塞，以最快的速度返回。</li>
+</ol>
+<p>CDN 通常会和 DNS 配合起来使用，所以这里单独拎出来说，运营同学修改 DNS 的设置，使得用户在访问资源时能够通过 CDN 来执行，<del>专业的事情交给专业的人来做</del>。由于 CDN 部署和生效需要一定的时间，一般用于分发静态资源。</p>
+<hr>
+<h2 id="TCP-HTTP"><a href="#TCP-HTTP" class="headerlink" title="TCP ~ HTTP"></a>TCP ~ HTTP</h2><p>再来看看拿到 IP 地址之后的事情，大多数情况下，App 在请求数据时，都是通过 TCP 协议来建立和关闭连接。只有在链接建立的基础之上，才能通过 Http/Https 或者其他应用层协议与服务端交互。由于 Http 的优化与 TCP 协议紧密相关，这里就放在一块讲。</p>
+<h3 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h3><p>TCP协议是面向连接的，可靠的流协议，但在移动网络下也有些水土不服，需要针对性地做一些优化。HTTP 本身也存在安全性等等问题，咱们具体看看。</p>
+<ol>
+<li><p>速度<br>TCP 协议在建立和关闭链接的时候，会涉及到三次握手和四次挥手，这是相对耗时的操作。但对于绝大多数 App 而言, 单次数据量都不大，但是次数很多，这会导致频繁地建立和关闭链接，导致用户体感上响应较慢。<br>HTTP/1.1 的时候，通过管道一次性发送多个请求，希望这样来提高效率。由于 TCP 协议的设定，每个请求必须按顺序进行，也就是说如果上一个请求阻塞住，后面的请求必须等待被阻塞的请求处理完毕过后再进行，这个问题被称为队头阻塞(<strong>Head-of-line blocking</strong>)。尽管在 HTTP/2 的时候，将数据拆分成若干个 Frame 发送，减少了阻塞的可能性，但只要是 TCP 协议，问题本质是在传输层，其实还是不能完全解决。</p>
+</li>
+<li><p>安全<br>前些年 iOS 强制要求开发者使用 HTTPS 协议的新闻，在 IT 圈被广泛讨论。原因就在于 HTTP 协议不能很好地保护用户隐私，隐患一直存在。因而即便在 Android 上，越来越多的 APP 也主动切换到更为安全的 HTTPS 上。</p>
+</li>
+<li><p>稳定<br>移动 APP 可能处于各种网络环境下，2G/3G/4G/校园网/公网 等等。Socket 的参数不能适用于所有情况，默认的参数可能表现很差。前面也提到，TCP 协议是有状态的，请求过去都需要回来的 ACK 包，但弱网环境下，包可能有很大的延迟，包越多就能耗时越久，用户体感越差。</p>
+</li>
+</ol>
+<h3 id="方案-1"><a href="#方案-1" class="headerlink" title="方案"></a>方案</h3><ol>
+<li><p>链接复用<br>既然建立和关闭链接耗时，那就尽可能地复用它，这样就能优化速度。HTTP/1.x 可以设置为 <strong>keep-alive</strong>，或者接入 <strong>HTTP/2</strong>，<strong>HTTP/2</strong> 不仅能提供连接复用，也提供了诸多其他优化，例如 header 数据压缩，TLS 优化等等。</p>
+</li>
+<li><p>HTTPS<br>HTTP 协议存在安全隐患，那我们给他加上安全控制不就好了吗？HTTPS 也就诞生了，关于其如何加密数据的方式，也随着时间迭代了数个版本。有兴趣的同学，可以深入地了解下这段历史，能学到不少东西呢。</p>
+</li>
+<li><p>QUIC<br>既然 TCP 协议的机制决定速度不是最优的，那能不能用它的兄弟 UDP 来做一些事情？在 UDP 的基础之上，添加一些控制，在保证安全性的基础之上，尽可能地加快速度呢？<a href="https://www.chromium.org/quic" target="_blank" rel="noopener">QUIC，a multiplexed stream transport over UDP</a> 在 Google 的推动下就诞生了，相较于<strong>TCP + TLS + HTTP2</strong>的模式，有以下几点优势：</p>
+</li>
+</ol>
+<ul>
+<li>Dramatically reduced connection establishment time</li>
+<li>Improved congestion control</li>
+<li>Multiplexing without head of line blocking</li>
+<li>Forward error correction</li>
+<li>Connection migration</li>
+</ul>
+<hr>
+<h2 id="DATA"><a href="#DATA" class="headerlink" title="DATA"></a>DATA</h2><p>终于到实际传输的数据了，这里核心的点，在于如何尽可能地减少包大小和如何保证数据安全上。罗列一下常见的优化方法:</p>
+<ol>
+<li>对于服务端定义的协议，查看有没有冗余的地方，优化数据结构。对于常见的公参字段做简化，例如 vc = version code，vn = version name 等等。</li>
+<li>尝试使用<a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="noopener">Protocol Buffers   |  Google Developers</a>，相较于其他格式而言，更小更快。</li>
+<li>对于图片而言，可以使用<a href="https://developers.google.com/speed/webp/" target="_blank" rel="noopener">A new image format for the Web  |  WebP       |  Google Developers</a>。</li>
+</ol>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>篇幅所下，很多知识都是点到为止，起到抛转引用的作用。最后阐述下，并没有万能的银弹，网络本身的复杂性就决定了没有统一的解决方案，各 APP 都需要针对自身的情况，去做一些特定的优化，来达到优化的目的，实践才是唯一的真理。<br>这里列出一些对外发布的优化实践例子，供大家参考:</p>
+<ol>
+<li><a href="https://tech.meituan.com/2017/03/17/shark-sdk.html" target="_blank" rel="noopener">美团点评移动网络优化实践 - 美团技术团队</a></li>
+<li><a href="https://github.com/Tencent/mars/wiki" target="_blank" rel="noopener">Home · Tencent/mars Wiki · GitHub</a></li>
+</ol>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://blog.cnbang.net/tech/3531/" target="_blank" rel="noopener">移动 APP 网络优化概述 «  bang’s blog</a></li>
+<li><a href="https://hpbn.co/" target="_blank" rel="noopener">High Performance Browser Networking (O’Reilly)</a></li>
+<li><a href="https://github.com/alex/what-happens-when" target="_blank" rel="noopener">GitHub - alex/what-happens-when: An attempt to answer the age old interview question “What happens when you type google.com into your browser and press enter?”</a></li>
+<li><a href="https://tech.meituan.com/2017/03/17/shark-sdk.html" target="_blank" rel="noopener">https://tech.meituan.com/2017/03/17/shark-sdk.html</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/06/internet_protocol_suite_part_ii.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/06/internet_protocol_suite_part_ii.html</a></li>
+<li><a href="http://www.52im.net/thread-1003-1-1.html" target="_blank" rel="noopener">http://www.52im.net/thread-1003-1-1.html</a></li>
+</ol>
+<hr>
+<hr>
+<h2 id="文档信息"><a href="#文档信息" class="headerlink" title="文档信息"></a>文档信息</h2><ul>
+<li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">创意共享3.0许可证</a>）</li>
+<li>发表日期：2019年09月02日</li>
+<li>社交媒体：<a href="http://weibo.com/woaitqs" target="_blank" rel="noopener">weibo.com/woaitqs</a></li>
+<li>Feed订阅：<a href="http://www.woaitqs.cc/atom.xml">www.woaitqs.cc/atom.xml</a></li>
+</ul>
+<hr>
+
+  </div>
+</article>
+
+
+        <div id="vcomments"></div>
+        <script>
+            new Valine({
+                el: '#vcomments',
+                appId: 'TsNbG48vQyxT0tMC3xCbqg2B-MdYXbMMI',
+                appKey: 'HNiBRfYlHGyIbgI65aR1Umgo'
+            })
+        </script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#衡量"><span class="toc-number">2.</span> <span class="toc-text">衡量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解剖"><span class="toc-number">3.</span> <span class="toc-text">解剖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS"><span class="toc-number">3.1.</span> <span class="toc-text">DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#问题"><span class="toc-number">3.1.1.</span> <span class="toc-text">问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案"><span class="toc-number">3.2.</span> <span class="toc-text">方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-HTTP"><span class="toc-number">4.</span> <span class="toc-text">TCP ~ HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题-1"><span class="toc-number">4.1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案-1"><span class="toc-number">4.2.</span> <span class="toc-text">方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DATA"><span class="toc-number">5.</span> <span class="toc-text">DATA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">8.</span> <span class="toc-text">文档信息</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/09/02/improve-app-network/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&text=浅谈移动端网络优化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&is_video=false&description=浅谈移动端网络优化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=浅谈移动端网络优化&body=Check out this article: http://www.woaitqs.cc/2019/09/02/improve-app-network/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&title=浅谈移动端网络优化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/02/improve-app-network/&name=浅谈移动端网络优化&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Qisen Tang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?80435c13fc4c3f32d9ae5e4b1cea4b13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
