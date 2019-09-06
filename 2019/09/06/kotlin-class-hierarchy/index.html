@@ -16,7 +16,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://www.woaitqs.cc/images/blog/kotlin-nothing-hierarchy.png">
 <meta property="og:image" content="http://www.woaitqs.cc/images/blog/kotlin-entire-hierarchy.png">
-<meta property="og:updated_time" content="2019-09-06T07:33:56.729Z">
+<meta property="og:updated_time" content="2019-09-06T08:30:44.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin 类型系统原来如此简单">
 <meta name="twitter:description" content="理解 kotlin 的类型系统">
@@ -104,7 +104,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-number">1.</span> <span class="toc-text">Any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unit"><span class="toc-number">2.</span> <span class="toc-text">Unit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nothing"><span class="toc-number">3.</span> <span class="toc-text">Nothing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nullable"><span class="toc-number">4.</span> <span class="toc-text">Nullable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">7.</span> <span class="toc-text">文档信息</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quote"><span class="toc-number">1.</span> <span class="toc-text">Quote</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-number">2.</span> <span class="toc-text">Any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unit"><span class="toc-number">3.</span> <span class="toc-text">Unit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nothing"><span class="toc-number">4.</span> <span class="toc-text">Nothing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nullable"><span class="toc-number">5.</span> <span class="toc-text">Nullable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">8.</span> <span class="toc-text">文档信息</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -135,6 +135,9 @@
     </div>
 
 
+      <span id="busuanzi_container_page_pv">
+        | PV(<span id="busuanzi_value_page_pv"></span>)
+      </span>
       
     <div class="article-category">
         <i class="fas fa-archive"></i>
@@ -154,7 +157,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>在学习 Kotlin 的过程中，对 Kotlin 的类型系统产生了好奇，Kotlin 是否存在类似于 Java 中 Object 的公共基类？Kotlin 中是否也有类似于 Java 基础类型这样的单独分支？在研究一番过后，博主发现相较于 Java，Kotlin 交出了更为满意的答案，而且出乎意外地简单，只需要遵循简单的规则，便能理解整个类型系统。</p>
+    <h2 id="Quote"><a href="#Quote" class="headerlink" title="Quote"></a>Quote</h2><p>在学习 Kotlin 的过程中，对 Kotlin 的类型系统产生了好奇，Kotlin 是否存在类似于 Java 中 Object 的公共基类？Kotlin 中是否也有类似于 Java 基础类型这样的单独分支？在研究一番过后，博主发现相较于 Java，Kotlin 交出了更为满意的答案，而且出乎意外地简单，只需要遵循简单的规则，便能理解整个类型系统。</p>
 <hr>
 <h2 id="Any"><a href="#Any" class="headerlink" title="Any"></a>Any</h2><p>Any 等同于 Java 中的 Object 的概念，Any 在注释中这么写到:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The root of the Kotlin class hierarchy. Every Kotlin class has [Any] as a superclass.</span><br></pre></td></tr></table></figure>
@@ -268,7 +271,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-number">1.</span> <span class="toc-text">Any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unit"><span class="toc-number">2.</span> <span class="toc-text">Unit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nothing"><span class="toc-number">3.</span> <span class="toc-text">Nothing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nullable"><span class="toc-number">4.</span> <span class="toc-text">Nullable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">7.</span> <span class="toc-text">文档信息</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quote"><span class="toc-number">1.</span> <span class="toc-text">Quote</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-number">2.</span> <span class="toc-text">Any</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unit"><span class="toc-number">3.</span> <span class="toc-text">Unit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nothing"><span class="toc-number">4.</span> <span class="toc-text">Nothing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nullable"><span class="toc-number">5.</span> <span class="toc-text">Nullable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文档信息"><span class="toc-number">8.</span> <span class="toc-text">文档信息</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -305,6 +308,9 @@
         Copyright &copy;
             2019
                 Qisen Tang
+                    <span id="busuanzi_container_site_pv">
+                    |  总访问量<span id="busuanzi_value_site_pv"></span>次
+                    </span>
     </div>
     <div class="footer-right">
         <nav>
