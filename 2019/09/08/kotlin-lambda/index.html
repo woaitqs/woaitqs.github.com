@@ -9,16 +9,16 @@
     <meta name="description" content="理解 kotlin 的lambda 比较晦涩的部分">
 <meta name="keywords" content="kotlin,method,lambda">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kotlin 之弄懂 lambda">
+<meta property="og:title" content="Kotlin 真香之 Lambda 表达式">
 <meta property="og:url" content="http://www.woaitqs.cc/2019/09/08/kotlin-lambda/index.html">
 <meta property="og:site_name" content="Droid&#39;s blogs">
 <meta property="og:description" content="理解 kotlin 的lambda 比较晦涩的部分">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://www.woaitqs.cc/images/blog/kotlin-SAM-interface.png">
 <meta property="og:image" content="http://www.woaitqs.cc/images/blog/kotlin-jsonbuilder-output.png">
-<meta property="og:updated_time" content="2019-09-15T15:01:29.474Z">
+<meta property="og:updated_time" content="2019-09-15T15:19:46.652Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kotlin 之弄懂 lambda">
+<meta name="twitter:title" content="Kotlin 真香之 Lambda 表达式">
 <meta name="twitter:description" content="理解 kotlin 的lambda 比较晦涩的部分">
 <meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/kotlin-SAM-interface.png">
     
@@ -40,7 +40,7 @@
         
     
     <!-- title -->
-    <title>kotlin 之弄懂 lambda</title>
+    <title>Kotlin 真香之 Lambda 表达式</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- persian styles -->
@@ -74,6 +74,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" href="/2019/09/15/kotlin-sealed-class/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" href="/2019/09/08/kotlin-extension-method/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -89,15 +91,15 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&text=kotlin 之弄懂 lambda"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&is_video=false&description=kotlin 之弄懂 lambda"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=kotlin 之弄懂 lambda&body=Check out this article: http://www.woaitqs.cc/2019/09/08/kotlin-lambda/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&name=kotlin 之弄懂 lambda&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&text=Kotlin 真香之 Lambda 表达式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&is_video=false&description=Kotlin 真香之 Lambda 表达式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kotlin 真香之 Lambda 表达式&body=Check out this article: http://www.woaitqs.cc/2019/09/08/kotlin-lambda/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&name=Kotlin 真香之 Lambda 表达式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -115,7 +117,7 @@
     <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
     
     <h1 class="posttitle" itemprop="name headline">
-        kotlin 之弄懂 lambda
+        Kotlin 真香之 Lambda 表达式
     </h1>
 
 
@@ -284,15 +286,15 @@
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&text=kotlin 之弄懂 lambda"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&is_video=false&description=kotlin 之弄懂 lambda"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=kotlin 之弄懂 lambda&body=Check out this article: http://www.woaitqs.cc/2019/09/08/kotlin-lambda/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=kotlin 之弄懂 lambda"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&name=kotlin 之弄懂 lambda&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&text=Kotlin 真香之 Lambda 表达式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&is_video=false&description=Kotlin 真香之 Lambda 表达式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kotlin 真香之 Lambda 表达式&body=Check out this article: http://www.woaitqs.cc/2019/09/08/kotlin-lambda/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&title=Kotlin 真香之 Lambda 表达式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/08/kotlin-lambda/&name=Kotlin 真香之 Lambda 表达式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

@@ -9,16 +9,16 @@
     <meta name="description" content="理解 kotlin 的类型系统">
 <meta name="keywords" content="program,unit,nothing,kotlin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kotlin 类型系统原来如此简单">
+<meta property="og:title" content="Kotlin 真香之类型系统">
 <meta property="og:url" content="http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/index.html">
 <meta property="og:site_name" content="Droid&#39;s blogs">
 <meta property="og:description" content="理解 kotlin 的类型系统">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://www.woaitqs.cc/images/blog/kotlin-nothing-hierarchy.png">
 <meta property="og:image" content="http://www.woaitqs.cc/images/blog/kotlin-entire-hierarchy.png">
-<meta property="og:updated_time" content="2019-09-06T08:30:44.557Z">
+<meta property="og:updated_time" content="2019-09-15T15:19:14.325Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kotlin 类型系统原来如此简单">
+<meta name="twitter:title" content="Kotlin 真香之类型系统">
 <meta name="twitter:description" content="理解 kotlin 的类型系统">
 <meta name="twitter:image" content="http://www.woaitqs.cc/images/blog/kotlin-nothing-hierarchy.png">
     
@@ -40,7 +40,7 @@
         
     
     <!-- title -->
-    <title>Kotlin 类型系统原来如此简单</title>
+    <title>Kotlin 真香之类型系统</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- persian styles -->
@@ -91,15 +91,15 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&text=Kotlin 类型系统原来如此简单"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&is_video=false&description=Kotlin 类型系统原来如此简单"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Kotlin 类型系统原来如此简单&body=Check out this article: http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&name=Kotlin 类型系统原来如此简单&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&text=Kotlin 真香之类型系统"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&is_video=false&description=Kotlin 真香之类型系统"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kotlin 真香之类型系统&body=Check out this article: http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&name=Kotlin 真香之类型系统&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -117,7 +117,7 @@
     <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
     
     <h1 class="posttitle" itemprop="name headline">
-        Kotlin 类型系统原来如此简单
+        Kotlin 真香之类型系统
     </h1>
 
 
@@ -277,15 +277,15 @@
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&text=Kotlin 类型系统原来如此简单"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&is_video=false&description=Kotlin 类型系统原来如此简单"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Kotlin 类型系统原来如此简单&body=Check out this article: http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 类型系统原来如此简单"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&name=Kotlin 类型系统原来如此简单&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&text=Kotlin 真香之类型系统"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&is_video=false&description=Kotlin 真香之类型系统"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kotlin 真香之类型系统&body=Check out this article: http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&title=Kotlin 真香之类型系统"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.woaitqs.cc/2019/09/06/kotlin-class-hierarchy/&name=Kotlin 真香之类型系统&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
